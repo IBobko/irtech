@@ -1,0 +1,43 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#showHideAdviser").click(function(){
+		if ($("#adviserContent").css('opacity') == 0) {
+			$("#adviserContent").animate({"opacity":1});
+			$("#adviserContent").show();
+			console.log("show");
+		} else {
+			$("#adviserContent").animate({"opacity":0});	
+			$("#adviserContent").hide();
+
+			console.log("h");
+		}
+	});
+});
+
+</script>
+<style type="text/css">
+#adviser {
+	position:fixed;
+
+	right:10px;
+	bottom:30px;
+}
+
+#adviserContent {
+	background-color:red;
+	height:200px;
+	width:200px;
+}
+
+</style>
+</head>
+<body>
+<div id="adviser" style="border:1px solid">
+	<div id="adviserContent">Привет мир</div>
+	<div style="background:green;width:40px;height:40px;position:absolute;right:10px;bottom:10px;" id="showHideAdviser"></div>
+</div>	
+</body>
+</html>
