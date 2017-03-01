@@ -2,22 +2,106 @@
 <head>
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 <script type="text/javascript">
+
+var hasAdvice = false;
+var adviceShowing = false;
+
+function hideAdvisor(){
+	$("#adviserContent").animate({"opacity":0});	
+	$("#adviserContent").hide();
+
+	if(hasAdvice && !adviceShowing){
+		$("#adviserButtonImage").attr("src","./resources/images/advisorbutton/blub.png");
+	}
+	else{
+		$("#adviserButtonImage").attr("src","./resources/images/advisorbutton/expand.png");
+	}
+}
+
+function showAdvisor(){
+	if(hasAdvice && !adviceShowing){
+		$("#adviserImage").attr("src","./resources/images/advisor/advisor_idea.png");
+	}
+	else{
+		$("#adviserImage").attr("src","./resources/images/advisor/advisor.png");
+	}
+
+	$("#adviserButtonImage").attr("src","./resources/images/advisorbutton/collapse.png");
+
+	$("#adviserContent").animate({"opacity":1});
+	$("#adviserContent").show();
+}
+
+function isAdvisorHided(){
+	return $("#adviserContent").css('opacity') == 0;
+}
+
+function adviceReceived(){
+	hasAdvice = true;
+	
+	if(isAdvisorHided()){
+		$("#adviserButtonImage").attr("src","./resources/images/advisorbutton/blub.png");
+		return;
+	}
+	else{
+		showAdvisor();
+		}
+}
+
+function showAdvice(){	
+	adviceShowing = true;
+	$("#adviserImage").attr("src","./resources/images/advisor/advisor_texting.png");
+	$("#adviserButtonImage").attr("src","./resources/images/advisorbutton/collapse.png");
+
+	$("#advisorAdvice").animate({"opacity":1});	
+	$("#advisorAdvice").show();
+}
+
+function hideAdvice(){
+	hasAdvice = false;
+	adviceShowing = false;
+	$("#advisorAdvice").animate({"opacity":0});	
+	$("#advisorAdvice").hide();
+
+	$("#adviserImage").attr("src","./resources/images/advisor/advisor.png");
+}
+
 $(document).ready(function() {
-	$("#showHideAdviser").click(function(){
-		if ($("#adviserContent").css('opacity') == 0) {
-			$("#adviserContent").animate({"opacity":1});
-			$("#adviserContent").show();
+	$("#advisorButton").click(function(){
+		if (isAdvisorHided()) {
+			showAdvisor();
 		} else {
-			$("#adviserContent").animate({"opacity":0});	
-			$("#adviserContent").hide();
+			hideAdvisor();
+			hideAdvice();
 		}
 	});
+
+	$("#adviserContent").click(function(){
+		if (hasAdvice && !adviceShowing) {
+			showAdvice();
+		} else {
+			return;
+		}
+	});
+
+	$("#advisorAdvice").click(function(){
+		hideAdvice();
+	});
+
+	
+
+	setInterval(function() {
+  		adviceReceived();
+		}, 10000);
 });
+
+
 
 </script>
 <style type="text/css">
+
 body {
-background:url('background.png')
+	background:url('background.png')
 }
 
 #adviser {
@@ -27,13 +111,16 @@ background:url('background.png')
 }
 
 #adviserContent {
-	background-color:red;
 	height:200px;
 	width:200px;
 }
 
-#showHideAdviser {
-	background: green;
+#adviserImage {
+	height:200px;
+	width:200px;	
+}
+
+#advisorButton {
 	width: 40px;
 	height: 40px;
 	position: absolute;
@@ -41,13 +128,57 @@ background:url('background.png')
 	bottom: 10px;
 }
 
+#advisorAdvice {
+	width: 900px;
+	height: 300px;
+	position: absolute;
+	right: 170px; 
+	bottom: 110px;
+}
+
+#advisorAdviceText {
+	width: 700px;
+	height: 200px;
+	position: absolute;
+	right: 110px; 
+	bottom: 20px;
+}
+
+#advisorAdviceImage {
+	width: 900px;
+	height: 300px;
+}
+
+#adviserButtonImage {
+	width: 40px;
+	height: 40px;
+}
+
 </style>
 </head>
 <body>
 
-<div id="adviser" style="border:1px solid">
-	<div id="adviserContent">Привет мир</div>
-	<div id="showHideAdviser"></div>
+<div id="adviser">
+	<div id="adviserContent">
+		<img 
+			id="adviserImage" 
+			src="./resources/images/advisor/advisor.png" />
+	</div>
+	<div id="advisorButton">
+		<img 
+			id="adviserButtonImage" 
+			src="./resources/images/advisorbutton/collapse.png" />
+	</div>
 </div>	
+<div id="advisorAdvice" style="display:none">
+	<img 
+		id="advisorAdviceImage" 
+		src="./resources/images/text_cloud.png" >
+		<div id="advisorAdviceText">
+			<p>А вы знали что завтра будет очень холодно? Не забудте одеть шапку. Если у вас нет шапки то рекомендую купить её.</p>
+			<a target="_blank" href="http://pilnikov.ru/zhenskie-shapki.html">Купить шапку без регистрации и смс!</a>
+		</div>
+	</img>
+</div>
 </body>
 </html>
