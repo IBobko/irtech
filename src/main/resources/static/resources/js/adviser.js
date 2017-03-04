@@ -1,13 +1,13 @@
 var injectHtml = '<div id="adviser">\
 <div id="adviserContent">\
-    <img id="adviserImage" src="./resources/images/advisor/advisor.png" /> \
+    <img id="adviserImage" src="{host}/resources/images/advisor/advisor.png" /> \
     </div> \
     <div id="advisorButton"> \
-    <img id="adviserButtonImage" src="./resources/images/advisorbutton/collapse.png" /> \
+    <img id="adviserButtonImage" src="{host}/resources/images/advisorbutton/collapse.png" /> \
     </div> \
     </div> \
     <div id="advisorAdvice" style="display:none"> \
-    <img id="advisorAdviceImage" src="./resources/images/text_cloud.png" > \
+    <img id="advisorAdviceImage" src="{host}/resources/images/text_cloud.png" > \
     <div id="advisorAdviceText"></div> \
 </img> \
 </div>';
@@ -40,6 +40,8 @@ var InnopolisAdviser = {
                 that.jsHostLocation = location.protocol + "//" + location.host;
             }
         });
+
+        injectHtml = injectHtml.replace(new RegExp("{host}", 'g'), that.jsHostLocation);
 
 
         var script = document.createElement('script');
@@ -95,19 +97,19 @@ var InnopolisAdviser = {
         $("#adviserContent").hide();
 
         if (this.hasAdvice && !this.adviceShowing) {
-            $("#adviserButtonImage").attr("src", "./resources/images/advisorbutton/blub.png");
+            $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/blub.png");
         } else {
-            $("#adviserButtonImage").attr("src", "./resources/images/advisorbutton/expand.png");
+            $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/expand.png");
         }
     },
 
     showAdvisor: function () {
         if (this.hasAdvice && !this.adviceShowing) {
-            $("#adviserImage").attr("src", "./resources/images/advisor/advisor_idea.png");
+            $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor_idea.png");
         } else {
-            $("#adviserImage").attr("src", "./resources/images/advisor/advisor.png");
+            $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor.png");
         }
-        $("#adviserButtonImage").attr("src", "./resources/images/advisorbutton/collapse.png");
+        $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/collapse.png");
         //noinspection JSJQueryEfficiency
         $("#adviserContent").animate({"opacity": 1});
         //noinspection JSJQueryEfficiency
@@ -122,7 +124,7 @@ var InnopolisAdviser = {
         this.hasAdvice = true;
 
         if (this.isAdvisorHided()) {
-            $("#adviserButtonImage").attr("src", "./resources/images/advisorbutton/blub.png");
+            $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/blub.png");
         } else {
             this.showAdvisor();
         }
@@ -130,8 +132,8 @@ var InnopolisAdviser = {
 
     showAdvice: function () {
         this.adviceShowing = true;
-        $("#adviserImage").attr("src", "./resources/images/advisor/advisor_texting.png");
-        $("#adviserButtonImage").attr("src", "./resources/images/advisorbutton/collapse.png");
+        $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor_texting.png");
+        $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/collapse.png");
         //noinspection JSJQueryEfficiency
         $("#advisorAdvice").animate({"opacity": 1});
         //noinspection JSJQueryEfficiency
@@ -146,7 +148,7 @@ var InnopolisAdviser = {
         //noinspection JSJQueryEfficiency
         $("#advisorAdvice").hide();
 
-        $("#adviserImage").attr("src", "./resources/images/advisor/advisor.png");
+        $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor.png");
     },
 
     connect: function () {
