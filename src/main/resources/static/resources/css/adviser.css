@@ -1,0 +1,54 @@
+
+body {
+    background: url('../../background.png')
+}
+
+#adviser {
+    position: fixed;
+    right: 10px;
+    bottom: 30px;
+}
+
+#adviserContent {
+    height: 200px;
+    width: 200px;
+}
+
+#adviserImage {
+    height: 200px;
+    width: 200px;
+}
+
+#advisorButton {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
+#advisorAdvice {
+    width: 900px;
+    height: 300px;
+    position: absolute;
+    right: 170px;
+    bottom: 110px;
+}
+
+#advisorAdviceText {
+    width: 700px;
+    height: 200px;
+    position: absolute;
+    right: 110px;
+    bottom: 20px;
+}
+
+#advisorAdviceImage {
+    width: 900px;
+    height: 300px;
+}
+
+#adviserButtonImage {
+    width: 40px;
+    height: 40px;
+}

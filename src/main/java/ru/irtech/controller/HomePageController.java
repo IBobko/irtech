@@ -13,6 +13,6 @@ public class HomePageController {
     @RequestMapping("")
     @ResponseBody
     public String index() {
-        return "Hello world";
+        return "IrTech main page";
     }
 }
