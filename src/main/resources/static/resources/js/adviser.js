@@ -169,9 +169,26 @@ var InnopolisAdviser = {
 
 };
 
-$(function () {
-    InnopolisAdviser.init();
-});
+function Innopolis_Adviser_start() {
+    $(function () {
+        InnopolisAdviser.init();
+    });
+}
+
+if (typeof jQuery == 'undefined') {
+    var headTag = document.getElementsByTagName("head")[0];
+    var jqTag = document.createElement('script');
+    jqTag.type = 'text/javascript';
+    jqTag.src = 'https://code.jquery.com/jquery-3.1.1.min.js';
+    jqTag.onload = function () {
+        Innopolis_Adviser_start();
+    };
+    headTag.appendChild(jqTag);
+} else {
+    Innopolis_Adviser_start();
+}
+
+
 
 
 
