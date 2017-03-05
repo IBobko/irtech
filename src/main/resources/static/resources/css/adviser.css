@@ -31,7 +31,7 @@ body {
 #advisorAdvice {
     width: 900px;
     height: 300px;
-    position: absolute;
+    position: fixed;
     right: 170px;
     bottom: 110px;
     z-index: 1000;
