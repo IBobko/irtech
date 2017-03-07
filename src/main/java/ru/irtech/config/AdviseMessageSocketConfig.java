@@ -11,8 +11,14 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 @Configuration
 @EnableWebSocketMessageBroker
 public class AdviseMessageSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+    /**
+     * Register STOMP endpoints mapping each to a specific URL and (optionally)
+     * enabling and configuring SockJS fallback options.
+     *
+     * @param registry A registry for configuring message broker options.
+     */
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
+    public void registerStompEndpoints(final StompEndpointRegistry registry) {
         registry.addEndpoint("/advises").setAllowedOrigins("*").withSockJS();
     }
 

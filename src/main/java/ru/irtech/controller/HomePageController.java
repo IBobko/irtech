@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/")
 @Controller
 public class HomePageController {
+    /**
+     * Main page of our site.
+     *
+     * @return Text which provided users.
+     */
     @RequestMapping("")
     @ResponseBody
     public String index() {
