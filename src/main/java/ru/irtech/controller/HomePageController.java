@@ -18,6 +18,6 @@ public class HomePageController {
     @RequestMapping("")
     @ResponseBody
     public String index() {
-        return "IrTech main page. Development Server.";
+        return "IrTech main page. Development Version Server.";
     }
 }
