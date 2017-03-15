@@ -18,6 +18,7 @@ var InnopolisAdviser = {
     jsName: "adviser.js",
     hasAdvice: false,
     adviceShowing: false,
+    isHided: false,
 
     getLocation: function (href) {
         var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
@@ -37,7 +38,12 @@ var InnopolisAdviser = {
         $("script").each(function (index, js) {
             if (js.src.indexOf(InnopolisAdviser.jsName) != -1) {
                 var location = that.getLocation(js.src);
-                that.jsHostLocation = location.protocol + "//" + location.host;
+                if(location == null){
+                    that.jsHostLocation = "."; // dev environment
+                }
+                else{
+                    that.jsHostLocation = location.protocol + "//" + location.host;  // production environment
+                }
             }
         });
 
@@ -90,6 +96,15 @@ var InnopolisAdviser = {
 
 
     },
+
+    setButtonImage : function(image){
+        $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/" + image + ".png");
+    },
+
+    setAdvisorImage : function(image) {
+        $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/" + image + ".png"); 
+    },
+
     hideAdvisor: function () {
         //noinspection JSJQueryEfficiency
         $("#adviserContent").animate({"opacity": 0});
@@ -97,34 +112,36 @@ var InnopolisAdviser = {
         $("#adviserContent").hide();
 
         if (this.hasAdvice && !this.adviceShowing) {
-            $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/blub.png");
+            this.setButtonImage("blub");
         } else {
-            $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/expand.png");
+            this.setButtonImage("expand");
         }
+        this.isHided = true;
     },
 
     showAdvisor: function () {
         if (this.hasAdvice && !this.adviceShowing) {
-            $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor_idea.png");
+            this.setAdvisorImage("advisor_idea");
         } else {
-            $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor.png");
+            this.setAdvisorImage("advisor");
         }
-        $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/collapse.png");
+        this.setButtonImage("collapse");
         //noinspection JSJQueryEfficiency
         $("#adviserContent").animate({"opacity": 1});
         //noinspection JSJQueryEfficiency
         $("#adviserContent").show();
+        this.isHided = false;
     },
 
     isAdvisorHided: function () {
-        return $("#adviserContent").css('opacity') == 0;
+        return this.isHided;
     },
 
     adviceReceived: function () {
         this.hasAdvice = true;
 
         if (this.isAdvisorHided()) {
-            $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/blub.png");
+            this.setButtonImage("blub");
         } else {
             this.showAdvisor();
         }
@@ -132,8 +149,8 @@ var InnopolisAdviser = {
 
     showAdvice: function () {
         this.adviceShowing = true;
-        $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor_texting.png");
-        $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/collapse.png");
+        this.setAdvisorImage("advisor_texting");
+        this.setButtonImage("collapse");
         //noinspection JSJQueryEfficiency
         $("#advisorAdvice").animate({"opacity": 1});
         //noinspection JSJQueryEfficiency
@@ -147,25 +164,33 @@ var InnopolisAdviser = {
         $("#advisorAdvice").animate({"opacity": 0});
         //noinspection JSJQueryEfficiency
         $("#advisorAdvice").hide();
-
-        $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/advisor.png");
+        this.setAdvisorImage("advisor");
     },
 
     connect: function () {
         var that = this;
-        var socket = new SockJS(that.jsHostLocation + '/advises');
-        this.stompClient = Stomp.over(socket);
-        this.stompClient.connect({}, function (frame) {
-            console.log('%c' + frame, 'background: #222; color: #bada55');
-            that.stompClient.subscribe('/', function (greeting) {
-                //var result = JSON.parse(greeting.body);
-                //console.log(greeting.body);
-                $('#advisorAdviceText').html(greeting.body);
-                InnopolisAdviser.adviceReceived();
+        if(that.jsHostLocation == "."){
+            setInterval(function() {
+                if(!that.hasAdvice){
+                   $('#advisorAdviceText').html("test text");
+                   InnopolisAdviser.adviceReceived();
+                }
+            },5000);
+        }
+        else{
+            var socket = new SockJS(that.jsHostLocation + '/advises');
+            this.stompClient = Stomp.over(socket);
+            this.stompClient.connect({}, function (frame) {
+                console.log('%c' + frame, 'background: #222; color: #bada55');
+                that.stompClient.subscribe('/', function (greeting) {
+                    //var result = JSON.parse(greeting.body);
+                    //console.log(greeting.body);
+                    $('#advisorAdviceText').html(greeting.body);
+                    InnopolisAdviser.adviceReceived();
+                });
             });
-        });
-    }
-
+        }
+    },
 
 };
 
