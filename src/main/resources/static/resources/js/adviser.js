@@ -1,16 +1,34 @@
-var injectHtml = '<div id="adviser">\
-<div id="adviserContent">\
-    <img id="adviserImage" src="{host}/resources/images/advisor/advisor.png" /> \
-    </div> \
-    <div id="advisorButton"> \
-    <img id="adviserButtonImage" src="{host}/resources/images/advisorbutton/collapse.png" /> \
-    </div> \
-    </div> \
-    <div id="advisorAdvice" style="display:none"> \
-    <img id="advisorAdviceImage" src="{host}/resources/images/text_cloud.png" > \
-    <div id="advisorAdviceText"></div> \
-</img> \
-</div>';
+var injectHtml = 
+    '<div id="advisor">\
+        <div id="advisorContent">\
+            <img id="advisorImage" class="image" src="advisor.png"/>\
+        </div>\
+        <div id="advisorButtons">\
+            <div id="settingsButton" class="button50">\
+                <img id="settingsButtonImage" class="image50" src="blub.png">\
+            </div>\
+            <div id="adviceRequestButton" class="button50">\
+                <img id="adviceRequestButtonImage" class="image50" src="blub.png">\
+            </div>\
+        </div>\
+        <div id="advisorButton" class="button50">\
+            <img id="advisorButtonImage" class="image50" src="blub.png">\
+        </div>\
+        <div id="advisorAdvice">\
+            <div id="leftButton" class="button">\
+                <img id="leftButtonImage" class="image" src="blub.png">\
+            </div>\
+            <div id="adviceContent" class="content">\
+                \
+            </div>\
+            <div id="rightButton" class="button">\
+                <img id="rightButtonImage" class="image" src="blub.png">\
+            </div>\
+            <div id="adviceCloseButton" class="button50">\
+                <img id="closeAdviceButtonImage" class="image50" src="blub.png">\
+            </div>\
+        </div>\
+    </div>';
 
 var InnopolisAdviser = {
     jsHostLocation: null,
@@ -84,7 +102,7 @@ var InnopolisAdviser = {
             }
         });
 
-        $("#adviserContent").click(function () {
+        $("#advisorContent").click(function () {
             if (that.hasAdvice && !that.adviceShowing) {
                 that.showAdvice();
             }
@@ -94,22 +112,33 @@ var InnopolisAdviser = {
             that.hideAdvice();
         });
 
-
+        //initial state
+        this.hideAdvice();
+        this.hideAdvisor();
     },
 
     setButtonImage : function(image){
-        $("#adviserButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/" + image + ".png");
+        $("#advisorButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/" + image + ".png");
     },
 
     setAdvisorImage : function(image) {
-        $("#adviserImage").attr("src", this.jsHostLocation + "/resources/images/advisor/" + image + ".png"); 
+        $("#advisorImage").attr("src", this.jsHostLocation + "/resources/images/advisor/" + image + ".png"); 
     },
 
     hideAdvisor: function () {
         //noinspection JSJQueryEfficiency
-        $("#adviserContent").animate({"opacity": 0});
+        $("#advisorContent").animate({"opacity": 0});
         //noinspection JSJQueryEfficiency
-        $("#adviserContent").hide();
+        $("#advisorContent").hide();
+        //noinspection JSJQueryEfficiency
+        $("#adviceRequestButton").animate({"opacity": 0});
+        //noinspection JSJQueryEfficiency
+        $("#adviceRequestButton").hide();
+        //noinspection JSJQueryEfficiency
+        $("#settingsButton").animate({"opacity": 0});
+        //noinspection JSJQueryEfficiency
+        $("#settingsButton").hide();
+
 
         if (this.hasAdvice && !this.adviceShowing) {
             this.setButtonImage("blub");
@@ -127,9 +156,17 @@ var InnopolisAdviser = {
         }
         this.setButtonImage("collapse");
         //noinspection JSJQueryEfficiency
-        $("#adviserContent").animate({"opacity": 1});
+        $("#advisorContent").animate({"opacity": 1});
         //noinspection JSJQueryEfficiency
-        $("#adviserContent").show();
+        $("#advisorContent").show();
+        //noinspection JSJQueryEfficiency
+        $("#adviceRequestButton").animate({"opacity": 1});
+        //noinspection JSJQueryEfficiency
+        $("#adviceRequestButton").show();
+        //noinspection JSJQueryEfficiency
+        $("#settingsButton").animate({"opacity": 1});
+        //noinspection JSJQueryEfficiency
+        $("#settingsButton").show();
         this.isHided = false;
     },
 

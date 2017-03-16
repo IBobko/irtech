@@ -3,54 +3,84 @@ body {
     background: url('../../background.png')
 }
 
-#adviser {
-    position: fixed;
-    right: 10px;
-    bottom: 30px;
+#advisor {
     z-index: 1000;
+    position: fixed;
+    bottom: 30px;
+    right: 10px;
 }
 
-#adviserContent {
-    height: 200px;
-    width: 200px;
-}
-
-#adviserImage {
-    height: 200px;
-    width: 200px;
-}
-
-#advisorButton {
-    width: 40px;
-    height: 40px;
+#advisorButtons {
+    width: 50px;
+    height: 150px;
     position: absolute;
     right: 10px;
     bottom: 10px;
 }
 
-#advisorAdvice {
-    width: 900px;
-    height: 300px;
-    position: fixed;
-    right: 170px;
-    bottom: 110px;
-    z-index: 1000;
+#advisorButtons .button {
+    float: left;
+    width: 50px;
+    height: 50px;
 }
 
-#advisorAdviceText {
-    width: 700px;
-    height: 200px;
+#advisorContent {
+    width: 150px;
+    height: 150px;
     position: absolute;
-    right: 110px;
-    bottom: 20px;
+    bottom: 10px;
+    right: 60px;
 }
 
-#advisorAdviceImage {
-    width: 900px;
-    height: 300px;
+#advisorContent .image{
+    width: 150px;
+    height: 150px;
 }
 
-#adviserButtonImage {
-    width: 40px;
-    height: 40px;
+#advisorAdvice {
+    width: 400px;
+    height: 100px;
+    position: absolute;
+    bottom: 10px;
+    right: 210px;
+}
+
+#advisorAdvice div{
+    float: left;
+}
+
+#advisorAdvice .button {
+    width: 25px;
+    height: 100px;
+    background-color: lightblue;
+}
+
+#advisorAdvice .image{
+    width: 25px;
+    height: 100px;
+}
+
+#advisorAdvice .content{
+    width: 350px;
+    height:100px;
+    background-color: blue;
+}
+
+#adviceCloseButton {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 100px;
+    right: 25px;
+    background-color: black;
+}
+
+.button50 {
+    width: 50px;
+    height: 50px;
+}
+
+.image50 {
+    width: 50px;
+    height: 50px;
 }
