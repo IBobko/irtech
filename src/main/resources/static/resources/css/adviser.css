@@ -12,10 +12,9 @@ body {
 
 #advisorButtons {
     width: 50px;
-    height: 150px;
+    height: 100px;
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    bottom: 50px;
 }
 
 #advisorButtons .button {
@@ -28,8 +27,8 @@ body {
     width: 150px;
     height: 150px;
     position: absolute;
-    bottom: 10px;
-    right: 60px;
+    bottom: 0px;
+    right: 50px;
 }
 
 #advisorContent .image{

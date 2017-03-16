@@ -4,34 +4,36 @@ var injectHtml =
             <img id="advisorImage" class="image" src="advisor.png"/>\
         </div>\
         <div id="advisorButtons">\
-            <div id="settingsButton" class="button50">\
-                <img id="settingsButtonImage" class="image50" src="blub.png">\
+            <div id="settingsButton" class="button50" style="background-color: red">\
+                <img id="settingsButtonImage" class="image50">\
             </div>\
-            <div id="adviceRequestButton" class="button50">\
-                <img id="adviceRequestButtonImage" class="image50" src="blub.png">\
+            <div id="adviceRequestButton" class="button50" style="background-color: orange">\
+                <img id="adviceRequestButtonImage" class="image50">\
             </div>\
         </div>\
         <div id="advisorButton" class="button50">\
-            <img id="advisorButtonImage" class="image50" src="blub.png">\
+            <img id="advisorButtonImage" class="image50">\
         </div>\
         <div id="advisorAdvice">\
             <div id="leftButton" class="button">\
-                <img id="leftButtonImage" class="image" src="blub.png">\
+                <img id="leftButtonImage" class="image">\
             </div>\
             <div id="adviceContent" class="content">\
                 \
             </div>\
             <div id="rightButton" class="button">\
-                <img id="rightButtonImage" class="image" src="blub.png">\
+                <img id="rightButtonImage" class="image">\
             </div>\
             <div id="adviceCloseButton" class="button50">\
-                <img id="closeAdviceButtonImage" class="image50" src="blub.png">\
+                <img id="closeAdviceButtonImage" class="image50">\
             </div>\
         </div>\
     </div>';
 
 var InnopolisAdviser = {
     jsHostLocation: null,
+    advicePool : ["1","2","3"],
+    currentAdviceIndex : -1,
     cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
     hasAdvice: false,
@@ -52,21 +54,20 @@ var InnopolisAdviser = {
     },
 
     init: function () {
-        var that = this;
+        var self = this;
         $("script").each(function (index, js) {
-            if (js.src.indexOf(InnopolisAdviser.jsName) != -1) {
-                var location = that.getLocation(js.src);
+            if (js.src.indexOf(self.jsName) != -1) {
+                var location = self.getLocation(js.src);
                 if(location == null){
-                    that.jsHostLocation = "."; // dev environment
+                    self.jsHostLocation = "."; // dev environment
                 }
                 else{
-                    that.jsHostLocation = location.protocol + "//" + location.host;  // production environment
+                    self.jsHostLocation = location.protocol + "//" + location.host;  // production environment
                 }
             }
         });
 
-        injectHtml = injectHtml.replace(new RegExp("{host}", 'g'), that.jsHostLocation);
-
+        injectHtml = injectHtml.replace(new RegExp("{host}", 'g'), self.jsHostLocation);
 
         var script = document.createElement('script');
         script.type = "text/javascript";
@@ -79,7 +80,7 @@ var InnopolisAdviser = {
             script2.async = "async";
             script2.defer = "defer";
             script2.onload = function () {
-                that.connect();
+                self.connect();
             };
             script2.src = "https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js";
             document.getElementsByTagName('head')[0].appendChild(script2);
@@ -89,32 +90,72 @@ var InnopolisAdviser = {
 
         document.getElementsByTagName('head')[0].appendChild(script);
 
-
-        $('head').append('<link rel="stylesheet" type="text/css" href=" ' + InnopolisAdviser.jsHostLocation + InnopolisAdviser.cssLocation + '">');
+        $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation + this.cssLocation + '">');
         $('body').append(injectHtml);
 
+        //show-hide advisor button
         $("#advisorButton").click(function () {
-            if (that.isAdvisorHided()) {
-                that.showAdvisor();
+            if (self.isAdvisorHided()) {
+                self.showAdvisor();
             } else {
-                that.hideAdvisor();
-                that.hideAdvice();
+                self.hideAdvisor();
+                self.hideAdvice();
             }
         });
 
-        $("#advisorContent").click(function () {
-            if (that.hasAdvice && !that.adviceShowing) {
-                that.showAdvice();
+        //advice request button
+        $("#adviceRequestButton").click(function () {
+            if (self.hasAdvice && !self.adviceShowing) {
+                self.showAdvice();
             }
         });
 
-        $("#advisorAdvice").click(function () {
-            that.hideAdvice();
+        //button self closes advice cloud
+        $("#adviceCloseButton").click(function () {
+            self.hideAdvice();
+        });
+
+        //left and right advice cloud buttons
+        $("leftButton").click(function(){
+            self.adviceLeftButtonClicked();
+        });
+        $("rightButton").click(function(){
+            self.adviceRightButtonClicked();
         });
 
         //initial state
         this.hideAdvice();
         this.hideAdvisor();
+    },
+
+    adviceLeftButtonClicked : function () {
+        if(advicePool.length == 0){
+            return;
+        }
+        if(this.currentAdviceIndex == 0){
+            this.loadAdvice(this.advicePool.length - 1);
+        }
+        else{
+            this.loadAdvice(this.currentAdviceIndex - 1);
+        }
+    },
+
+    adviceRightButtonClicked : function () {
+        if(advicePool.length == 0){
+            return;
+        }
+        if(this.currentAdviceIndex == this.advicePool.length){
+            this.loadAdvice(0);
+        }
+        else{
+            this.loadAdvice(this.currentAdviceIndex + 1);
+        }
+    },
+
+    loadAdvice : function(index) {
+        var adviceToLoad = this.advicePool[index];
+        $("#adviceContent").innerHTML = adviceToLoad;
+        this.currentAdviceIndex = index;
     },
 
     setButtonImage : function(image){
@@ -125,20 +166,24 @@ var InnopolisAdviser = {
         $("#advisorImage").attr("src", this.jsHostLocation + "/resources/images/advisor/" + image + ".png"); 
     },
 
-    hideAdvisor: function () {
+    showDiv : function(div){
         //noinspection JSJQueryEfficiency
-        $("#advisorContent").animate({"opacity": 0});
+        $("#" + div).animate({"opacity": 1});
         //noinspection JSJQueryEfficiency
-        $("#advisorContent").hide();
-        //noinspection JSJQueryEfficiency
-        $("#adviceRequestButton").animate({"opacity": 0});
-        //noinspection JSJQueryEfficiency
-        $("#adviceRequestButton").hide();
-        //noinspection JSJQueryEfficiency
-        $("#settingsButton").animate({"opacity": 0});
-        //noinspection JSJQueryEfficiency
-        $("#settingsButton").hide();
+        $("#" + div).show();
+    },
 
+    hideDiv : function(div){
+        //noinspection JSJQueryEfficiency
+        $("#" + div).animate({"opacity": 0});
+        //noinspection JSJQueryEfficiency
+        $("#" + div).hide();
+    },
+
+    hideAdvisor: function () {
+        this.hideDiv("advisorContent");
+        this.hideDiv("adviceRequestButton");
+        this.hideDiv("settingsButton");
 
         if (this.hasAdvice && !this.adviceShowing) {
             this.setButtonImage("blub");
@@ -155,18 +200,9 @@ var InnopolisAdviser = {
             this.setAdvisorImage("advisor");
         }
         this.setButtonImage("collapse");
-        //noinspection JSJQueryEfficiency
-        $("#advisorContent").animate({"opacity": 1});
-        //noinspection JSJQueryEfficiency
-        $("#advisorContent").show();
-        //noinspection JSJQueryEfficiency
-        $("#adviceRequestButton").animate({"opacity": 1});
-        //noinspection JSJQueryEfficiency
-        $("#adviceRequestButton").show();
-        //noinspection JSJQueryEfficiency
-        $("#settingsButton").animate({"opacity": 1});
-        //noinspection JSJQueryEfficiency
-        $("#settingsButton").show();
+        this.showDiv("advisorContent");
+        this.showDiv("adviceRequestButton");
+        this.showDiv("settingsButton");
         this.isHided = false;
     },
 
@@ -180,6 +216,7 @@ var InnopolisAdviser = {
         if (this.isAdvisorHided()) {
             this.setButtonImage("blub");
         } else {
+            this.loadAdvice(this.advicePool.length - 1);
             this.showAdvisor();
         }
     },
@@ -188,38 +225,32 @@ var InnopolisAdviser = {
         this.adviceShowing = true;
         this.setAdvisorImage("advisor_texting");
         this.setButtonImage("collapse");
-        //noinspection JSJQueryEfficiency
-        $("#advisorAdvice").animate({"opacity": 1});
-        //noinspection JSJQueryEfficiency
-        $("#advisorAdvice").show();
+        this.showDiv("advisorAdvice");
     },
 
     hideAdvice: function () {
         this.hasAdvice = false;
         this.adviceShowing = false;
-        //noinspection JSJQueryEfficiency
-        $("#advisorAdvice").animate({"opacity": 0});
-        //noinspection JSJQueryEfficiency
-        $("#advisorAdvice").hide();
+        this.hideDiv("advisorAdvice");
         this.setAdvisorImage("advisor");
     },
 
     connect: function () {
-        var that = this;
-        if(that.jsHostLocation == "."){
+        var self = this;
+        if(self.jsHostLocation == "."){
             setInterval(function() {
-                if(!that.hasAdvice){
-                   $('#advisorAdviceText').html("test text");
+                if(!self.hasAdvice){
+                   self.advicePool.push("test text");
                    InnopolisAdviser.adviceReceived();
                 }
             },5000);
         }
         else{
-            var socket = new SockJS(that.jsHostLocation + '/advises');
+            var socket = new SockJS(self.jsHostLocation + '/advises');
             this.stompClient = Stomp.over(socket);
             this.stompClient.connect({}, function (frame) {
                 console.log('%c' + frame, 'background: #222; color: #bada55');
-                that.stompClient.subscribe('/', function (greeting) {
+                self.stompClient.subscribe('/', function (greeting) {
                     //var result = JSON.parse(greeting.body);
                     //console.log(greeting.body);
                     $('#advisorAdviceText').html(greeting.body);
