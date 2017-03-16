@@ -36,6 +36,7 @@ var InnopolisAdviser = {
     currentAdviceIndex : 1,
     cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
+    selectedAdvisor : "default",
     hasAdvice: false,
     adviceShowing: false,
     isHided: false,
@@ -159,11 +160,11 @@ var InnopolisAdviser = {
     },
 
     setButtonImage : function(image){
-        $("#advisorButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisorbutton/" + image + ".png");
+        $("#advisorButtonImage").attr("src", this.jsHostLocation + "/resources/images/advisors/" + this.selectedAdvisor + "/" + image + ".png");
     },
 
     setAdvisorImage : function(image) {
-        $("#advisorImage").attr("src", this.jsHostLocation + "/resources/images/advisor/" + image + ".png"); 
+        $("#advisorImage").attr("src", this.jsHostLocation + "/resources/images/advisors/" + this.selectedAdvisor + "/" + image + ".png"); 
     },
 
     showDiv : function(div){
