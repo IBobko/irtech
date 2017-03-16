@@ -52,6 +52,7 @@ body {
     width: 25px;
     height: 100px;
     background-color: lightblue;
+    z-index: 1001;
 }
 
 #advisorAdvice .image{

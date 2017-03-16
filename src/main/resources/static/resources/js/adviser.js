@@ -32,8 +32,8 @@ var injectHtml =
 
 var InnopolisAdviser = {
     jsHostLocation: null,
-    advicePool : ["1","2","3"],
-    currentAdviceIndex : -1,
+    advicePool : ["Привет! Я ваш помошник, время от времени я буду давать полезные советы."],
+    currentAdviceIndex : 1,
     cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
     hasAdvice: false,
@@ -103,6 +103,14 @@ var InnopolisAdviser = {
             }
         });
 
+        //left and right advice cloud buttons
+        $("#leftButton").click(function () {
+            self.adviceLeftButtonClicked();
+        });
+        $("#rightButton").click(function () {
+            self.adviceRightButtonClicked();
+        });
+
         //advice request button
         $("#adviceRequestButton").click(function () {
             if (self.hasAdvice && !self.adviceShowing) {
@@ -115,21 +123,13 @@ var InnopolisAdviser = {
             self.hideAdvice();
         });
 
-        //left and right advice cloud buttons
-        $("leftButton").click(function(){
-            self.adviceLeftButtonClicked();
-        });
-        $("rightButton").click(function(){
-            self.adviceRightButtonClicked();
-        });
-
         //initial state
         this.hideAdvice();
         this.hideAdvisor();
     },
 
     adviceLeftButtonClicked : function () {
-        if(advicePool.length == 0){
+        if(this.advicePool.length == 0){
             return;
         }
         if(this.currentAdviceIndex == 0){
@@ -141,10 +141,10 @@ var InnopolisAdviser = {
     },
 
     adviceRightButtonClicked : function () {
-        if(advicePool.length == 0){
+        if(this.advicePool.length == 0){
             return;
         }
-        if(this.currentAdviceIndex == this.advicePool.length){
+        if(this.currentAdviceIndex == this.advicePool.length - 1){
             this.loadAdvice(0);
         }
         else{
@@ -154,7 +154,7 @@ var InnopolisAdviser = {
 
     loadAdvice : function(index) {
         var adviceToLoad = this.advicePool[index];
-        $("#adviceContent").innerHTML = adviceToLoad;
+        document.getElementById("adviceContent").innerHTML = adviceToLoad;
         this.currentAdviceIndex = index;
     },
 
