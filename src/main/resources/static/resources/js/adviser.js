@@ -1,5 +1,4 @@
-var injectHtml = 
-    '<div id="advisor">\
+var injectHtml = '<div id="advisor">\
         <div id="advisorContent">\
             <img id="advisorImage" class="image" src="advisor.png"/>\
         </div>\
@@ -28,12 +27,23 @@ var injectHtml =
                 <img id="closeAdviceButtonImage" class="image50">\
             </div>\
         </div>\
+        <div id="myModal" class="modal">\
+            <div class="modal-content">\
+                <span class="close">&times;</span>\
+                <p>Выберите представление помошника</p>\
+                <select id="skinSelector">\
+                      <option value="default">Стандартный</option>\
+                      <option value="minion">Минионы</option>\
+                </select>\
+                <button id="modalDialogOkButton">Ok</button>\
+            </div>\
+        </div>\
     </div>';
 
 var InnopolisAdviser = {
     jsHostLocation: null,
     advicePool : ["Привет! Я ваш помошник, время от времени я буду давать полезные советы."],
-    currentAdviceIndex : 1,
+    currentAdviceIndex : 0,
     cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
     selectedAdvisor : "default",
@@ -67,9 +77,7 @@ var InnopolisAdviser = {
                 }
             }
         });
-
-        injectHtml = injectHtml.replace(new RegExp("{host}", 'g'), self.jsHostLocation);
-
+        
         var script = document.createElement('script');
         script.type = "text/javascript";
         script.async = "async";
@@ -94,6 +102,16 @@ var InnopolisAdviser = {
         $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation + this.cssLocation + '">');
         $('body').append(injectHtml);
 
+        //bind ui
+        this.bindButtons(this);
+        this.bindSettingsModal(this);
+
+        //initial state
+        this.hideAdvice();
+        this.hideAdvisor();
+    },
+
+    bindButtons : function (self) {
         //show-hide advisor button
         $("#advisorButton").click(function () {
             if (self.isAdvisorHided()) {
@@ -123,10 +141,43 @@ var InnopolisAdviser = {
         $("#adviceCloseButton").click(function () {
             self.hideAdvice();
         });
+    },
 
-        //initial state
-        this.hideAdvice();
-        this.hideAdvisor();
+    bindSettingsModal : function (self) {
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("settingsButton");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // Handle ok button
+        var okButton = document.getElementById("modalDialogOkButton");
+        okButton.onclick = function () {
+            modal.style.display = "none";
+            self.selectedAdvisor = document.getElementById("skinSelector").value;
+            self.hideAdvice();
+            self.hideAdvisor();      
+        }
+
+        // When the user clicks on the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     },
 
     adviceLeftButtonClicked : function () {
