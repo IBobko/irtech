@@ -44,9 +44,9 @@ var InnopolisAdviser = {
     jsHostLocation: null,
     advicePool : ["Привет! Я ваш помошник, время от времени я буду давать полезные советы."],
     currentAdviceIndex : 0,
-    cssLocation: "sresources/css/adviser.css",
+    cssLocation: "/adviser/static/resources/css/adviser.css",
     jsName: "adviser.js",
-    selectedAdvisor : "default",
+    selectedAdvisor : "default",r
     hasAdvice: false,
     adviceShowing: false,
     isHided: false,
@@ -206,11 +206,13 @@ var InnopolisAdviser = {
     },
 
     setButtonImage : function(image){
-        $("#advisorButtonImage").attr("src", this.jsHostLocation + "/resources/images.advisors/" + this.selectedAdvisor + "/" + image + ".png");
+        $("#advisorButtonImage").attr("src", this.jsHostLocation + "/adviser/static/resources/images/advisors/" + this.selectedAdvisor
+        + "/" + image + ".png");
     },
 
     setAdvisorImage : function(image) {
-        $("#advisorImage").attr("src", this.jsHostLocation + "/resources/images.advisors/" + this.selectedAdvisor + "/" + image + ".png");
+        $("#advisorImage").attr("src", this.jsHostLocation + "/adviser/static/resources/images/advisors/" + this.selectedAdvisor + "/"
+        + image + ".png");
     },
 
     showDiv : function(div){
