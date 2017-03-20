@@ -44,7 +44,7 @@ var InnopolisAdviser = {
     jsHostLocation: null,
     advicePool : ["Привет! Я ваш помошник, время от времени я буду давать полезные советы."],
     currentAdviceIndex : 0,
-    cssLocation: "resources/css/adviser.css",
+    cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
     selectedAdvisor : "default",
     hasAdvice: false,
