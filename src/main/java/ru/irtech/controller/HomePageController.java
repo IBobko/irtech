@@ -18,17 +18,6 @@ public class HomePageController {
     @RequestMapping("")
     @ResponseBody
     public String index() {
-        return "<!doctype html>\n" +
-                "<!--suppress ALL -->\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "    <script src=\"https://innsgo.ru/resources/js/adviser.js\"></script>\n" +
-                "    <meta charset=\"utf-8\"/>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "\n" +
-                "\n" +
-                "</body>\n" +
-                "</html>";
+        return "<!doctype html>\n<html>\n<head>\n<script src=\"https://insgo.ru/resources/js/adviser.js\"></script>\n<meta charset=\"utf-8\"/>\n</head>\n<body>\n</body>\n</html>";
     }
 }
