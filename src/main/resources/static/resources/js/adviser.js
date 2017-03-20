@@ -3,10 +3,10 @@ var injectHtml = '<div id="advisor">\
             <img id="advisorImage" class="image" src="advisor.png"/>\
         </div>\
         <div id="advisorButtons">\
-            <div id="settingsButton" class="button50" style="background-color: red">\
+            <div id="settingsButton" class="button50" >\
                 <img id="settingsButtonImage" class="image50">\
             </div>\
-            <div id="adviceRequestButton" class="button50" style="background-color: orange">\
+            <div id="adviceRequestButton" class="button50" >\
                 <img id="adviceRequestButtonImage" class="image50">\
             </div>\
         </div>\
@@ -46,7 +46,7 @@ var InnopolisAdviser = {
     currentAdviceIndex : 0,
     cssLocation: "/adviser/static/resources/css/adviser.css",
     jsName: "adviser.js",
-    selectedAdvisor : "default",r
+    selectedAdvisor : "default",
     hasAdvice: false,
     adviceShowing: false,
     isHided: false,
@@ -104,6 +104,8 @@ var InnopolisAdviser = {
         //initial state
         this.hideAdvice();
         this.hideAdvisor();
+        this.setImage("settingsButtonImage","settings"); //todo set specific method
+        this.setImage("adviceRequestButtonImage","show_advice");//todo set specific method
     },
 
     bindButtons : function (self) {
@@ -213,6 +215,11 @@ var InnopolisAdviser = {
     setAdvisorImage : function(image) {
         $("#advisorImage").attr("src", this.jsHostLocation + "/adviser/static/resources/images/advisors/" + this.selectedAdvisor + "/"
         + image + ".png");
+    },
+
+    setImage : function(image,src) {
+        $("#" + image).attr("src", this.jsHostLocation + "/adviser/static/resources/images/advisors/" + this.selectedAdvisor + "/"
+            + src + ".png");
     },
 
     showDiv : function(div){
