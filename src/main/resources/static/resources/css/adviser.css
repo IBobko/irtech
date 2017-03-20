@@ -51,7 +51,7 @@ body {
 #advisorAdvice .button {
     width: 25px;
     height: 100px;
-    background-color: lightblue;
+    background-color: light-blue;
     z-index: 1001;
 }
 

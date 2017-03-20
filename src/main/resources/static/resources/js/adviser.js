@@ -106,6 +106,7 @@ var InnopolisAdviser = {
         this.hideAdvisor();
         this.setImage("settingsButtonImage","settings"); //todo set specific method
         this.setImage("adviceRequestButtonImage","show_advice");//todo set specific method
+        this.setImage("closeAdviceButtonImage","close");//todo set specific method
     },
 
     bindButtons : function (self) {
