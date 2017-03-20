@@ -18,6 +18,17 @@ public class HomePageController {
     @RequestMapping("")
     @ResponseBody
     public String index() {
-        return "IrTech main page. Development Version Server.";
+        return "<!doctype html>\n" +
+                "<!--suppress ALL -->\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <script src=\"https://innsgo.ru/resources/js/adviser.js\"></script>\n" +
+                "    <meta charset=\"utf-8\"/>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
     }
 }
