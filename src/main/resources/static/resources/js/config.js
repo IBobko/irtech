@@ -18,11 +18,3 @@ requirejs(modules, function () {
     InnopolisAdviser.jsHostLocation = jsHostLocation;
     InnopolisAdviser.init();
 });
-
-
-
-
-
-
-
-
