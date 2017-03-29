@@ -1,45 +1,3 @@
-var injectHtml = '<div id="advisor">\
-        <div id="advisorContent">\
-            <img id="advisorImage" class="image" src="advisor.png"/>\
-        </div>\
-        <div id="advisorButtons">\
-            <div id="settingsButton" class="button50" >\
-                <img id="settingsButtonImage" class="image50">\
-            </div>\
-            <div id="adviceRequestButton" class="button50" >\
-                <img id="adviceRequestButtonImage" class="image50">\
-            </div>\
-        </div>\
-        <div id="advisorButton" class="button50">\
-            <img id="advisorButtonImage" class="image50">\
-        </div>\
-        <div id="advisorAdvice">\
-            <div id="leftButton" class="button">\
-                <img id="leftButtonImage" class="image">\
-            </div>\
-            <div id="adviceContent" class="content">\
-                \
-            </div>\
-            <div id="rightButton" class="button">\
-                <img id="rightButtonImage" class="image">\
-            </div>\
-            <div id="adviceCloseButton" class="button50">\
-                <img id="closeAdviceButtonImage" class="image50">\
-            </div>\
-        </div>\
-        <div id="myModal" class="modal">\
-            <div class="modal-content">\
-                <span class="close">&times;</span>\
-                <p>Выберите представление помошника</p>\
-                <select id="skinSelector">\
-                      <option value="default">Стандартный</option>\
-                      <option value="minion">Минионы</option>\
-                </select>\
-                <button id="modalDialogOkButton">Ok</button>\
-            </div>\
-        </div>\
-    </div>';
-
 var InnopolisAdviser = {
     jsHostLocation: null,
     advicePool : ["Привет! Я ваш помошник, время от времени я буду давать полезные советы."],
@@ -51,28 +9,28 @@ var InnopolisAdviser = {
     adviceShowing: false,
     isHided: false,
 
-    getLocation: function (href) {
-        var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
-        return match && {
-                protocol: match[1],
-                host: match[2],
-                hostname: match[3],
-                port: match[4],
-                pathname: match[5],
-                search: match[6],
-                hash: match[7]
-            }
-    },
+    // getLocation: function (href) {
+    //     var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+    //     return match && {
+    //             protocol: match[1],
+    //             host: match[2],
+    //             hostname: match[3],
+    //             port: match[4],
+    //             pathname: match[5],
+    //             search: match[6],
+    //             hash: match[7]
+    //         }
+    // },
 
     init: function () {
         var self = this;
-        $("script").each(function (index, js) {
-            if (js.src.indexOf(self.jsName) != -1) {
-                var location = self.getLocation(js.src);
-                    self.jsHostLocation = location.protocol + "//" + location.host;
-            }
-        });
-        
+        // $("script").each(function (index, js) {
+        //     if (js.src.indexOf(self.jsName) != -1) {
+        //         var location = self.getLocation(js.src);
+        //             self.jsHostLocation = location.protocol + "//" + location.host;
+        //     }
+        // });
+        //
         var script = document.createElement('script');
         script.type = "text/javascript";
         script.async = "async";
@@ -94,8 +52,14 @@ var InnopolisAdviser = {
 
         document.getElementsByTagName('head')[0].appendChild(script);
 
+
         $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation + this.cssLocation + '">');
-        $('body').append(injectHtml);
+        $.ajax({
+            url: this.jsHostLocation + "/templates/adviser.html",
+            async: false
+        }).done(function (content) {
+            $('body').append(content);
+        });
 
         //bind ui
         this.bindButtons(this);
@@ -203,9 +167,11 @@ var InnopolisAdviser = {
     },
 
     loadAdvice : function(index) {
-        var adviceToLoad = this.advicePool[index];
-        document.getElementById("adviceContent").innerHTML = adviceToLoad;
-        this.currentAdviceIndex = index;
+        if (!this.hasAdvice) {
+            var adviceToLoad = this.advicePool[index];
+            document.getElementById("adviceContent").innerHTML = adviceToLoad;
+            this.currentAdviceIndex = index;
+        }
     },
 
     setButtonImage : function(image){
@@ -260,6 +226,8 @@ var InnopolisAdviser = {
         this.showDiv("advisorContent");
         this.showDiv("adviceRequestButton");
         this.showDiv("settingsButton");
+
+        this.showDiv("advisorAdvice");
         this.isHided = false;
     },
 
@@ -301,34 +269,9 @@ var InnopolisAdviser = {
                 self.stompClient.subscribe('/', function (greeting) {
                     //var result = JSON.parse(greeting.body);
                     //console.log(greeting.body);
-                    $('#advisorAdviceText').html(greeting.body);
+                    $('#adviceContent').html(greeting.body);
                     InnopolisAdviser.adviceReceived();
                 });
             });
-    },
-
+    }
 };
-
-function Innopolis_Adviser_start() {
-    $(function () {
-        InnopolisAdviser.init();
-    });
-}
-
-if (typeof jQuery == 'undefined') {
-    var headTag = document.getElementsByTagName("head")[0];
-    var jqTag = document.createElement('script');
-    jqTag.type = 'text/javascript';
-    jqTag.src = 'https://code.jquery.com/jquery-3.1.1.min.js';
-    jqTag.onload = function () {
-        Innopolis_Adviser_start();
-    };
-    headTag.appendChild(jqTag);
-} else {
-    Innopolis_Adviser_start();
-}
-
-
-
-
-
