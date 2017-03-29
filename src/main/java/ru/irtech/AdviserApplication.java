@@ -29,6 +29,7 @@ public class AdviserApplication {
     /**
      * Registration of filter which tracks of Javascript's treatment.
      *
+     * @param hostNameStatService Service of hostname statistics.
      * @return New FilterRegistrationBean with new Filter.
      */
     @Bean

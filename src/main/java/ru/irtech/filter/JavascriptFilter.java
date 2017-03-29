@@ -18,6 +18,9 @@ public class JavascriptFilter implements Filter {
      */
     private HostNameStatService hostNameStatService;
 
+    /**
+     * @param hostNameStatService Service of hostname statistics.
+     */
     public JavascriptFilter(final HostNameStatService hostNameStatService) {
         this.hostNameStatService = hostNameStatService;
     }
