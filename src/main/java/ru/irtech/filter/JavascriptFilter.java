@@ -40,7 +40,12 @@ public class JavascriptFilter implements Filter {
             final HostnameStatDomain domain = new HostnameStatDomain();
             domain.setHostname(((RequestFacade) servletRequest).getHeader("referer"));
             domain.setTime(new GregorianCalendar());
-            domain.setUserIp(servletRequest.getRemoteAddr());
+
+            String ipAddress = ((RequestFacade) servletRequest).getHeader("X-FORWARDED-FOR");
+            if (ipAddress == null) {
+                ipAddress = servletRequest.getRemoteAddr();
+            }
+            domain.setUserIp(ipAddress);
             getHostNameStatService().save(domain);
         }
         filterChain.doFilter(servletRequest, servletResponse);
