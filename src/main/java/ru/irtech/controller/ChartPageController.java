@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/chart")
 public class ChartPageController {
+    /**
+     * Returns template of test chart.
+     *
+     * @return Tenplate of test chart.
+     */
     @RequestMapping("")
     public String index() {
         return "chart/index";
