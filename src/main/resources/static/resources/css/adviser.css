@@ -3,6 +3,8 @@ body {
     background: url('../../background.png')
 }
 
+/* main adviser css */
+
 #advisor {
     z-index: 1000;
     position: fixed;
@@ -93,6 +95,7 @@ body {
     height: 20px;
 }
 
+/* modal settings window css */
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -129,4 +132,19 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#skinSelector{
+    width: 800px;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+.skinContainer{
+	width: 150px;
+	height: 150px;
+	margin: 5px;
+	border: 0px solid #fdf2D0;
 }

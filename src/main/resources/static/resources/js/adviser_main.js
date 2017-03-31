@@ -31,6 +31,7 @@ var InnopolisAdviser = {
         //bind ui
         this.bindButtons(this);
         this.bindSettingsModal(this);
+        this.bindSkinSelector(this);
 
         //initial state
         this.hideAdvice();
@@ -85,28 +86,27 @@ var InnopolisAdviser = {
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
 
-        // Handle ok button
-        var okButton = document.getElementById("modalDialogOkButton");
-        okButton.onclick = function () {
-            modal.style.display = "none";
-            self.selectedAdvisor = document.getElementById("skinSelector").value;
-            self.hideAdvice();
-            self.hideAdvisor();
-        };
-
-        // When the user clicks on the button, open the modal 
+        // When the user clicks on the button, open the modal
         btn.onclick = function () {
             modal.style.display = "block";
+            $("#"+ self.selectedAdvisor +"SkinSelector").css("border-width","5px");
+        };
+
+        document.getElementById("closeSettingsButton").onclick = function () {
+            self.hideAdvisor();
+            modal.style.display = "none";
         };
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
+            self.hideAdvisor();
             modal.style.display = "none";
         };
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
+                self.hideAdvisor();
                 modal.style.display = "none";
             }
         }
@@ -263,5 +263,23 @@ var InnopolisAdviser = {
                 InnopolisAdviser.adviceReceived(advice);
             });
         });
+    },
+
+    /*skin selector methods*/
+    bindSkinSelector : function (self){
+        $("#defaultSkinSelector").click(function () {
+            self.selectSkin("default");
+                });
+        $("#minionSkinSelector").click(function () {
+            self.selectSkin("minion");
+                });
+
+    },
+
+    selectSkin : function (skin){
+        $("#skinSelector").find("img").css("border-width","0px");
+        $("#"+skin+"SkinSelector").css("border-width","5px");
+        this.selectedAdvisor = skin;
     }
+
 };
