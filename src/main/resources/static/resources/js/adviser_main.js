@@ -2,7 +2,6 @@ var InnopolisAdviser = {
     jsHostLocation: null,
     advicePool: [],
     currentAdviceIndex: 0,
-    cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
     selectedAdvisor: "default",
     hasAdvice: false,
@@ -16,13 +15,16 @@ var InnopolisAdviser = {
     },
 
     init: function () {
+
+        var mobile = "";
         if(this.checkIfMobile()){
-            return;
+            mobile = "mobile";
         }
 
-        $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation + this.cssLocation + '">');
+        $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
+                           + "/resources/css/adviser" + mobile + '.css">');
         $.ajax({
-            url: this.jsHostLocation + "/templates/adviser.html",
+            url: this.jsHostLocation + "/templates/adviser" + mobile + ".html",
             async: false
         }).done(function (content) {
             $('body').append(content);
