@@ -2,7 +2,6 @@ var InnopolisAdviser = {
     jsHostLocation: null,
     advicePool: [],
     currentAdviceIndex: 0,
-    cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
     selectedAdvisor: "default",
     hasAdvice: false,
@@ -20,13 +19,16 @@ var InnopolisAdviser = {
     },
 
     init: function () {
+
+        var mobile = "";
         if(this.checkIfMobile()){
-            return;
+            mobile = "mobile";
         }
 
-        $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation + this.cssLocation + '">');
+        $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
+                           + "/resources/css/adviser" + mobile + '.css">');
         $.ajax({
-            url: this.jsHostLocation + "/templates/adviser.html",
+            url: this.jsHostLocation + "/templates/adviser" + mobile + ".html",
             async: false
         }).done(function (content) {
             $('body').append(content);
@@ -35,6 +37,7 @@ var InnopolisAdviser = {
         //bind ui
         this.bindButtons(this);
         this.bindSettingsModal(this);
+        this.bindSkinSelector(this);
 
         //initial state
         this.hideAdvice();
@@ -89,28 +92,27 @@ var InnopolisAdviser = {
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
 
-        // Handle ok button
-        var okButton = document.getElementById("modalDialogOkButton");
-        okButton.onclick = function () {
-            modal.style.display = "none";
-            self.selectedAdvisor = document.getElementById("skinSelector").value;
-            self.hideAdvice();
-            self.hideAdvisor();
-        };
-
-        // When the user clicks on the button, open the modal 
+        // When the user clicks on the button, open the modal
         btn.onclick = function () {
             modal.style.display = "block";
+            $("#"+ self.selectedAdvisor +"SkinSelector").css("border-width","5px");
+        };
+
+        document.getElementById("closeSettingsButton").onclick = function () {
+            self.hideAdvisor();
+            modal.style.display = "none";
         };
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
+            self.hideAdvisor();
             modal.style.display = "none";
         };
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
+                self.hideAdvisor();
                 modal.style.display = "none";
             }
         }
@@ -267,5 +269,23 @@ var InnopolisAdviser = {
                 InnopolisAdviser.adviceReceived(advice);
             });
         });
+    },
+
+    /*skin selector methods*/
+    bindSkinSelector : function (self){
+        $("#defaultSkinSelector").click(function () {
+            self.selectSkin("default");
+                });
+        $("#minionSkinSelector").click(function () {
+            self.selectSkin("minion");
+                });
+
+    },
+
+    selectSkin : function (skin){
+        $("#skinSelector").find("img").css("border-width","0px");
+        $("#"+skin+"SkinSelector").css("border-width","5px");
+        this.selectedAdvisor = skin;
     }
+
 };
