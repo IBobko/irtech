@@ -11,16 +11,16 @@ body {
 }
 
 #advisorButtons {
-    width: 50px;
-    height: 100px;
+    width: 30px;
+    height: 60px;
     position: absolute;
-    bottom: 50px;
+    bottom: 30px;
 }
 
 #advisorButtons .button {
     float: left;
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
 }
 
 #advisorContent {
@@ -28,7 +28,7 @@ body {
     height: 150px;
     position: absolute;
     bottom: 0px;
-    right: 50px;
+    right: 30px;
 }
 
 #advisorContent .image{
@@ -37,11 +37,11 @@ body {
 }
 
 #advisorAdvice {
-    width: 400px;
-    height: 100px;
+    width: 440px;
+    min-height: 100px;
     position: absolute;
-    bottom: 10px;
-    right: 210px;
+    right: 190px;
+    bottom: 1px;
 }
 
 #advisorAdvice div{
@@ -49,39 +49,48 @@ body {
 }
 
 #advisorAdvice .button {
-    width: 25px;
-    height: 100px;
-    background-color: light-blue;
+    width: 20px;
+    min-height: 100px;
     z-index: 1001;
 }
 
 #advisorAdvice .image{
-    width: 25px;
-    height: 100px;
+    width: 20px;
+    min-height: 100px;
 }
 
 #advisorAdvice .content{
-    width: 350px;
+    width: 400px;
     height:100px;
-    background-color: light-blue;
+    background-color: #fdf2D0;
 }
 
 #adviceCloseButton {
-    width: 50px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     position: absolute;
-    bottom: 100px;
+    bottom: 70px;
     right: 25px;
 }
 
 .button50 {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
 }
 
 .image50 {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
+}
+
+.button20 {
+    width: 20px;
+    height: 20px;
+}
+
+.image20 {
+    width: 20px;
+    height: 20px;
 }
 
 /* The Modal (background) */

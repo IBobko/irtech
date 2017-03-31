@@ -1,6 +1,6 @@
 var InnopolisAdviser = {
     jsHostLocation: null,
-    advicePool: ["Привет! Я ваш помошник, время от времени я буду давать полезные советы."],
+    advicePool: [],
     currentAdviceIndex: 0,
     cssLocation: "/resources/css/adviser.css",
     jsName: "adviser.js",
@@ -25,9 +25,11 @@ var InnopolisAdviser = {
         //initial state
         this.hideAdvice();
         this.hideAdvisor();
-        this.setImage("settingsButtonImage", "settings"); //todo set specific method
-        this.setImage("adviceRequestButtonImage", "show_advice");//todo set specific method
-        this.setImage("closeAdviceButtonImage", "close");//todo set specific method
+        this.setImage("settingsButtonImage", "settings");
+        this.setImage("adviceRequestButtonImage", "show_advice");
+        this.setImage("closeAdviceButtonImage", "close");
+        this.setImage("rightButtonImage", "next_advice");
+        this.setImage("leftButtonImage", "prev_advice");
         this.connect();
     },
 
@@ -126,7 +128,7 @@ var InnopolisAdviser = {
 
     loadAdvice: function (index) {
         if (!this.hasAdvice) {
-            document.getElementById("adviceContent").innerHTML = this.advicePool[index];
+            document.getElementById("adviceContent").html = this.advicePool[index].content;
             this.currentAdviceIndex = index;
         }
     },
@@ -184,7 +186,6 @@ var InnopolisAdviser = {
         this.showDiv("adviceRequestButton");
         this.showDiv("settingsButton");
 
-        this.showDiv("advisorAdvice");
         this.isHided = false;
     },
 
@@ -192,7 +193,26 @@ var InnopolisAdviser = {
         return this.isHided;
     },
 
-    adviceReceived: function () {
+    checkId : function(id){
+        var self = this;
+        if(self.advicePool.length == 0){
+            return false;
+        }
+        for(var i = 0; i < self.advicePool.length; i++) {
+            if (self.advicePool[i].id == id) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    adviceReceived: function (advice) {
+        if(this.checkId(advice.id)){
+            return;
+        }
+
+        this.advicePool.push(advice);
+
         this.hasAdvice = true;
 
         if (this.isAdvisorHided()) {
@@ -222,12 +242,15 @@ var InnopolisAdviser = {
         var socket = new SockJS(self.jsHostLocation + '/advises');
         this.stompClient = Stomp.over(socket);
         this.stompClient.connect({}, function (frame) {
-            console.log('%c' + frame, 'background: #222; color: #bada55');
             self.stompClient.subscribe('/', function (greeting) {
                 //var result = JSON.parse(greeting.body);
                 //console.log(greeting.body);
-                $('#adviceContent').html(greeting.body);
-                InnopolisAdviser.adviceReceived();
+                var advice = {
+                    id : "1",
+                    type : "Text",
+                    content : "Привет! Я ваш помошник, время от времени я буду давать полезные советы."
+                };
+                InnopolisAdviser.adviceReceived(advice);
             });
         });
     }
