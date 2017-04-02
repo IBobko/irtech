@@ -1,6 +1,7 @@
 package ru.irtech.filter;
 
 import org.apache.catalina.connector.RequestFacade;
+import org.apache.catalina.connector.ResponseFacade;
 import ru.irtech.domain.HostnameStatDomain;
 import ru.irtech.service.HostNameStatService;
 
@@ -48,6 +49,9 @@ public class JavascriptFilter implements Filter {
             domain.setUserIp(ipAddress);
             getHostNameStatService().save(domain);
         }
+
+        ((ResponseFacade) servletResponse).setHeader("Access-Control-Allow-Origin", "*");
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
