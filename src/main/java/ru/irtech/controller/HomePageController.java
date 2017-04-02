@@ -16,7 +16,7 @@ public class HomePageController {
      */
     @RequestMapping("")
     public String index() {
-        return "IrTech main page. Master's Version Server";
+        return "index";
 
     }
 }
