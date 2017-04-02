@@ -14,7 +14,7 @@ import java.util.Random;
 @Component
 public class AdviseMessage {
     /**
-     * Temporary array of advertisement advices
+     * Temporary array of advertisement advices.
      * todo move to DBO
      */
     private ArrayList<String> advertisements = new ArrayList<String>() {
