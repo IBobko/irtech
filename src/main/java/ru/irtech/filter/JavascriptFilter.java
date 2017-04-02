@@ -50,7 +50,7 @@ public class JavascriptFilter implements Filter {
             getHostNameStatService().save(domain);
         }
 
-        ((ResponseFacade) servletResponse).setHeader("Access-Control-Allow-Origin", "*");
+        ((ResponseFacade) servletResponse).setHeader("Access-Control-Allow-Origin", "sg-o.ru");
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
