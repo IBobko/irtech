@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import ru.irtech.filter.AdvisorCorsFilter;
 import ru.irtech.filter.JavascriptFilter;
 import ru.irtech.service.HostNameStatService;
 
@@ -37,6 +38,7 @@ public class AdviserApplication {
     public FilterRegistrationBean myFilterRegistration(final HostNameStatService hostNameStatService) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new AdvisorCorsFilter());
         registration.setFilter(new JavascriptFilter(hostNameStatService));
         return registration;
     }
