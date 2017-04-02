@@ -22,5 +22,7 @@ public class AdviseMessageSocketConfig extends AbstractWebSocketMessageBrokerCon
         registry.addEndpoint("/advises").setAllowedOrigins("*").withSockJS();
     }
 
+
+
 }
 
