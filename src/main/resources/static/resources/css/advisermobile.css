@@ -60,6 +60,15 @@
     right: 20px;
 }
 
+.advertisementImage {
+    width : 75px;
+    height: 75px;
+}
+
+#adviceContent {
+    overflow-y : auto;
+}
+
 .right {
     float:right;
 }

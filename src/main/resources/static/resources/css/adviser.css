@@ -12,6 +12,14 @@
     bottom: 30px;
 }
 
+.right {
+    float:right;
+}
+
+.left {
+    float:left;
+}
+
 #advisorButtons .button {
     float: left;
     width: 30px;
@@ -33,7 +41,7 @@
 
 #advisorAdvice {
     width: 440px;
-    min-height: 100px;
+    height: 175px;
     position: absolute;
     right: 190px;
     bottom: 1px;
@@ -43,28 +51,35 @@
     float: left;
 }
 
-#advisorAdvice .button {
+#leftButton {
     width: 20px;
-    min-height: 100px;
-    z-index: 1001;
+    height: 175px;
 }
 
-#advisorAdvice .image{
+#leftButtonImage{
     width: 20px;
-    min-height: 100px;
+    height: 175px;
 }
 
-#advisorAdvice .content{
+#rightButtonImage{
+    width: 20px;
+    height: 175px;
+}
+
+#rightButton {
+    width: 20px;
+    height: 175px;
+}
+
+#adviceContent {
     width: 400px;
-    height:100px;
+    height:175px;
     background-color: #fdf2D0;
 }
 
 #adviceCloseButton {
-    width: 20px;
-    height: 20px;
     position: absolute;
-    bottom: 70px;
+    bottom: 145px;
     right: 25px;
 }
 
@@ -86,6 +101,11 @@
 .image20 {
     width: 20px;
     height: 20px;
+}
+
+.advertisementImage {
+    width : 150px;
+    height: 150px;
 }
 
 /* modal settings window css */
@@ -141,3 +161,4 @@
 	margin: 5px;
 	border: 0px solid #fdf2D0;
 }
+

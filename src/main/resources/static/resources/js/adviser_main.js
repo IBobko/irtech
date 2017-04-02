@@ -19,7 +19,7 @@ var InnopolisAdviser = {
     init: function () {
 
         var mobile = "";
-        if(this.checkIfMobile()){
+        if(!this.checkIfMobile()){
             mobile = "mobile";
         }
 
@@ -47,6 +47,13 @@ var InnopolisAdviser = {
         this.setImage("rightButtonImage", "next_advice");
         this.setImage("leftButtonImage", "prev_advice");
         this.connect();
+
+        //initial advice
+        var advice = {
+            id : 1,
+            content : "<p>Привет! Я ваш помошник, время от времени я буду давать полезные советы.</p>"
+        };
+        this.adviceReceived(advice);
     },
 
     bindButtons: function (self) {
@@ -142,10 +149,10 @@ var InnopolisAdviser = {
     },
 
     loadAdvice: function (index) {
-        if (!this.hasAdvice) {
-            document.getElementById("adviceContent").html = this.advicePool[index].content;
-            this.currentAdviceIndex = index;
-        }
+        var adviceContent = this.advicePool[index].content;
+        var advicePlaceHolder = document.getElementById("adviceContent");
+        advicePlaceHolder.innerHTML = adviceContent;
+        this.currentAdviceIndex = index;
     },
 
     setButtonImage: function (image) {
@@ -233,9 +240,9 @@ var InnopolisAdviser = {
         if (this.isAdvisorHided()) {
             this.setButtonImage("blub");
         } else {
-            this.loadAdvice(this.advicePool.length - 1);
             this.showAdvisor();
         }
+        this.loadAdvice(this.advicePool.length - 1);
     },
 
     showAdvice: function () {
@@ -257,17 +264,15 @@ var InnopolisAdviser = {
         var socket = new SockJS(self.jsHostLocation + '/advises');
         this.stompClient = Stomp.over(socket);
         this.stompClient.connect({}, function (frame) {
-            self.stompClient.subscribe('/', function (greeting) {
-                //var result = JSON.parse(greeting.body);
-                //console.log(greeting.body);
-                var advice = {
-                    id : "1",
-                    type : "Text",
-                    content : "Привет! Я ваш помошник, время от времени я буду давать полезные советы."
-                };
+            self.stompClient.subscribe('/partnerAdvertisement', function (message) {
+                var advice = JSON.parse(message.body);
+                advice.content = advice.content.replace(/&#34/g,'"')
                 InnopolisAdviser.adviceReceived(advice);
             });
         });
+    },
+
+    replaceAll(search,replace){
     },
 
     /*skin selector methods*/
