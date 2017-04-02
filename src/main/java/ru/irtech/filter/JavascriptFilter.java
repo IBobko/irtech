@@ -51,6 +51,8 @@ public class JavascriptFilter implements Filter {
         }
 
         ((ResponseFacade) servletResponse).setHeader("Access-Control-Allow-Origin", "https://sg-o.ru");
+        ((ResponseFacade) servletResponse).setHeader("Access-Control-Allow-Credentials", "true");
+
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
