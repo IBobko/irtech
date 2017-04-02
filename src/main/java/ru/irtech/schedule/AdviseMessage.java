@@ -5,11 +5,28 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 @Component
 public class AdviseMessage {
+    /**
+     * Temporary array of advertisement advices.
+     * todo move to DBO
+     */
+    private ArrayList<String> advertisements = new ArrayList<String>() {
+        {
+            add("{\"id\":1001,\"content\":\"<a href=&#34https://ad.admitad.com/g/05442bf5b3095ebd86e53a47696a87/?ulp=http%3A%2F%2Fnetology.ru%2F&#34 target=&#34_blank&#34><img src=&#34./resources/advertisements/netologia.png&#34 class=&#34advertisementImage&#34/><div>Получите востребованную интернет профессию!</div></a>\"}");
+            add("{\"id\":1002,\"content\":\"<a href=&#34https://ad.admitad.com/g/ap2mflhpx9095ebd86e552dab193aa/?ulp=http%3A%2F%2Frepetitors.info%2F&#34 target=&#34_blank&#34><img src=&#34./resources/advertisements/vash-repititor.jpg&#34 class=&#34advertisementImage&#34/><div>Ваш репетитор уже ждет вас!</div></a>\"}");
+            add("{\"id\":1003,\"content\":\"<a href=&#34https://ad.admitad.com/g/0abba212ff095ebd86e51ac5a4392d/?ulp=https%3A%2F%2Fpuzzle-english.com%2F&#34 target=&#34_blank&#34><img src=&#34./resources/advertisements/puzzle-english.png&#34 class=&#34advertisementImage&#34/><div>Начните понимать анлийский на слух!</div></a>\"}");
+            add("{\"id\":1004,\"content\":\"<a href=&#34https://ad.admitad.com/g/ejv76qyygv095ebd86e5731073a875/?ulp=https%3A%2F%2Fupstudy.ru%2F&#34 target=&#34_blank&#34><img src=&#34./resources/advertisements/upstudy.jpg&#34 class=&#34advertisementImage&#34/><div>Учи и учись</div></a>\"}");
+            add("{\"id\":1005,\"content\":\"<a href=&#34https://ad.admitad.com/g/6fz1m1rqml095ebd86e5806ff16a4a/&#34 target=&#34_blank&#34><img src=&#34./resources/advertisements/tcs.jpg&#34 class=&#34advertisementImage&#34/><div>Карта для умного шопинга!</div></a>\"}");
+            add("{\"id\":1006,\"content\":\"<div>А вы знали что песня Стюардесса по имени Жанна была написана в 1992 году? Вот ведь дела...</div>\"}");
+        }
+    };
 
     /**
      *
@@ -43,13 +60,9 @@ public class AdviseMessage {
      * Function sends advise to the subscribers.
      */
     @Scheduled(fixedRate = AdviseMessage.TIME_FOR_SENDING)
-    private void reportCurrentTime() {
-        getTemplate().convertAndSend("/", "    А вы знали что завтра будет"
-                + "очень холодно? Не забудте одеть шапку. Если у вас нет шапки"
-                + " то рекомендую купить её. \n"
-                + "<a target=\"_blank\""
-                + "href=\"http://pilnikov.ru/zhenskie-shapki.html\">"
-                + "Купить шапку без регистрации и смс!</a>");
+    private void getPartnerAdvertisement() {
+        int index = new Random().nextInt(advertisements.size());
+        getTemplate().convertAndSend("/partnerAdvertisement", advertisements.get(index));
     }
 
 }

@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
-@RequestMapping("/")
 @Controller
-public class HomePageController {
+@RequestMapping("/chart")
+public class ChartPageController {
     /**
-     * Main page of our site.
+     * Returns template of test chart.
      *
-     * @return Text which provided users.
+     * @return Tenplate of test chart.
      */
     @RequestMapping("")
     public String index() {
-        return "IrTech main page. Master's Version Server";
-
+        return "chart/index";
     }
+
 }

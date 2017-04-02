@@ -1,86 +1,76 @@
 #advisor {
     z-index: 1000;
     position: fixed;
+    width: 240px;
     bottom: 30px;
     right: 10px;
 }
 
 #advisorButtons {
-    width: 30px;
-    height: 60px;
-    position: absolute;
-    bottom: 30px;
-}
-
-.right {
-    float:right;
-}
-
-.left {
-    float:left;
+    width: 60px;
+    height: 30px;
 }
 
 #advisorButtons .button {
-    float: left;
     width: 30px;
     height: 30px;
 }
 
 #advisorContent {
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    bottom: 0px;
-    right: 30px;
+    width: 100px;
+    height: 100px;
 }
 
 #advisorContent .image{
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
 }
 
 #advisorAdvice {
-    width: 440px;
-    height: 175px;
-    position: absolute;
-    right: 190px;
-    bottom: 1px;
+    width: 240px;
+    min-height: 100px;
 }
 
 #advisorAdvice div{
     float: left;
 }
 
-#leftButton {
+#advisorAdvice .button {
     width: 20px;
-    height: 175px;
+    min-height: 100px;
+    z-index: 1001;
 }
 
-#leftButtonImage{
+#advisorAdvice .image{
     width: 20px;
-    height: 175px;
+    min-height: 100px;
 }
 
-#rightButtonImage{
-    width: 20px;
-    height: 175px;
-}
-
-#rightButton {
-    width: 20px;
-    height: 175px;
-}
-
-#adviceContent {
-    width: 400px;
-    height:175px;
+#advisorAdvice .content{
+    width: 200px;
+    height:100px;
     background-color: #fdf2D0;
 }
 
 #adviceCloseButton {
+    width: 20px;
+    height: 20px;
     position: absolute;
-    bottom: 145px;
-    right: 25px;
+    bottom: 120px;
+    right: 20px;
+}
+
+.advertisementImage {
+    width : 75px;
+    height: 75px;
+}
+
+#adviceContent {
+    overflow-y : auto;
+}
+
+.right {
+    float:right;
 }
 
 .button50 {
@@ -103,10 +93,6 @@
     height: 20px;
 }
 
-.advertisementImage {
-    width : 150px;
-    height: 150px;
-}
 
 /* modal settings window css */
 /* The Modal (background) */
@@ -161,4 +147,3 @@
 	margin: 5px;
 	border: 0px solid #fdf2D0;
 }
-
