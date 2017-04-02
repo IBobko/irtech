@@ -19,7 +19,7 @@ var InnopolisAdviser = {
     init: function () {
 
         var mobile = "";
-        if(!this.checkIfMobile()){
+        if(this.checkIfMobile()){
             mobile = "mobile";
         }
 
