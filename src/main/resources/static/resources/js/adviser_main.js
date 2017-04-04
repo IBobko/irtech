@@ -37,23 +37,55 @@ var InnopolisAdviser = {
         this.bindSettingsModal(this);
         this.bindSkinSelector(this);
 
-        //initial state
-        this.hideAdvice();
-        this.hideAdvisor();
-        this.setAdvisorImage("advisor");
-        this.setImage("settingsButtonImage", "settings");
-        this.setImage("adviceRequestButtonImage", "show_advice");
-        this.setImage("closeAdviceButtonImage", "close");
-        this.setImage("rightButtonImage", "next_advice");
-        this.setImage("leftButtonImage", "prev_advice");
+        this.setInitialState();
+
         this.connect();
 
-        //initial advice
-        var advice = {
-            id : 1,
-            content : "<p>Привет! Я ваш помошник, время от времени я буду давать полезные советы.</p>"
-        };
-        this.adviceReceived(advice);
+        //initial advice check //todo to a method
+        if(this.getCookie("greeting")==""){
+            var advice = {
+                        id : 1,
+                        content : "<p>Привет! Я ваш помощник, время от времени я буду давать полезные советы.</p>"
+                    };
+            this.adviceReceived(advice);
+            this.showAdvice();
+
+            this.setCookie("greeting","was",30);
+        }
+    },
+
+    setInitialState : function(){
+            this.hideAdvice();
+            this.showAdvisor();
+            this.setAdvisorImage("advisor");
+            this.setImage("settingsButtonImage", "settings");
+            this.setImage("adviceRequestButtonImage", "show_advice");
+            this.setImage("closeAdviceButtonImage", "close");
+            this.setImage("rightButtonImage", "next_advice");
+            this.setImage("leftButtonImage", "prev_advice");
+    },
+
+    setCookie : function (cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    },
+
+    getCookie : function (cname){
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     },
 
     bindButtons: function (self) {
@@ -105,20 +137,20 @@ var InnopolisAdviser = {
         };
 
         document.getElementById("closeSettingsButton").onclick = function () {
-            self.hideAdvisor();
+            self.setInitialState();
             modal.style.display = "none";
         };
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
-            self.hideAdvisor();
+            self.setInitialState();
             modal.style.display = "none";
         };
 
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
-                self.hideAdvisor();
+                self.setInitialState();
                 modal.style.display = "none";
             }
         }
@@ -242,12 +274,14 @@ var InnopolisAdviser = {
         } else {
             this.showAdvisor();
         }
+        this.setImage("adviceRequestButtonImage", "blub");
         this.loadAdvice(this.advicePool.length - 1);
     },
 
     showAdvice: function () {
         this.adviceShowing = true;
         this.setAdvisorImage("advisor_texting");
+        this.setImage("adviceRequestButtonImage", "show_advice");
         this.setButtonImage("collapse");
         this.showDiv("advisorAdvice");
     },
