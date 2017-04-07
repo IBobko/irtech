@@ -38,7 +38,7 @@
 #leftButton {
     width: 20px;
     height: 100px;
-    background-color: #fdf2D0;
+    background-color: #f6cc6a;
     border-radius: 15px 0px 0px 15px;
 }
 
@@ -53,7 +53,7 @@
 #rightButton {
     width: 20px;
     height: 100px;
-    background-color: #fdf2D0;
+    background-color: #f6cc6a;
     border-radius: 0px 15px 15px 0px;
 }
 
