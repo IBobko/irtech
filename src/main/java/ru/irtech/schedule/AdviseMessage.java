@@ -31,7 +31,7 @@ public class AdviseMessage {
     /**
      *
      */
-    private static final long TIME_FOR_SENDING = 30000;
+    private static final long TIME_FOR_SENDING = 5000;
     /**
      * For WeSocket usage.
      */
