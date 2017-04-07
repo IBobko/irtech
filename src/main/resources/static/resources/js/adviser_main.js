@@ -27,7 +27,16 @@ var InnopolisAdviser = {
             mobile = "mobile";
         }
 
-        // add css and html advisor template to current view
+        //initial advisor selected
+        if(this.getCookie("selectedAdvisor")==""){
+            this.setCookie("selectedAdvisor","default",365);
+            this.selectedAdvisor = "default";
+        }
+        else {
+            this.selectedAdvisor = this.getCookie("selectedAdvisor");
+        }
+
+// add css and html advisor template to current view
         $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
                            + "/resources/css/adviser" + mobile + '.css">');
         $.ajax({
@@ -365,6 +374,7 @@ var InnopolisAdviser = {
     selectSkin : function (skin){
         $("#skinSelector").find("img").css("border-width","0px");
         $("#"+skin+"SkinSelector").css("border-width","5px");
+        this.setCookie("selectedAdvisor",skin,365);
         this.selectedAdvisor = skin;
     }
 
