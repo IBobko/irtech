@@ -21,7 +21,7 @@ public class PearsonsCorrelationProcessor implements ICorrelationProcessor {
      * @return
      */
     @Override
-    public Dictionary<Integer, Double> ParseCorrelation(String csvFileName, Integer classColumnIndex
+    public Dictionary<Integer, Double> parseCorrelation(String csvFileName, Integer classColumnIndex
             , Integer[] targetColumnIndex) {
         Dictionary<Integer, Double> result = new Hashtable<>();
         try {

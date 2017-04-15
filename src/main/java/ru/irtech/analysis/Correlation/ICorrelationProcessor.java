@@ -4,9 +4,6 @@ import java.util.Dictionary;
 
 /**
  * Created by Iggytoto on 15.04.2017.
- */
-
-/**
  * Processor that counts correlations on .csv input file
  */
 public interface ICorrelationProcessor {
@@ -17,6 +14,6 @@ public interface ICorrelationProcessor {
      * @param targetColumnIndex indexes of column that points on the target attribute
      * @return Dictionary that contains pairs index -> correlation value.
      */
-    Dictionary<Integer,Double> ParseCorrelation(String csvFileName,Integer classColumnIndex
-            ,Integer[] targetColumnIndex);
+    Dictionary<Integer,Double> parseCorrelation(String csvFileName, Integer classColumnIndex
+            , Integer[] targetColumnIndex);
 }
