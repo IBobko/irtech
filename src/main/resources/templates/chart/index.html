@@ -1,88 +1,378 @@
 <!DOCTYPE html>
-<svg width="960" height="960" font-family="sans-serif" font-size="10" text-anchor="middle"></svg>
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+
+    <!-- DateTime picker -->
+    <link rel="stylesheet" href="resources/css/external/datetimepicker/bootstrap-datetimepicker.min.css"/>
+
+    <style>
+        .mt {
+            margin-top: 55px;
+        }
+
+        .bar rect {
+            fill: steelblue;
+        }
+
+        .bar text {
+            fill: #fff;
+            font: 10px sans-serif;
+        }
+
+    </style>
+
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-3 mt">
+            <div class="thumbnail">
+                <div class="list-group">
+                    <a id="learn"
+                       onclick="event.preventDefault();$('#prof').removeClass('active');
+                       $('#corr').removeClass('active'); $('#learn').addClass('active');
+                        histogram(); "
+                       class="list-group-item active">
+                        Обучение
+                    </a>
+                    <a id="prof"
+                       onclick="event.preventDefault(); $('#prof').addClass('active');
+                       $('#corr').removeClass('active'); $('#learn').removeClass('active');
+                        bubble_chart();"
+                       class="list-group-item">Проф ориентация</a>
+                    <a id="corr"
+                       onclick="event.preventDefault(); $('#corr').addClass('active');
+                        $('#prof').removeClass('active'); $('#learn').removeClass('active');
+                        linear_chart();"
+                       class="list-group-item">Корреляции</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <h1>Графики</h1>
+            <div id="dashboard">
+                <svg width="900" height="900" id="svg" font-family="sans-serif" font-size="10"
+                     text-anchor="middle"></svg>
+            </div>
+            <div>
+                <h1>Результаты</h1>
+            </div>
+        </div>
+
+        <div class="col-sm-3 col-md-3 mt">
+            <div class="form-group">
+                <label for="period">Период времени </label>
+                <select class="form-control" id="period">
+                    <option>Последняя Неделя</option>
+                    <option>Последний Месяц</option>
+                    <option>Последняя Четверть</option>
+                    <option>Последнее Полугодие</option>
+                    <option>Последний Год</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dtp_from">C </label>
+                <div class='input-group date' id='datetimepicker_from'>
+                    <input type='text' class="form-control" id="dtp_from"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dtp_to">По </label>
+                <div class='input-group date' id='datetimepicker_to'>
+                    <input type='text' class="form-control" id="dtp_to"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary">Экспорт в Excel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript files inserted at the end of the page to improve the loading performance -->
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="resources/js/external/moment/moment.min.js"></script>
+<script type="text/javascript" src="resources/js/external/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
 <script>
+    /**
+     * Generates bubble chart graphic from flare.csv file (some fake data)
+     * @return no return value, generated graph is places in svg
+     */
+    function bubble_chart() {
 
-    var svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
+        $("#svg").empty();
 
-    var format = d3.format(",d");
+        var svg = d3.select("svg"),
+                width = +document.getElementById('dashboard').offsetWidth,
+                height = +document.getElementById('dashboard').offsetWidth;
 
-    var color = d3.scaleOrdinal(d3.schemeCategory20c);
+        var format = d3.format(",d");
 
-    var pack = d3.pack()
-        .size([width, height])
-        .padding(1.5);
+        var color = d3.scaleOrdinal(d3.schemeCategory20c);
 
-    d3.csv("/flare.csv", function (d) {
-        d.value = +d.value;
-        if (d.value) return d;
-    }, function (error, classes) {
-        if (error) throw error;
+        var pack = d3.pack()
+                .size([width, height])
+                .padding(1.5);
 
-        var root = d3.hierarchy({children: classes})
-            .sum(function (d) {
-                return d.value;
-            })
-            .each(function (d) {
-                if (id = d.data.id) {
-                    var id, i = id.lastIndexOf(".");
-                    d.id = id;
-                    d.package = id.slice(0, i);
-                    d.class = id.slice(i + 1);
-                }
-            });
+        d3.csv("/flare.csv", function (d) {
+            d.value = +d.value;
+            if (d.value) return d;
+        }, function (error, classes) {
+            if (error) throw error;
 
-        var node = svg.selectAll(".node")
-            .data(pack(root).leaves())
-            .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function (d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            });
+            var root = d3.hierarchy({children: classes})
+                    .sum(function (d) {
+                        return d.value;
+                    })
+                    .each(function (d) {
+                        if (id = d.data.id) {
+                            var id, i = id.lastIndexOf(".");
+                            d.id = id;
+                            d.package = id.slice(0, i);
+                            d.class = id.slice(i + 1);
+                        }
+                    });
 
-        node.append("circle")
-            .attr("id", function (d) {
+            var node = svg.selectAll(".node")
+                    .data(pack(root).leaves())
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", function (d) {
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
+
+            node.append("circle")
+                    .attr("id", function (d) {
+                        return d.id;
+                    })
+                    .attr("r", function (d) {
+                        return d.r;
+                    })
+                    .style("fill", function (d) {
+                        return color(d.package);
+                    });
+
+            node.append("clipPath")
+                    .attr("id", function (d) {
+                        return "clip-" + d.id;
+                    })
+                    .append("use")
+                    .attr("xlink:href", function (d) {
+                        return "#" + d.id;
+                    });
+
+            node.append("text")
+                    .attr("clip-path", function (d) {
+                        return "url(#clip-" + d.id + ")";
+                    })
+                    .selectAll("tspan")
+                    .data(function (d) {
+                        return d.class.split(/(?=[A-Z][^A-Z])/g);
+                    })
+                    .enter().append("tspan")
+                    .attr("x", 0)
+                    .attr("y", function (d, i, nodes) {
+                        return 13 + (i - nodes.length / 2 - 0.5) * 10;
+                    })
+                    .text(function (d) {
+                        return d;
+                    });
+
+            node.append("title")
+                    .text(function (d) {
+                        return d.id + "\n" + format(d.value);
+                    });
+        });
+    }
+
+    /**
+     * Generates histogram graphic from randomly generated data
+     * @todo plot histogram for grades
+     * @return no return value, generated graph is places in svg
+     */
+    function histogram() {
+        $("#svg").empty();
+        var data = d3.range(100).map(d3.randomBates(10));
+
+        var formatCount = d3.format(",.0f");
+
+        var svg = d3.select("svg"),
+                margin = {top: 10, right: 10, bottom: 10, left: 10},
+                width = +document.getElementById('dashboard').offsetWidth,
+                height = +document.getElementById('dashboard').offsetWidth-100;
+
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var x = d3.scaleLinear()
+                .rangeRound([0, width]);
+
+        var bins = d3.histogram()
+                .domain(x.domain())
+                .thresholds(x.ticks(20))
+                (data);
+
+        var y = d3.scaleLinear()
+                .domain([0, d3.max(bins, function (d) {
+                    return d.length;
+                })])
+                .range([height, 0]);
+
+        var bar = g.selectAll(".bar")
+                .data(bins)
+                .enter().append("g")
+                .attr("class", "bar")
+                .attr("transform", function (d) {
+                    return "translate(" + x(d.x0) + "," + y(d.length) + ")";
+                });
+
+        bar.append("rect")
+                .attr("x", 1)
+                .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
+                .attr("height", function (d) {
+                    return height - y(d.length);
+                });
+
+        bar.append("text")
+                .attr("dy", ".75em")
+                .attr("y", 6)
+                .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
+                .attr("text-anchor", "middle")
+                .text(function (d) {
+                    return formatCount(d.length);
+                });
+
+        g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+    }
+
+    /**
+     * Generates linear chart graphic
+     * @return no return value, generated graph is places in svg
+     */
+    function linear_chart() {
+        $("#svg").empty();
+        var svg = d3.select("svg"),
+                margin = {top: 10, right: 30, bottom: 10, left: 30},
+                width = +document.getElementById('dashboard').offsetWidth,
+                height = +document.getElementById('dashboard').offsetWidth-100;
+                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        console.log(document.getElementById('dashboard').offsetWidth-100);
+
+        var x0 = d3.scaleLinear()
+                .domain([0, 9])
+                .range([0, 500]);
+
+        var x1 = d3.scaleLinear()
+                .domain([0, 9])
+                .range([0, 500]);
+
+
+        var y = d3.scaleLinear()
+                .domain([5, 2])
+                .range([10, 500]);
+
+        var line = d3.line()
+                .x(function (d) {
+                    return x0(d.id);
+                })
+                .y(function (d) {
+                    return y(d.year_middle);
+                });
+
+        d3.csv("fakeData.csv", function (d) {
+            d.id = parseInt(d.id);
+            d.year_middle = parseFloat(d.year_middle);
+            return d;
+        }, function (error, data) {
+            if (error) throw error;
+
+            x0.domain(d3.extent(data, function (d) {
                 return d.id;
-            })
-            .attr("r", function (d) {
-                return d.r;
-            })
-            .style("fill", function (d) {
-                return color(d.package);
-            });
+            }));
+            y.domain(d3.extent(data, function (d) {
+                return d.year_middle;
+            }));
 
-        node.append("clipPath")
-            .attr("id", function (d) {
-                return "clip-" + d.id;
-            })
-            .append("use")
-            .attr("xlink:href", function (d) {
-                return "#" + d.id;
-            });
+            // adding x axes
+            g.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x0))
+                    .select(".domain")
+                    .remove();
 
-        node.append("text")
-            .attr("clip-path", function (d) {
-                return "url(#clip-" + d.id + ")";
-            })
-            .selectAll("tspan")
-            .data(function (d) {
-                return d.class.split(/(?=[A-Z][^A-Z])/g);
-            })
-            .enter().append("tspan")
-            .attr("x", 0)
-            .attr("y", function (d, i, nodes) {
-                return 13 + (i - nodes.length / 2 - 0.5) * 10;
-            })
-            .text(function (d) {
-                return d;
-            });
+            //adding y axes
+            g.append("g")
+                    .call(d3.axisLeft(y))
+                    .append("text")
+                    .attr("fill", "#000")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", "0.71em")
+                    .attr("text-anchor", "end")
+                    .text("среднегодовая оценка");
 
-        node.append("title")
-            .text(function (d) {
-                return d.id + "\n" + format(d.value);
-            });
+            console.log(data);
+            // adding line
+            g.append("path")
+                    .datum(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line);
+        });
+    }
+
+    // функция для подключения виджета datetimepicker
+    $(function () {
+        $('#datetimepicker_from').datetimepicker(
+                {
+                    language: 'ru',
+                    pickTime: false,
+                    format: 'DD/MM/YYYY'
+                }
+        );
+    });
+
+    // функция для подключения виджета datetimepicker
+    $(function () {
+        $('#datetimepicker_to').datetimepicker(
+                {
+                    language: 'ru',
+                    pickTime: false,
+                    format: 'DD/MM/YYYY'
+                }
+        );
     });
 
 </script>
+</body>
+</html>
