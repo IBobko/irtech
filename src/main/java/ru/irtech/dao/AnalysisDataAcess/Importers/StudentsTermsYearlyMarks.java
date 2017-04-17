@@ -20,12 +20,13 @@ import java.util.List;
  */
 public class StudentsTermsYearlyMarks extends BaseImporter {
     /**
-     * Main processing method
+     * Main processing method.
+     *
      * @param databaseName target database for apply query
      * @return path to csv file
      */
     @Override
-    public String importData(File file,String databaseName) {
+    public String importData(final File file, final String databaseName) {
         String result = "test";
         try {
 
@@ -45,9 +46,9 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
             for (int studentId : studentIds) {
-                if (!studentPeriodGradeMap.containsKey(studentId) ||
-                        !studentYearlyGradeMap.containsKey(studentId) ||
-                        !studentRelationsMap.containsKey(studentId)) {
+                if (!studentPeriodGradeMap.containsKey(studentId)
+                        || !studentYearlyGradeMap.containsKey(studentId)
+                        || !studentRelationsMap.containsKey(studentId)) {
                     continue;
                 }
 
@@ -60,45 +61,46 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
             connection.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            return result;
         }
+
+        return result;
+
     }
 
     /**
-     * method that queries database for all student ids
+     * method that queries database for all student ids.
+     *
      * @param connection connection to database
      * @return list of ids
      */
-    private List<Integer> queryStudentIds(Connection connection) {
+    private List<Integer> queryStudentIds(final Connection connection) {
         List<Integer> result = new ArrayList<>();
-        try
-        {
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("select DISTINCT u.USERID\n" +
-                "from users as u\n" +
-                "inner join USERSROLES as ur\n" +
-                "\ton u.USERID=ur.USERID\n" +
-                "\twhere ur.ROLEID = 4");
-        while (rs.next()) {
-            result.add(rs.getInt(1));
-        }
-        rs.close();
-        st.close();}
-        catch (Exception e){
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT DISTINCT u.USERID\n"
+                    + "FROM users AS u\n"
+                    + "INNER JOIN USERSROLES AS ur\n"
+                    + "\tON u.USERID=ur.USERID\n"
+                    + "\tWHERE ur.ROLEID = 4");
+            while (rs.next()) {
+                result.add(rs.getInt(1));
+            }
+            rs.close();
+            st.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        finally{
-            return result;
-        }
+
+        return result;
     }
 
     /**
-     * Method that queries database for students family relations (parents)
+     * Method that queries database for students family relations (parents).
+     *
      * @param connection connection to database
      * @return set of student ids and their relations (7 for mother, 8 for father)
      */
-    private AbstractMap<Integer, List<Integer>> queryRelationships(Connection connection) {
+    private AbstractMap<Integer, List<Integer>> queryRelationships(final Connection connection) {
         AbstractMap<Integer, List<Integer>> result = new HashMap<>();
         Statement st;
         try {
@@ -106,8 +108,8 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
 
             ResultSet rs;
 
-            rs = st.executeQuery("select userid,relationshiptypeid from FAMILYINFO \n" +
-                    "where RELATIONSHIPTYPEID = 7 or RELATIONSHIPTYPEID =8");
+            rs = st.executeQuery("SELECT userid,relationshiptypeid FROM FAMILYINFO \n"
+                    + "WHERE RELATIONSHIPTYPEID = 7 OR RELATIONSHIPTYPEID =8");
             while (rs.next()) {
                 int studentId = rs.getInt(1);
                 int relation = rs.getInt(2);
@@ -118,23 +120,21 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
                 rs.close();
                 st.close();
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
-            return result;
-        }
+
+        return result;
 
     }
 
     /**
-     * Method that queries database for students yearly grades
+     * Method that queries database for students yearly grades.
      *
      * @param connection connection to database
      * @return reference to resulting hashmap
      */
-    private HashMap<Integer, List<Double>> queryYearGrades(Connection connection) {
+    private HashMap<Integer, List<Double>> queryYearGrades(final Connection connection) {
         HashMap<Integer, List<Double>> result = new HashMap<>();
         Statement st;
         try {
@@ -155,18 +155,17 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            return result;
         }
+        return result;
     }
 
     /**
-     * MEthod that queries database and search for all term grades of all students
+     * MEthod that queries database and search for all term grades of all students.
      *
      * @param connection connection to database
      * @return reference to resulting hashmap
      */
-    private HashMap<Integer, List<Double>> queryTermGrades(Connection connection) {
+    private HashMap<Integer, List<Double>> queryTermGrades(final Connection connection) {
         HashMap<Integer, List<Double>> result = new HashMap<>();
         Statement st;
         try {
@@ -186,8 +185,8 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            return result;
         }
+        return result;
+
     }
 }

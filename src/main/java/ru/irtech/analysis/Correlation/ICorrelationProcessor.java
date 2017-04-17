@@ -8,12 +8,12 @@ import java.util.Dictionary;
  */
 public interface ICorrelationProcessor {
     /**
-     * Main processing method
+     * Main processing method.
      * @param csvFileName input path to .csv file
      * @param classColumnIndex index of column that points on the class
      * @param targetColumnIndex indexes of column that points on the target attribute
      * @return Dictionary that contains pairs index -> correlation value.
      */
-    Dictionary<Integer,Double> parseCorrelation(String csvFileName, Integer classColumnIndex
-            , Integer[] targetColumnIndex);
+    Dictionary<Integer, Double> parseCorrelation(String csvFileName, Integer classColumnIndex,
+                                                 Integer[] targetColumnIndex);
 }

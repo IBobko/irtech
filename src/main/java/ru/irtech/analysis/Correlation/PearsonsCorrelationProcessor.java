@@ -13,16 +13,16 @@ import java.util.Hashtable;
  */
 public class PearsonsCorrelationProcessor implements ICorrelationProcessor {
     /**
-     * Process the data
+     * Process the data.
      *
      * @param csvFileName       input path to .csv file
      * @param classColumnIndex  index of column that points on the class
      * @param targetColumnIndex indexes of column that points on the target attribute
-     * @return
+     * @return .
      */
     @Override
-    public Dictionary<Integer, Double> parseCorrelation(String csvFileName, Integer classColumnIndex
-            , Integer[] targetColumnIndex) {
+    public Dictionary<Integer, Double> parseCorrelation(final String csvFileName, final Integer classColumnIndex,
+                                                        final Integer[] targetColumnIndex) {
         Dictionary<Integer, Double> result = new Hashtable<>();
         try {
             ConverterUtils.DataSource source = new ConverterUtils.DataSource(csvFileName);
@@ -38,8 +38,9 @@ public class PearsonsCorrelationProcessor implements ICorrelationProcessor {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage()); //TODO Implement Logger
-        } finally {
-            return result;
         }
+
+        return result;
+
     }
 }

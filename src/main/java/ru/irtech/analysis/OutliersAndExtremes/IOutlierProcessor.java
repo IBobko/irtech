@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface IOutlierProcessor {
     /**
-     * Parse input method
+     * Parse input method.
      * @param csvInputFile target .csv file with input data
      * @param idIndex entity index id that should be counted as entity reference
      * @param targetColumns target columns to search on

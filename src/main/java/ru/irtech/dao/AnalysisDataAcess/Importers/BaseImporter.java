@@ -8,13 +8,14 @@ import java.sql.SQLException;
  * Created by Iggytoto on 16.04.2017.
  * Base importer class
  */
-public abstract class BaseImporter implements ICsvImporter{
+abstract class BaseImporter implements ICsvImporter {
     /**
-     * Method that returns connection to database
+     * Method that returns connection to database.
+     *
      * @param databaseName database name to connect to
      * @return java.sql.Connection instance or NULL if something bad happened
      */
-    Connection getConnection(String databaseName){
+    Connection getConnection(final String databaseName) {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -23,7 +24,7 @@ public abstract class BaseImporter implements ICsvImporter{
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://innsgo.ru:5432/" + databaseName,"postgres", "yOklqXf4");
+                    "jdbc:postgresql://innsgo.ru:5432/" + databaseName, "postgres", "yOklqXf4");
         } catch (SQLException e) {
             e.printStackTrace();
         }

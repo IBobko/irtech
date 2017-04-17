@@ -5,16 +5,25 @@ import java.util.List;
 
 /**
  * Created by Iggytoto on 16.04.2017.
+ *
  */
-public class DataBaseList {
+public final class DataBaseList {
     /**
-     * List of currently accessible databases with data
+     * List of currently accessible databases with data.
      */
-    public static List<String> dataBases = new ArrayList<String>(){
+    private static List<String> dataBases = new ArrayList<String>() {
         {
             add("irtech_data");
         }
     };
 
+    /**
+     * Constructor must be private for utility classes.
+     */
+    private DataBaseList() {
+    }
 
+    public static List<String> getDataBases() {
+        return dataBases;
+    }
 }
