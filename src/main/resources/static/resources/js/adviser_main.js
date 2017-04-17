@@ -366,7 +366,12 @@ var InnopolisAdviser = {
         $("#minionSkinSelector").click(function () {
             self.selectSkin("minion");
                 });
-
+        $("#alexSkinSelector").click(function () {
+            self.selectSkin("alex");
+                });
+        $("#pandaSkinSelector").click(function () {
+            self.selectSkin("panda");
+                });
     },
 
     //selects the skin
