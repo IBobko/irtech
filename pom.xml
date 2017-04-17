@@ -97,6 +97,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<includeFilterFile>src/main/resources/filter-find-bug.xml</includeFilterFile>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
