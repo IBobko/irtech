@@ -1,8 +1,8 @@
 #advisor {
     z-index: 1000;
     position: fixed;
-    bottom: 30px;
-    right: 10px;
+    bottom: 50px;
+    right: 30px;
 }
 
 #advisorButtons {
@@ -54,21 +54,25 @@
 #leftButton {
     width: 20px;
     height: 175px;
+    background-color: #f6cc6a;
+    border-radius: 15px 0px 0px 15px;
 }
 
 #leftButtonImage{
     width: 20px;
-    height: 175px;
+    margin-top: 20px;
 }
 
 #rightButtonImage{
     width: 20px;
-    height: 175px;
+    margin-top: 20px;
 }
 
 #rightButton {
     width: 20px;
     height: 175px;
+    background-color: #f6cc6a;
+    border-radius: 0px 15px 15px 0px;
 }
 
 #adviceContent {
@@ -160,5 +164,10 @@
 	height: 150px;
 	margin: 5px;
 	border: 0px solid #fdf2D0;
+}
+
+#closeSettingsButton {
+    width: 100px;
+    height: 30px;
 }
 
