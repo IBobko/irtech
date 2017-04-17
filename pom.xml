@@ -74,7 +74,15 @@
 			<version>3.8.0</version>
 		</dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>javafx</groupId>
+            <artifactId>jfxrt</artifactId>
+            <version>${java.version}</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
+        </dependency>
+
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -97,6 +105,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<includeFilterFile>src/main/resources/filter-find-bug.xml</includeFilterFile>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

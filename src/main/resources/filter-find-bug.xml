@@ -1,0 +1,10 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="ru.irtech.controller.AdviceRestController"/>
+
+        <Bug pattern="DMI_HARDCODED_ABSOLUTE_FILENAME"/>
+        <Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE"/>
+    </Match>
+
+
+</FindBugsFilter>
