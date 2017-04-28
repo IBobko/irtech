@@ -6,10 +6,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.thymeleaf.util.StringUtils;
 
 import java.io.*;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,10 +40,10 @@ public class AdviserApplicationTests {
 
         final Statement statement = connection.createStatement();
 
-        String text = "Text to save to file";
+        String text = "Log of file\n";
 
-        Path errorsFile = Paths.get("./errors.txt");
-        Files.write(errorsFile, text.getBytes());
+        final Path errorsFile = Paths.get("./errors.txt");
+        Files.write(errorsFile, text.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 
         final Path rootPath = Paths.get(PATH_TO_DUMP);
 
@@ -58,7 +55,8 @@ public class AdviserApplicationTests {
                         try {
                             statement.execute("TRUNCATE TABLE " + path.getFileName());
                         } catch (Exception e) {
-                            Files.write(errorsFile, e.getMessage().getBytes());
+                            String message = path.getFileName() + " : " + e.getMessage() + "\n";
+                            Files.write(errorsFile, message.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
                             System.out.println(e.getMessage());
                             continue;
                         }
@@ -82,7 +80,9 @@ public class AdviserApplicationTests {
                             final List<String> columnsArray = Arrays.asList(columns).subList(1, columns.length);
                             sql = "INSERT INTO " + path.getFileName() + " (" + StringUtils.join(columnsArray, ",") + ")";
 
+                            int currentLine = 0;
                             while ((sCurrentLine = br.readLine()) != null) {
+                                currentLine++;
                                 String s = sql;
 
                                 s = s + " VALUES (";
@@ -118,7 +118,8 @@ public class AdviserApplicationTests {
                                 try {
                                     statement.execute(s);
                                 } catch (Exception e) {
-                                    Files.write(errorsFile, e.getMessage().getBytes());
+                                    String message = path.getFileName() + " : Line: " + currentLine + "; " + e.getMessage() + "\n";
+                                    Files.write(errorsFile, message.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
                                     System.out.println(e.getMessage());
                                 }
                             }
@@ -126,7 +127,7 @@ public class AdviserApplicationTests {
                     }
                 }
             } catch (IOException e) {
-                Files.write(errorsFile, e.getMessage().getBytes());
+                Files.write(errorsFile, e.getMessage().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
                 throw new RuntimeException(e);
             }
         }
