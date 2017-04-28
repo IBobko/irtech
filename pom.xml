@@ -99,7 +99,7 @@
 				<version>3.0.4</version> <!-- using latest from maven central, feel free to use any specific -->
 				<executions>
 					<execution>
-						<phase>install</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
@@ -118,7 +118,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<phase>install</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
