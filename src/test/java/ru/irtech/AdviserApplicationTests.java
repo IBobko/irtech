@@ -50,7 +50,7 @@ public class AdviserApplicationTests {
     public void contextLoads() throws SQLException, IOException {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://innsgo.ru:5432/irtech_data");
+        dataSource.setUrl("jdbc:postgresql://innsgo.ru:5432/irtech_data_test");
         dataSource.setUsername("postgres");
         dataSource.setPassword("yOklqXf4");
 
