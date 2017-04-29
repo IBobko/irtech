@@ -1,6 +1,7 @@
 package ru.irtech;
 
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.thymeleaf.util.StringUtils;
@@ -151,6 +152,7 @@ public class AdviserApplicationTests {
                             value = "'" + value + "'";
                         }
                         value = value.replace(",", ".");
+                        value = StringEscapeUtils.escapeSql(value);
                         tmpArgumentsArray.set(i,value);
                     }
 
