@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.remoting.rmi.RmiServiceExporter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -12,16 +11,20 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 @Component
 @DependsOn("a11")
 public class N extends RmiServiceExporter {
-
-
-
-
-    public N(@Autowired AImpl a11) {
+    /**
+     * PORT.
+     */
+    private static final int PORT = 1199;
+    /**
+     *  constructor.
+     * @param a11 service.
+     */
+    public N(@Autowired final AImpl a11) {
 
         setServiceName("a11");
         setService(a11);
         setServiceInterface(A.class);
-        setRegistryPort(1199);
+        setRegistryPort(PORT);
 
     }
 }

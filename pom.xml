@@ -88,6 +88,12 @@
 			<version>2.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>ru.irtech</groupId>
+			<artifactId>AdviserRmiObjects</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
     </dependencies>
 
 	<build>

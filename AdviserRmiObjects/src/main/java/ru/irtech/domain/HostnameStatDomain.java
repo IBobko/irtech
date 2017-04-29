@@ -1,6 +1,7 @@
 package ru.irtech.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Calendar;
  */
 @Entity
 @Table(name = "hostname_stat")
-public class HostnameStatDomain {
+public class HostnameStatDomain implements Serializable {
     /**
      * Primary key.
      */

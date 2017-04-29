@@ -1,4 +1,4 @@
-package ru.irtech;
+package ru.irtech.engine;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

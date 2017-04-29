@@ -1,4 +1,4 @@
-package ru.irtech;
+package ru.irtech.engine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -14,6 +14,9 @@ import javax.jms.Session;
 @Controller
 public class ActiveMQController {
 
+    /**
+     * TEST.
+     */
     private JmsTemplate jmsTemplate;
 
     private JmsTemplate getJmsTemplate() {
@@ -21,10 +24,14 @@ public class ActiveMQController {
     }
 
     @Autowired
-    public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    public void setJmsTemplate(final JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 
+    /**
+     * TEST.
+     * @return response.
+     */
     @ResponseBody
     @RequestMapping
     public String index() {
