@@ -37,21 +37,15 @@
             <div class="thumbnail">
                 <div class="list-group">
                     <a id="learn"
-                       onclick="event.preventDefault();$('#prof').removeClass('active');
-                       $('#corr').removeClass('active'); $('#learn').addClass('active');
-                        histogram(); "
+                       onclick="switch_chart('#learn');"
                        class="list-group-item active">
                         Обучение
                     </a>
                     <a id="prof"
-                       onclick="event.preventDefault(); $('#prof').addClass('active');
-                       $('#corr').removeClass('active'); $('#learn').removeClass('active');
-                        bubble_chart();"
+                       onclick="switch_chart('#prof')"
                        class="list-group-item">Проф ориентация</a>
                     <a id="corr"
-                       onclick="event.preventDefault(); $('#corr').addClass('active');
-                        $('#prof').removeClass('active'); $('#learn').removeClass('active');
-                        bar_chart('Средняя оценка за год',0.3, 'Средняя оценка за четверть',0.9, 'Зависимость оценок от полноты семьи');"
+                       onclick="switch_chart('#corr')"
                        class="list-group-item">Корреляции</a>
                 </div>
             </div>
@@ -118,6 +112,34 @@
 <script type="text/javascript" src="resources/js/external/datetimepicker/bootstrap-datetimepicker.min.js"></script>
 
 <script>
+    /**
+     * this function switches between graphs
+     * @type the type of graph to be loaded
+     */
+    function switch_chart(type){
+        // prevent page reload
+        event.preventDefault();
+        console.log(type);
+        if (type=='#prof') {
+            $('#prof').addClass('active');
+            $('#corr').removeClass('active');
+            $('#learn').removeClass('active');
+            bubble_chart();
+        }
+        else if(type=='#corr') {
+            $('#corr').addClass('active');
+            $('#prof').removeClass('active');
+            $('#learn').removeClass('active');
+            bar_chart('Средняя оценка за год',0.3, 'Средняя оценка за четверть',0.9, 'Зависимость оценок от полноты семьи');
+        }
+        else if (type=='#learn'){
+            $('#corr').removeClass('active');
+            $('#prof').removeClass('active');
+            $('#learn').addClass('active');
+            histogram();
+        }
+    }
+
     /**
      * @warning! This is a test chart with no information logically correlating with our system
      * Generates bubble chart graphic from flare.csv file (some fake data)
@@ -186,6 +208,7 @@
                         return "#" + d.id;
                     });
 
+            
             node.append("text")
                     .attr("clip-path", function (d) {
                         return "url(#clip-" + d.id + ")";
@@ -293,7 +316,7 @@
 
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // creating scale for x axis - scale with oridnal values
+// creating scale for x axis - scale with oridnal values
         var x = d3.scaleOrdinal()
                 .domain(["", attribute_first, attribute_second])
                 .range([0, width/3,(width/3)*2, width]);
