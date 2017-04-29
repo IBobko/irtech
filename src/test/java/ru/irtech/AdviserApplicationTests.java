@@ -157,7 +157,7 @@ public class AdviserApplicationTests {
             final String tableName = path.getFileName().toString();
 
             try {
-                fop.write(("TRUNCATE TABLE " + tableName + ";").getBytes());
+                fop.write(("TRUNCATE TABLE " + tableName + ";\n").getBytes());
 
                 fop.flush();
             } catch (Exception e) {
@@ -188,7 +188,7 @@ public class AdviserApplicationTests {
                     final StringBuilder executedString = new StringBuilder(sql);
                     try {
                         final List<String> tmpArgumentsArray = formingArgumentsArray(sCurrentLine);
-                        executedString.append("(").append(StringUtils.join(tmpArgumentsArray, ",")).append(");");
+                        executedString.append("(").append(StringUtils.join(tmpArgumentsArray, ",")).append(");\n");
                         fop.write(executedString.toString().getBytes());
                     } catch (Exception e) {
                         String message = tableName + " : Line: " + currentLine + "; " + e.getMessage() + "\n";
