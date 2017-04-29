@@ -27,7 +27,6 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
      */
     @Override
     public String importData(final File file, final String databaseName) {
-        String result = "test";
         try {
 
             Connection connection = getConnection(databaseName);
@@ -63,7 +62,7 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
             System.out.println(e.getMessage());
         }
 
-        return result;
+        return file.getPath();
 
     }
 
