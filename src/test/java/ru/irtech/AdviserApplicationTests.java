@@ -149,10 +149,10 @@ public class AdviserApplicationTests {
                         if (value.equals("")) {
                             value = "null";
                         } else {
+                            value = StringEscapeUtils.escapeSql(value);
                             value = "'" + value + "'";
                         }
                         value = value.replace(",", ".");
-                        value = StringEscapeUtils.escapeSql(value);
                         tmpArgumentsArray.set(i,value);
                     }
 
