@@ -5,23 +5,23 @@ package ru.irtech.dto;
  */
 public class ControllerResponse {
     /**
-     * Message
+     * Message.
      */
-    protected final String message;
+    private final String message;
 
     /**
-     * Main c-tor
+     * Main c-tor.
      *
-     * @param message message to return
+     * @param message message to return.
      */
-    public ControllerResponse(String message) {
+    public ControllerResponse(final String message) {
         this.message = message;
     }
 
     /**
-     * Message getter
+     * Message getter.
      *
-     * @return message
+     * @return message.
      */
     public String getMessage() {
         return this.message;

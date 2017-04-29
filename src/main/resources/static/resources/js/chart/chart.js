@@ -252,3 +252,37 @@ $(function () {
             }
     );
 });
+
+$(document).ready(function() {
+    requestFTGData();
+});
+
+function requestFTGData(){
+    $.ajax(
+        {
+            url     : "/correlationData/familyToGrades",
+            success : onFTGDataReceived,
+            error   : console.log,
+            dataType: "json"
+        }
+    );
+}
+
+function onFTGDataReceived(data){
+    if(data.message != "OK"){
+        console.log(data.message);
+        //TODO DO NOT CREATE FTG GRAPH
+    }
+    else{
+        drawFTG(data.termsCorrelation,data.yearlyCorrelation);
+    }
+}
+
+function drawFTG(termsCorrelation,yearlyCorrelation){
+    var fullFamilyTerms = termsCorrelation;
+    var notFullFamilyTerms = 1 - termsCorrelation;
+    var fullFamilyYearly = yearlyCorrelation;
+    var notFullFamilyYearly = 1 - yearlyCorrelation;
+
+    //TODO DRAW CHART HERE
+}
