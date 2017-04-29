@@ -44,7 +44,7 @@ public class AdviserApplicationTests {
         }
     }
 
-    @Test
+    //@Test
     public void contextLoads() throws SQLException, IOException {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
