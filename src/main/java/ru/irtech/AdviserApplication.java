@@ -77,7 +77,7 @@ public class AdviserApplication {
      *
      * @return Transaction manager.
      */
-    @Bean("dataTx")
+ /*   @Bean("dataTx")
     public DataSourceTransactionManager mysqlTx() {
         return new DataSourceTransactionManager(secondaryDataSource());
     }
@@ -87,10 +87,10 @@ public class AdviserApplication {
      *
      * @return Transaction manager.
      */
-    @Bean("adviserTx")
+   /* @Bean("adviserTx")
     public DataSourceTransactionManager adviserTx() {
         return new DataSourceTransactionManager(primaryDataSource());
-    }
+    }*/
 
 }
 
