@@ -51,7 +51,7 @@
                     <a id="corr"
                        onclick="event.preventDefault(); $('#corr').addClass('active');
                         $('#prof').removeClass('active'); $('#learn').removeClass('active');
-                        linear_chart();"
+                        bar_chart('Средняя оценка за год',0.3, 'Средняя оценка за четверть',0.9, 'Зависимость оценок от полноты семьи');"
                        class="list-group-item">Корреляции</a>
                 </div>
             </div>
@@ -119,6 +119,7 @@
 
 <script>
     /**
+     * @warning! This is a test chart with no information logically correlating with our system
      * Generates bubble chart graphic from flare.csv file (some fake data)
      * @return no return value, generated graph is places in svg
      */
@@ -272,7 +273,77 @@
     }
 
     /**
+     * Plots bar graph for two attributes
+     * @attribute_first name of the first attribute for comparison
+     * @correlation_first correlation index for the first attribute
+     * @attribute_second name of the first attribute for comparison
+     * @correlation_second correlation index for the first attribute
+     * @graph_name name which will be represented on the top of the chart
+     * @return no return value, generated graph is plot into svg
+     */
+    function bar_chart(attribute_first, correlation_first, attribute_second, correlation_second, graph_name) {
+        // cleanin svg field
+        $("#svg").empty();
+
+        // setting svg boundaries
+        var svg = d3.select("svg"),
+                margin = {top: 10, right: 10, bottom: 10, left: 10},
+                width = +document.getElementById('dashboard').offsetWidth-100,
+                height = +document.getElementById('dashboard').offsetWidth-100;
+
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // creating scale for x axis - scale with oridnal values
+        var x = d3.scaleOrdinal()
+                .domain(["", attribute_first, attribute_second])
+                .range([0, width/3,(width/3)*2, width]);
+
+        // creating scale for y axis - scake with linear values from 0 to 1
+        var y = d3.scaleLinear()
+                .domain([0, 1])
+                .range([height, 0]);
+
+        // creating rectangle for first attribute
+        g.append("rect")
+                .attr("x", 30)
+                .attr("y", height-correlation_first*height)
+                .attr("fill", "blue")
+                .attr("width", width/3)
+                .attr("height", correlation_first*height);
+
+        // creating rectangle for secind attribute
+        g.append("rect")
+                .attr("x", width - width/3-30)
+                .attr("y", height - correlation_second*height)
+                .attr("fill", "red")
+                .attr("width", width/3)
+                .attr("height", correlation_second*height);
+
+        // adding x axis to svg graph
+        g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+        // adding y axis to svg graph
+        g.append("g")
+                .attr("class", "axis axis--y")
+                .attr("transform", "translate(" + width + ",0)")
+                .call(d3.axisRight(y));
+
+        // adding text on the top of the chart
+        svg.append("text")
+                .attr("x", (width / 2))
+                .attr("y", 15)
+                .attr("text-anchor", "middle")
+                .style("font-size", "16px")
+                .style("text-decoration", "underline")
+                .text(graph_name);
+    }
+
+    /**
      * Generates linear chart graphic
+     * @depricated
      * @return no return value, generated graph is places in svg
      */
     function linear_chart() {
@@ -281,18 +352,11 @@
                 margin = {top: 10, right: 30, bottom: 10, left: 30},
                 width = +document.getElementById('dashboard').offsetWidth,
                 height = +document.getElementById('dashboard').offsetWidth-100;
-                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        console.log(document.getElementById('dashboard').offsetWidth-100);
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var x0 = d3.scaleLinear()
                 .domain([0, 9])
                 .range([0, 500]);
-
-        var x1 = d3.scaleLinear()
-                .domain([0, 9])
-                .range([0, 500]);
-
 
         var y = d3.scaleLinear()
                 .domain([5, 2])
