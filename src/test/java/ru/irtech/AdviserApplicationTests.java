@@ -179,7 +179,7 @@ public class AdviserApplicationTests {
                 }
 
                 final List<String> columnsArray = Arrays.asList(columns).subList(1, columns.length);
-                String sql = "INSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")" + " VALUES ";
+                String sql = "\nINSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")" + " VALUES ";
                 System.out.println(sql);
 
                 int currentLine = 0;
