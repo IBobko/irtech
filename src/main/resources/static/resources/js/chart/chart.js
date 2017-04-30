@@ -1,3 +1,8 @@
+// вызывется при открытии страницы для отрисовки начального состояния графиков
+window.onload = function() {
+    switch_chart('#learn')
+};
+
 /**
  * this function switches between graphs
  * @type the type of graph to be loaded
@@ -9,28 +14,35 @@
         $('#prof').addClass('active');
         $('#corr').removeClass('active');
         $('#learn').removeClass('active');
-        bubble_chart();
+        $('#header').empty();
+        $('#header').append("Проф ориентация");
+        bubble_chart("Тестовый график");
     }
     else if(type=='#corr') {
         $('#corr').addClass('active');
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
+        $('#header').empty();
+        $('#header').append("Корреляции");
         bar_chart('Средняя оценка за год',0.3, 'Средняя оценка за четверть',0.9, 'Зависимость оценок от полноты семьи');
     }
     else if (type=='#learn'){
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
         $('#learn').addClass('active');
-        histogram();
+        $('#header').empty();
+        $('#header').append("Обучение");
+        histogram("Распределения оценок");
     }
 }
 
 /**
  * @warning! This is a test chart with no information logically correlating with our system
  * Generates bubble chart graphic from flare.csv file (some fake data)
+ * @graph_name name of the chart which is sotrred into svg
  * @return no return value, generated graph is places in svg
  */
-function bubble_chart() {
+function bubble_chart(graph_name) {
 
     $("#svg").empty();
 
@@ -121,16 +133,17 @@ function bubble_chart() {
 /**
  * Generates histogram graphic from randomly generated data
  * @todo plot histogram for grades
+ * @graph_name name of the chart which is sotrred into svg
  * @return no return value, generated graph is places in svg
  */
-function histogram() {
+function histogram(graph_name) {
     $("#svg").empty();
     var data = d3.range(100).map(d3.randomBates(5));
 
     var formatCount = d3.format(",.0f");
 
     var svg = d3.select("svg"),
-        margin = {top: 10, right: 10, bottom: 10, left: 10},
+        margin = {top: 30, right: 10, bottom: 10, left: 10},
         width = +document.getElementById('dashboard').offsetWidth,
         height = +document.getElementById('dashboard').offsetWidth-100;
 
@@ -144,12 +157,14 @@ function histogram() {
         .thresholds(x.ticks(20))
         (data);
 
+    // scale creation
     var y = d3.scaleLinear()
         .domain([0, d3.max(bins, function (d) {
             return d.length;
         })])
         .range([height, 0]);
 
+    // adding classes for rectangles
     var bar = g.selectAll(".bar")
         .data(bins)
         .enter().append("g")
@@ -158,6 +173,7 @@ function histogram() {
             return "translate(" + x(d.x0) + "," + y(d.length) + ")";
         });
 
+    // adding histogram bars
     bar.append("rect")
         .attr("x", 1)
         .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
@@ -165,6 +181,7 @@ function histogram() {
             return height - y(d.length);
         });
 
+    // adding y axis
     bar.append("text")
         .attr("dy", ".75em")
         .attr("y", 6)
@@ -174,10 +191,19 @@ function histogram() {
             return formatCount(d.length);
         });
 
+    // adding x axis
     g.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
+
+    // adding text on the top of the chart
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 15)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(graph_name);
 }
 
 /**
@@ -245,7 +271,6 @@ function bar_chart(attribute_first, correlation_first, attribute_second, correla
         .attr("y", 15)
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        .style("text-decoration", "underline")
         .text(graph_name);
 }
 
