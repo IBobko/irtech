@@ -1,3 +1,6 @@
+var fullFamilyTerms = 0;
+var fullFamilyYearly = 0;
+
 /**
  * this function switches between graphs
  * @type the type of graph to be loaded
@@ -15,7 +18,7 @@
         $('#corr').addClass('active');
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
-        bar_chart('Средняя оценка за год',0.3, 'Средняя оценка за четверть',0.9, 'Зависимость оценок от полноты семьи');
+        bar_chart('Средняя оценка за год',fullFamilyYearly, 'Средняя оценка за четверть',fullFamilyTerms, 'Зависимость оценок от полноты семьи');
     }
     else if (type=='#learn'){
         $('#corr').removeClass('active');
@@ -208,24 +211,43 @@ function bar_chart(attribute_first, correlation_first, attribute_second, correla
 
     // creating scale for y axis - scake with linear values from 0 to 1
     var y = d3.scaleLinear()
-        .domain([0, 1])
+        .domain([-1, 1])
         .range([height, 0]);
+
+    var startPosition  =   0;
+    var endPosition    =   0;
+
+    if(correlation_first > 0){
+        startPosition = height/2 - correlation_first - (height/2)*correlation_first;
+    }
+    else{
+        startPosition = height/2 - correlation_first;
+    }
+    endPosition = (height/2)*Math.abs(correlation_first);
 
     // creating rectangle for first attribute
     g.append("rect")
         .attr("x", 30)
-        .attr("y", height-correlation_first*height)
+        .attr("y", startPosition)
         .attr("fill", "blue")
         .attr("width", width/3)
-        .attr("height", correlation_first*height);
+        .attr("height", endPosition);
+        
+    if(correlation_second > 0){
+        startPosition = height/2 - correlation_second - (height/2)*correlation_second;
+    }
+    else{
+        startPosition = height/2 - correlation_second;
+    }
+    endPosition = (height/2)*Math.abs(correlation_second);
 
-    // creating rectangle for secind attribute
+    // creating rectangle for second attribute
     g.append("rect")
         .attr("x", width - width/3-30)
-        .attr("y", height - correlation_second*height)
+        .attr("y", startPosition)
         .attr("fill", "red")
         .attr("width", width/3)
-        .attr("height", correlation_second*height);
+        .attr("height", endPosition);
 
     // adding x axis to svg graph
     g.append("g")
@@ -249,78 +271,6 @@ function bar_chart(attribute_first, correlation_first, attribute_second, correla
         .text(graph_name);
 }
 
-/**
- * Generates linear chart graphic
- * @depricated
- * @return no return value, generated graph is places in svg
- */
-function linear_chart() {
-    $("#svg").empty();
-    var svg = d3.select("svg"),
-        margin = {top: 10, right: 30, bottom: 10, left: 30},
-        width = +document.getElementById('dashboard').offsetWidth,
-        height = +document.getElementById('dashboard').offsetWidth-100;
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var x0 = d3.scaleLinear()
-        .domain([0, 9])
-        .range([0, 500]);
-
-    var y = d3.scaleLinear()
-        .domain([5, 2])
-        .range([10, 500]);
-
-    var line = d3.line()
-        .x(function (d) {
-            return x0(d.id);
-        })
-        .y(function (d) {
-            return y(d.year_middle);
-        });
-
-    d3.csv("fakeData.csv", function (d) {
-        d.id = parseInt(d.id);
-        d.year_middle = parseFloat(d.year_middle);
-        return d;
-    }, function (error, data) {
-        if (error) throw error;
-
-        x0.domain(d3.extent(data, function (d) {
-            return d.id;
-        }));
-        y.domain(d3.extent(data, function (d) {
-            return d.year_middle;
-        }));
-
-        // adding x axes
-        g.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x0))
-            .select(".domain")
-            .remove();
-
-        //adding y axes
-        g.append("g")
-            .call(d3.axisLeft(y))
-            .append("text")
-            .attr("fill", "#000")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", "0.71em")
-            .attr("text-anchor", "end")
-            .text("среднегодовая оценка");
-
-        // adding line
-        g.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 1.5)
-            .attr("d", line);
-    });
-}
 
 // функция для подключения виджета datetimepicker
 $(function () {
@@ -343,3 +293,34 @@ $(function () {
         }
     );
 });
+
+
+$(document).ready(function() {
+    requestFTGData();
+});
+
+function requestFTGData(){
+    $.ajax(
+        {
+            url     : "/correlationData/familyToGrades",
+            success : onFTGDataReceived,
+            error   : console.log,
+            dataType: "json"
+        }
+    );
+}
+
+function onFTGDataReceived(data){
+    if(data.message != "OK"){
+        console.log(data.message);
+        //TODO DO NOT CREATE FTG GRAPH
+    }
+    else{
+        drawFTG(data.termsCorrelation,data.yearlyCorrelation);
+    }
+}
+
+function drawFTG(termsCorrelation,yearlyCorrelation){
+    fullFamilyTerms = termsCorrelation;
+    fullFamilyYearly = yearlyCorrelation;
+}

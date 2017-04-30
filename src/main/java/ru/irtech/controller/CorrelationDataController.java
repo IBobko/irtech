@@ -46,15 +46,15 @@ public class CorrelationDataController {
             importer.importData(file, DataBaseList.getDataBases().get(0));
 
             if (file.getTotalSpace() == 0) {
-                return new ControllerResponse("No data");
+                return new ControllerResponse("No data"); // FOR TEST COMMENT THIS LINE
             }
 
             ICorrelationProcessor processor = new PearsonsCorrelationProcessor();
             Dictionary<Integer, Double> result = processor.parseCorrelation(file.getAbsolutePath(), FAMILY_TO_GRADE_CLASS_INDEX,
                     new Integer[]{1, 2});
 
-            //return new FamilyToGradesCorrelationResponse(1d,2d);
-            return new FamilyToGradesCorrelationResponse(result.get(1), result.get(2));
+            //return new FamilyToGradesCorrelationResponse(-0.88d,-0.23d); // FOR TEST UNCOMMENT THIS LINE
+            return new FamilyToGradesCorrelationResponse(result.get(1), result.get(2)); // FOR TEST COMMENT THIS LINE
         } catch (Exception e) {
             return new ControllerResponse(e.getMessage());
         } finally {
