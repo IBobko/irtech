@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Created by Iggytoto on 30.04.2017.
- * Class that represents students grade
+ * Class that represents students grade.
  */
 public class ExactHumanitarianGrade {
     /**
@@ -23,11 +23,11 @@ public class ExactHumanitarianGrade {
     private final GradeType type;
 
     /**
-     * Main c-tor
+     * Main c-tor.
      *
-     * @param grade grade
-     * @param date  date
-     * @param type  type
+     * @param grade grade.
+     * @param date  date.
+     * @param type  type.
      */
     public ExactHumanitarianGrade(final double grade, final Date date, final GradeType type) {
         this.grade = grade;
@@ -36,27 +36,27 @@ public class ExactHumanitarianGrade {
     }
 
     /**
-     * get type
+     * get type.
      *
-     * @return GradeType
+     * @return GradeType.
      */
     public GradeType getType() {
         return type;
     }
 
     /**
-     * get date
+     * get date.
      *
-     * @return date
+     * @return date.
      */
     public Date getDate() {
         return date;
     }
 
     /**
-     * get grade
+     * get grade.
      *
-     * @return grade
+     * @return grade.
      */
     public double getGrade() {
         return grade;

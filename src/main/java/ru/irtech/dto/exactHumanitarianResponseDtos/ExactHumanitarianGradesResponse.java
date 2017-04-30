@@ -20,8 +20,8 @@ public class ExactHumanitarianGradesResponse extends ControllerResponse {
     /**
      * Main c-tor.
      *
-     * @param exactGrades        exact grades
-     * @param humanitarianGrades humanitarian grades
+     * @param exactGrades        exact grades.
+     * @param humanitarianGrades humanitarian grades.
      */
     public ExactHumanitarianGradesResponse(final GradeDto[] exactGrades, final GradeDto[] humanitarianGrades) {
         super("OK");

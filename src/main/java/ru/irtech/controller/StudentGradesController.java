@@ -62,4 +62,6 @@ public class StudentGradesController {
 
         return new ExactHumanitarianGradesResponse((GradeDto[]) exact.toArray(), (GradeDto[]) humanitarian.toArray());
     }
+
+
 }

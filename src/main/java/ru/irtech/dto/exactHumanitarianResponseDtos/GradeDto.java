@@ -31,16 +31,16 @@ public class GradeDto {
     /**
      * gets the date.
      *
-     * @return
+     * @return date.
      */
     public Date getDate() {
         return this.date;
     }
 
     /**
-     * gets the grade/
+     * gets the grade.
      *
-     * @return
+     * @return grade.
      */
     public double getGrade() {
         return this.grade;
