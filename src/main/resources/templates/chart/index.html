@@ -23,21 +23,15 @@
             <div class="thumbnail">
                 <div class="list-group">
                     <a id="learn"
-                       onclick="event.preventDefault();$('#prof').removeClass('active');
-                       $('#corr').removeClass('active'); $('#learn').addClass('active');
-                        histogram(); "
+                       onclick="switch_chart('#learn');"
                        class="list-group-item active">
                         Обучение
                     </a>
                     <a id="prof"
-                       onclick="event.preventDefault(); $('#prof').addClass('active');
-                       $('#corr').removeClass('active'); $('#learn').removeClass('active');
-                        bubble_chart();"
+                       onclick="switch_chart('#prof')"
                        class="list-group-item">Проф ориентация</a>
                     <a id="corr"
-                       onclick="event.preventDefault(); $('#corr').addClass('active');
-                        $('#prof').removeClass('active'); $('#learn').removeClass('active');
-                        linear_chart();"
+                       onclick="switch_chart('#corr')"
                        class="list-group-item">Корреляции</a>
                 </div>
             </div>
