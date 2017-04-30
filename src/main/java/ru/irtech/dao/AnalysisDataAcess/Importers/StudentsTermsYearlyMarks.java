@@ -18,7 +18,7 @@ import java.util.List;
  * Class that returns csv file reference with data that contains four columns: studentId (int), meanTermGrade(double),
  * meanYearlyGrade (double), isFullFamily (both parents - True, other way - false)
  */
-public class StudentsTermsYearlyMarks extends BaseImporter {
+public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImporter {
     /**
      * Main processing method.
      *
