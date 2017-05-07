@@ -8,16 +8,12 @@
     <artifactId>IrtechAdviser</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
-    <name>Multi Chapter Simple Parent Project</name>
+    <name>Irtech Adviser Modules</name>
 
     <modules>
         <module>AdviserEngine</module>
         <module>AdviserRmiObjects</module>
-
-        <module>IrtechDataLoader</module>
-        <module>IrtechPresentation</module>
-
-
+        <module>AdviserPresentation</module>
     </modules>
 
     <build>

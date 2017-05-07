@@ -8,8 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>AdviserEngine</name>
-	<description>Engine of adviser</description>
+	<name>Adviser Engine Module</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
