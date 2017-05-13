@@ -53,8 +53,8 @@ public class CorrelationDataController {
             Dictionary<Integer, Double> result = processor.parseCorrelation(file.getAbsolutePath(), FAMILY_TO_GRADE_CLASS_INDEX,
                     new Integer[]{1, 2});
 
-            return new FamilyToGradesCorrelationResponse(-0.88d,-0.23d); // FOR TEST UNCOMMENT THIS LINE
-            //return new FamilyToGradesCorrelationResponse(result.get(1), result.get(2)); // FOR TEST COMMENT THIS LINE
+            //return new FamilyToGradesCorrelationResponse(-0.88d,-0.23d); // FOR TEST UNCOMMENT THIS LINE
+            return new FamilyToGradesCorrelationResponse(result.get(1), result.get(2)); // FOR TEST COMMENT THIS LINE
         } catch (Exception e) {
             return new ControllerResponse(e.getMessage());
         } finally {
