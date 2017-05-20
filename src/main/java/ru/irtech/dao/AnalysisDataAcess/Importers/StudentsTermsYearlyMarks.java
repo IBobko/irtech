@@ -101,11 +101,11 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
      */
     private AbstractMap<Integer, List<Integer>> queryRelationships(final Connection connection) {
         AbstractMap<Integer, List<Integer>> result = new HashMap<>();
-        Statement st;
+        Statement st = null;
+        ResultSet rs = null;
         try {
             st = connection.createStatement();
 
-            ResultSet rs;
 
             rs = st.executeQuery("SELECT userid,relationshiptypeid FROM FAMILYINFO \n"
                     + "WHERE RELATIONSHIPTYPEID = 7 OR RELATIONSHIPTYPEID =8");
@@ -116,11 +116,21 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
                     result.put(studentId, new ArrayList<>());
                 }
                 result.get(studentId).add(relation);
-                rs.close();
-                st.close();
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return result;
