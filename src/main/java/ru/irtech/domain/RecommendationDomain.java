@@ -12,13 +12,20 @@ public class RecommendationDomain {
      * Primary key.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    @SequenceGenerator(name = "seq", sequenceName = "seq_recommendation", allocationSize = 1)
+    @GeneratedValue
     private Integer id;
     /**
      * Text of recommendation.
      */
     private String data;
+    /**
+     * Type of advice.
+     * 1 - informational
+     * 2 - educational
+     * 3 - advertisement
+     * 4 - interesting fact
+     */
+    private Integer type;
 
     public Integer getId() {
         return id;
@@ -34,5 +41,13 @@ public class RecommendationDomain {
 
     public void setData(final String data) {
         this.data = data;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(final Integer type) {
+        this.type = type;
     }
 }
