@@ -26,6 +26,11 @@ public class RecommendationDomain {
      * 4 - interesting fact
      */
     private Integer type;
+    /**
+     * Links to other resources.
+     * empty for advices of type 1 and 4.
+     */
+    private String link;
 
     public Integer getId() {
         return id;
@@ -49,5 +54,13 @@ public class RecommendationDomain {
 
     public void setType(final Integer type) {
         this.type = type;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(final String link) {
+        this.link = link;
     }
 }
