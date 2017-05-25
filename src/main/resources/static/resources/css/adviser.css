@@ -1,7 +1,7 @@
 #advisor {
     z-index: 1000;
     position: fixed;
-    bottom: 50px;
+    bottom: 30px;
     right: 30px;
 }
 
@@ -13,11 +13,11 @@
 }
 
 .right {
-    float:right;
+    float: right;
 }
 
 .left {
-    float:left;
+    float: left;
 }
 
 #advisorButtons .button {
@@ -27,64 +27,51 @@
 }
 
 #advisorContent {
-    width: 150px;
-    height: 150px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     bottom: 0px;
-    right: 30px;
+    right: 0px;
 }
 
-#advisorContent .image{
-    width: 150px;
-    height: 150px;
+#advisorContent .image {
+    width: 60px;
+    height: 60px;
+    transition: all 0.75s 0.25s;
+}
+
+.toggle-down {
+    transform: rotate(0deg);
+}
+
+.toggle-up {
+    transform: rotate(360deg);
 }
 
 #advisorAdvice {
-    width: 440px;
-    height: 175px;
+    width: 275px;
+    overflow: auto;
     position: absolute;
-    right: 190px;
-    bottom: 1px;
+    right: 90px;
+    bottom: 50px;
+    border-radius: 20px 10px 0;
+    background-color: #1B9AF7;
 }
 
-#advisorAdvice div{
+#advisorAdvice div {
     float: left;
-}
-
-#leftButton {
-    width: 20px;
-    height: 175px;
-    background-color: #f6cc6a;
-    border-radius: 15px 0px 0px 15px;
-}
-
-#leftButtonImage{
-    width: 20px;
-    margin-top: 20px;
-}
-
-#rightButtonImage{
-    width: 20px;
-    margin-top: 20px;
-}
-
-#rightButton {
-    width: 20px;
-    height: 175px;
-    background-color: #f6cc6a;
-    border-radius: 0px 15px 15px 0px;
+    overflow: auto;
 }
 
 #adviceContent {
-    width: 400px;
-    height:175px;
-    background-color: #fdf2D0;
-}
-
-#adviceCloseButton {
-    position: absolute;
-    bottom: 145px;
-    right: 25px;
+    overflow: auto;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 10px;
+    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px;
+    color: #ffffff;
 }
 
 .button50 {
@@ -92,23 +79,8 @@
     height: 30px;
 }
 
-.image50 {
-    width: 30px;
-    height: 30px;
-}
-
-.button20 {
-    width: 20px;
-    height: 20px;
-}
-
-.image20 {
-    width: 20px;
-    height: 20px;
-}
-
 .advertisementImage {
-    width : 150px;
+    width: 150px;
     height: 150px;
 }
 
@@ -123,8 +95,8 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
@@ -151,7 +123,7 @@
     cursor: pointer;
 }
 
-#skinSelector{
+#skinSelector {
     width: 800px;
     height: 300px;
     overflow-x: hidden;
@@ -159,15 +131,9 @@
     white-space: nowrap;
 }
 
-.skinContainer{
-	width: 150px;
-	height: 150px;
-	margin: 5px;
-	border: 0px solid #fdf2D0;
+.skinContainer {
+    width: 150px;
+    height: 150px;
+    margin: 5px;
+    border: 0px solid #fdf2D0;
 }
-
-#closeSettingsButton {
-    width: 100px;
-    height: 30px;
-}
-
