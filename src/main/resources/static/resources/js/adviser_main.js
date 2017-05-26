@@ -329,7 +329,7 @@ var InnopolisAdviser = {
             $("#" + skin).id = "#" + this.selectedAdvisor;
             this.setCookie("selectedAdvisor", skin, 365);
             this.selectedAdvisor = skin;
-            this.setAdvisorImage(skin+"/advisor");
+            this.setAdvisorImage(skin + "/advisor");
         }
     }
     ;
