@@ -32,12 +32,21 @@ public class LoaderThread implements Runnable {
         System.out.println(path.getFileName() + " " + Files.size(path));
     }
 
-    private List<Long> divideIntoParts() throws IOException {
+    private PartOfFile divideIntoParts() throws IOException {
         final InputStream inputStreamReader = new FileInputStream(path.toString());
-        long portion = 1000;
+        final long portion = 1000;
         final List<Long> positions = new ArrayList<>();
         long currentPosition = 0;
 
+        final StringBuilder columns = new StringBuilder();
+        char ch = 0;
+        while (ch != '\n') {
+            int chi = inputStreamReader.read();
+            currentPosition++;
+            ch = (char) chi;
+            columns.append(ch);
+        }
+        positions.add(currentPosition);
         main:
         while (inputStreamReader.skip(portion) == portion) {
             currentPosition += portion;
@@ -49,13 +58,16 @@ public class LoaderThread implements Runnable {
                 char c = (char) r;
                 if (c == '\n') {
                     positions.add(currentPosition);
+                    currentPosition++;
                     break;
                 }
                 currentPosition++;
             }
         }
-        positions.forEach(System.out::println);
-        return positions;
+        final PartOfFile partOfFile = new PartOfFile();
+        partOfFile.columns = columns.toString();
+        partOfFile.parts = positions;
+        return partOfFile;
     }
 
     @Override
@@ -64,8 +76,18 @@ public class LoaderThread implements Runnable {
 
         try {
 
-            List<Long> positions = divideIntoParts();
+            List<Long> positions = divideIntoParts().parts;
 
+            for (int i = 0; i < positions.size(); i++) {
+                long last;
+                if (i == positions.size() - 1) {
+                    last = -1;
+                } else {
+                    last = positions.get(i + 1);
+                }
+                printInterval(positions.get(i), last);
+                System.out.println("---------------------------------");
+            }
 
 
             //loadingData();
@@ -76,6 +98,28 @@ public class LoaderThread implements Runnable {
 
         }
         doneSignal.countDown();
+    }
+
+
+    private void printInterval(long from, long to) throws Exception {
+        final InputStream inputStream = new FileInputStream(path.toString());
+        from = inputStream.skip(from);
+
+        final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+
+
+        try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
+            String sCurrentLine;
+            long read = 0;
+            while ((sCurrentLine = br.readLine()) != null) {
+                read += sCurrentLine.getBytes().length + 2;
+                System.out.println(sCurrentLine);
+                if (to != -1 && read + from >= to) {
+                    break;
+                }
+
+            }
+        }
     }
 
     /**
