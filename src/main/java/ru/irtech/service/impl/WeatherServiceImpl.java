@@ -26,7 +26,10 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -36,20 +39,36 @@ import java.util.*;
 public class WeatherServiceImpl implements WeatherService {
 
     /**
+     * This is temporary variable, because now we have problem with timezone in postgresql.
+     */
+    private static final Integer TEMP_MOVE_BY_TIMEZONE_MILLISECONDS = 3 * 1000 * 60 * 60;
+
+    /**
+     * Max allowed requests per day.
+     */
+    private static final Integer MAX_REQUESTS_PER_DAY = 500;
+    /**
+     * Max allowed requests per minute.
+     */
+    private static final Integer MAX_REQUESTS_PER_MINUTE = 10;
+
+    /**
+     * Milliseconds for sleeping. .
+     */
+    private static final Integer MILLISECONDS_FOR_SLEEPING = 60000;
+
+    /**
      * This format is used for storing the date data about limited access to weather.
      */
-    final private String DATE_FORMAT_FOR_SETTINGS = "yyyy-MM-dd-HH-mm";
-
+    private static final String DATE_FORMAT_FOR_SETTINGS = "yyyy-MM-dd-HH-mm";
+    /**
+     * This format is used for getting history of weather.
+     */
+    private static final String HISTORY_DATE_FORMAT = "yyyyMMdd";
     /**
      * Is used for forming the proper string for getting the date data.
      */
     private DateFormat dateFormatForSettings = new SimpleDateFormat(DATE_FORMAT_FOR_SETTINGS);
-
-
-    /**
-     * This format is used for getting history of weather.
-     */
-    final private String HISTORY_DATE_FORMAT = "yyyyMMdd";
     /**
      * For manipulation with database objects.
      */
@@ -62,23 +81,23 @@ public class WeatherServiceImpl implements WeatherService {
      * Wunderground key.
      */
     @Value("${wunderground.key}")
-    private String WUNDERGROUND_KEY;
+    private String wundergroundKey;
     /**
      * Wunderground api address.
      */
     @Value("${wunderground.api.address}")
-    private String WUNDERGROUND_API_ADDRESS;
+    private String wundergroundApiAddress;
 
-    public EntityManager getEntityManager() {
+    private EntityManager getEntityManager() {
         return entityManager;
     }
 
     @PersistenceContext
-    public void setEntityManager(EntityManager entityManager) {
+    public void setEntityManager(final EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public DateFormat getSimpleDateFormat() {
+    private DateFormat getSimpleDateFormat() {
         return simpleDateFormat;
     }
 
@@ -91,11 +110,14 @@ public class WeatherServiceImpl implements WeatherService {
      */
     @Override
     public String downloadHistoryForDay(final Calendar calendar, final String region) {
-        if (calendar == null) return null;
-        if (region == null || region.trim().isEmpty()) return null;
+        if (calendar == null) {
+            return null;
+        }
+        if (region == null || region.trim().isEmpty()) {
+            return null;
+        }
 
-
-        SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class,"weather_current_minute");
+        SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
         if (currentMinute == null) {
             Calendar calendar1 = new GregorianCalendar();
             currentMinute = new SettingsDomain();
@@ -104,7 +126,7 @@ public class WeatherServiceImpl implements WeatherService {
             getEntityManager().persist(currentMinute);
         }
 
-        SettingsDomain requestsPerMinute = getEntityManager().find(SettingsDomain.class,"weather_per_minute");
+        SettingsDomain requestsPerMinute = getEntityManager().find(SettingsDomain.class, "weather_per_minute");
         if (requestsPerMinute == null) {
             requestsPerMinute = new SettingsDomain();
             requestsPerMinute.setKey("weather_per_minute");
@@ -112,7 +134,7 @@ public class WeatherServiceImpl implements WeatherService {
             getEntityManager().persist(requestsPerMinute);
         }
 
-        SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class,"weather_per_day");
+        SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class, "weather_per_day");
         if (requestsPerDay == null) {
             requestsPerDay = new SettingsDomain();
             requestsPerDay.setKey("weather_per_day");
@@ -121,16 +143,16 @@ public class WeatherServiceImpl implements WeatherService {
         }
 
         Calendar calendar1 = new GregorianCalendar();
-        calendar1.set(Calendar.SECOND,0);
-        calendar1.set(Calendar.MILLISECOND,0);
+        calendar1.set(Calendar.SECOND, 0);
+        calendar1.set(Calendar.MILLISECOND, 0);
 
         try {
             Date date = dateFormatForSettings.parse(currentMinute.getValue());
             Calendar calendar2 = new GregorianCalendar();
             calendar2.setTime(date);
-            calendar2.set(Calendar.SECOND,0);
-            calendar2.set(Calendar.MILLISECOND,0);
-            if (calendar1.compareTo(calendar2) ==  0) {
+            calendar2.set(Calendar.SECOND, 0);
+            calendar2.set(Calendar.MILLISECOND, 0);
+            if (calendar1.compareTo(calendar2) == 0) {
                 requestsPerMinute.setValue(Integer.toString(Integer.parseInt(requestsPerMinute.getValue()) + 1));
                 getEntityManager().persist(requestsPerMinute);
             } else {
@@ -147,14 +169,14 @@ public class WeatherServiceImpl implements WeatherService {
             requestsPerDay.setValue(Integer.toString(Integer.parseInt(requestsPerDay.getValue()) + 1));
             getEntityManager().persist(requestsPerDay);
 
-            if (Integer.parseInt(requestsPerDay.getValue()) > 500) {
+            if (Integer.parseInt(requestsPerDay.getValue()) > MAX_REQUESTS_PER_DAY) {
                 System.out.println("Извините сегодня лимит исчерпан");
                 return null;
             }
 
-            if (Integer.parseInt(requestsPerMinute.getValue()) > 10) {
-                Thread.sleep(60000);
-                return downloadHistoryForDay(calendar,region);
+            if (Integer.parseInt(requestsPerMinute.getValue()) > MAX_REQUESTS_PER_MINUTE) {
+                Thread.sleep(MILLISECONDS_FOR_SLEEPING);
+                return downloadHistoryForDay(calendar, region);
             }
 
 
@@ -170,7 +192,7 @@ public class WeatherServiceImpl implements WeatherService {
 
         try {
             final CloseableHttpClient httpclient = HttpClientBuilder.create().build();
-            final HttpPost httppost = new HttpPost(WUNDERGROUND_API_ADDRESS + WUNDERGROUND_KEY + historyString);
+            final HttpPost httppost = new HttpPost(wundergroundApiAddress + wundergroundKey + historyString);
             final CloseableHttpResponse response = httpclient.execute(httppost);
             final StringWriter writer = new StringWriter();
             IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
@@ -203,8 +225,10 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public WeatherDomain downloadAndSave(final Calendar calendar, final String region) {
         String response = downloadHistoryForDay(calendar, region);
-        if (response == null) return null;
-        return saveHistoryResponse(response,region);
+        if (response == null) {
+            return null;
+        }
+        return saveHistoryResponse(response, region);
     }
 
 
@@ -212,10 +236,13 @@ public class WeatherServiceImpl implements WeatherService {
      * Saves history of weather to database.
      *
      * @param response JSON format of history weather.
+     * @param region Region.
      * @return WeatherDomain or null.
      */
-    private WeatherDomain saveHistoryResponse(final String response,final String region) {
-        if (response == null) return null;
+    private WeatherDomain saveHistoryResponse(final String response, final String region) {
+        if (response == null) {
+            return null;
+        }
 
         JSONObject root = new JSONObject(response);
 
@@ -231,7 +258,7 @@ public class WeatherServiceImpl implements WeatherService {
 
         Timestamp timestamp = new Timestamp(calendar.getTime().getTime());
 
-        WeatherDomain weatherDomain = getWeatherFromDatabase(calendar,region);
+        WeatherDomain weatherDomain = getWeatherFromDatabase(calendar, region);
 
         if (weatherDomain == null) {
             weatherDomain = new WeatherDomain();
@@ -269,7 +296,9 @@ public class WeatherServiceImpl implements WeatherService {
 
                     final Method method = getMethod(dailySummaryDomain.getClass(), s);
 
-                    if (method == null) return;
+                    if (method == null) {
+                        return;
+                    }
 
                     Double value = null;
                     if (jsonObject.get(s) instanceof String) {
@@ -297,11 +326,12 @@ public class WeatherServiceImpl implements WeatherService {
 
     /**
      * Reflection for setting value by name of method.
+     *
      * @param c Class ob object.
      * @param n Name of method.
      * @return Method or null.
      */
-    private Method getMethod(Class c, String n) {
+    private Method getMethod(final Class c, final String n) {
         for (Method method : c.getMethods()) {
             if (method.getName().toUpperCase().contains(("set" + n).toUpperCase())) {
                 return method;
@@ -312,7 +342,8 @@ public class WeatherServiceImpl implements WeatherService {
 
     /**
      * Returns WeatherDomain trying to get it by database or web-site.
-     * @param calendar  Date of weather.
+     *
+     * @param calendar Date of weather.
      * @param region   Region of weather.
      * @return WeatherDomain or null.
      */
@@ -337,7 +368,7 @@ public class WeatherServiceImpl implements WeatherService {
     private WeatherDomain getWeatherFromDatabase(final Calendar calendar, final String region) {
         final Query query = getEntityManager()
                 .createQuery("SELECT W FROM WeatherDomain W where date = ? and city = ?")
-                .setParameter(1, new Timestamp(calendar.getTime().getTime() - 3 * 1000 * 60 * 60))
+                .setParameter(1, new Timestamp(calendar.getTime().getTime() - TEMP_MOVE_BY_TIMEZONE_MILLISECONDS))
                 .setParameter(2, region);
         final List<WeatherDomain> weatherDomainList = query.getResultList();
         if (weatherDomainList.size() > 0) {
