@@ -6,6 +6,7 @@ import org.hibernate.annotations.Parameter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -13,78 +14,316 @@ import java.util.Calendar;
 @Entity
 @Table(name = "weather_daily_summary")
 public class WeatherDailySummaryDomain implements Serializable {
+    /**
+     * id.
+     */
     private Integer id;
+    /**
+     * data.
+     */
     private String data;
+    /**
+     * date.
+     */
     private Calendar date;
+    /**
+     * snowfallm.
+     */
     private Double snowfallm;
+    /**
+     * snowfallm.
+     */
     private Double precipi;
+    /**
+     * snowfallm.
+     */
     private Double precipsource;
+    /**
+     * snowfallm.
+     */
     private Double since1Julheatingdegreedays;
+    /**
+     * snowfallm.
+     */
     private Double snowfalli;
+    /**
+     * snowfallm.
+     */
     private Double precipm;
+    /**
+     * snowfallm.
+     */
     private Double meantempm;
+    /**
+     * snowfallm.
+     */
     private Double since1Julsnowfallm;
+    /**
+     * snowfallm.
+     */
     private Double monthtodateheatingdegreedays;
+    /**
+     * snowfallm.
+     */
     private Double thunder;
+    /**
+     * snowfallm.
+     */
     private Double meantempi;
+    /**
+     * snowfallm.
+     */
     private Double since1Julsnowfalli;
+    /**
+     * snowfallm.
+     */
     private Double meanvisi;
+    /**
+     * snowfallm.
+     */
     private Double since1Jancoolingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
     private Double maxwspdi;
+    /**
+     * snowfallm.
+     */
     private Double meanvism;
+    /**
+     * snowfallm.
+     */
     private Double mintempm;
+    /**
+     * snowfallm.
+     */
     private Double minhumidity;
+    /**
+     * snowfallm.
+     */
     private Double mintempi;
+    /**
+     * snowfallm.
+     */
     private Double humidity;
+    /**
+     * snowfallm.
+     */
     private Double monthtodatecoolingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
     private Double maxwspdm;
+    /**
+     * snowfallm.
+     */
     private Double monthtodateheatingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
     private Double rain;
+    /**
+     * snowfallm.
+     */
     private Double gdegreedays;
+    /**
+     * snowfallm.
+     */
     private Double since1Sepcoolingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
     private Double monthtodatecoolingdegreedays;
+    /**
+     * snowfallm.
+     */
     private Double since1Sepheatingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
     private Double heatingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
+
     private Double monthtodatesnowfalli;
+    /**
+     * snowfallm.
+     */
     private Double mindewptm;
+    /**
+     * snowfallm.
+     */
     private Double snow;
+    /**
+     * snowfallm.
+     */
     private Double monthtodatesnowfallm;
+    /**
+     * snowfallm.
+     */
     private Double mindewpti;
+    /**
+     * snowfallm.
+     */
     private Double heatingdegreedays;
+    /**
+     * snowfallm.
+     */
     private Double snowdepthm;
+    /**
+     * snowfallm.
+     */
     private Double maxdewptm;
+    /**
+     * snowfallm.
+     */
     private Double fog;
+    /**
+     * snowfallm.
+     */
     private Double snowdepthi;
+    /**
+     * snowfallm.
+     */
     private Double maxdewpti;
+    /**
+     * snowfallm.
+     */
     private Double maxtempm;
+    /**
+     * snowfallm.
+     */
     private Double minwspdi;
+    /**
+     * snowfallm.
+     */
     private Double maxtempi;
+    /**
+     * snowfallm.
+     */
     private Double since1Sepcoolingdegreedays;
+    /**
+     * snowfallm.
+     */
     private Double meanpressurem;
+    /**
+     * snowfallm.
+     */
     private Double minwspdm;
+    /**
+     * snowfallm.
+     */
     private Double coolingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
     private Double minpressurem;
+    /**
+     * snowfallm.
+     */
     private Double minvisi;
+    /**
+     * snowfallm.
+     */
     private Double tornado;
+    /**
+     * snowfallm.
+     */
+
     private Double meandewpti;
+    /**
+     * snowfallm.
+     */
+
     private Double maxhumidity;
+    /**
+     * snowfallm.
+     */
+
     private Double minpressurei;
+    /**
+     * snowfallm.
+     */
+
     private Double minvism;
+    /**
+     * snowfallm.
+     */
+
     private Double meandewptm;
+    /**
+     * snowfallm.
+     */
+
     private Double maxpressurem;
+    /**
+     * snowfallm.
+     */
+
     private Double since1Jancoolingdegreedays;
+    /**
+     * snowfallm.
+     */
+
     private Double hail;
+
+    /**
+     * snowfallm.
+     */
     private Double meanwindspdm;
+    /**
+     * snowfallm.
+     */
+
     private Double maxpressurei;
+    /**
+     * snowfallm.
+     */
+
     private Double meanwdire;
+    /**
+     * snowfallm.
+     */
+
     private Double since1Julheatingdegreedaysnormal;
+    /**
+     * snowfallm.
+     */
+
     private Double meanwdird;
+    /**
+     * snowfallm.
+     */
+
     private Double maxvism;
+    /**
+     * snowfallm.
+     */
+
     private Double since1Sepheatingdegreedays;
+
+    /**
+     * snowfallm.
+     */
     private Double meanwindspdi;
+    /**
+     * snowfallm.
+     */
+
     private Double maxvisi;
+
+    /**
+     * snowfallm.
+     */
     private Double meanpressurei;
+    /**
+     * snowfallm.
+     */
     private Double coolingdegreedays;
+    /**
+     * snowfallm.
+     */
     private WeatherDomain weatherDomain;
 
     @OneToOne(cascade = CascadeType.REMOVE)
@@ -93,7 +332,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return weatherDomain;
     }
 
-    public void setWeatherDomain(WeatherDomain weatherDomain) {
+    public void setWeatherDomain(final WeatherDomain weatherDomain) {
         this.weatherDomain = weatherDomain;
     }
 
@@ -105,7 +344,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -115,7 +354,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(final String data) {
         this.data = data;
     }
 
@@ -125,7 +364,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(final Calendar date) {
         this.date = date;
     }
 
@@ -135,7 +374,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return snowfallm;
     }
 
-    public void setSnowfallm(Double snowfallm) {
+    public void setSnowfallm(final Double snowfallm) {
         this.snowfallm = snowfallm;
     }
 
@@ -145,7 +384,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return precipi;
     }
 
-    public void setPrecipi(Double precipi) {
+    public void setPrecipi(final Double precipi) {
         this.precipi = precipi;
     }
 
@@ -155,7 +394,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return precipsource;
     }
 
-    public void setPrecipsource(Double precipsource) {
+    public void setPrecipsource(final Double precipsource) {
         this.precipsource = precipsource;
     }
 
@@ -165,7 +404,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Julheatingdegreedays;
     }
 
-    public void setSince1Julheatingdegreedays(Double since1Julheatingdegreedays) {
+    public void setSince1Julheatingdegreedays(final Double since1Julheatingdegreedays) {
         this.since1Julheatingdegreedays = since1Julheatingdegreedays;
     }
 
@@ -175,7 +414,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return snowfalli;
     }
 
-    public void setSnowfalli(Double snowfalli) {
+    public void setSnowfalli(final Double snowfalli) {
         this.snowfalli = snowfalli;
     }
 
@@ -185,7 +424,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return precipm;
     }
 
-    public void setPrecipm(Double precipm) {
+    public void setPrecipm(final Double precipm) {
         this.precipm = precipm;
     }
 
@@ -195,7 +434,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meantempm;
     }
 
-    public void setMeantempm(Double meantempm) {
+    public void setMeantempm(final Double meantempm) {
         this.meantempm = meantempm;
     }
 
@@ -205,7 +444,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Julsnowfallm;
     }
 
-    public void setSince1Julsnowfallm(Double since1Julsnowfallm) {
+    public void setSince1Julsnowfallm(final Double since1Julsnowfallm) {
         this.since1Julsnowfallm = since1Julsnowfallm;
     }
 
@@ -215,7 +454,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return monthtodateheatingdegreedays;
     }
 
-    public void setMonthtodateheatingdegreedays(Double monthtodateheatingdegreedays) {
+    public void setMonthtodateheatingdegreedays(final Double monthtodateheatingdegreedays) {
         this.monthtodateheatingdegreedays = monthtodateheatingdegreedays;
     }
 
@@ -225,7 +464,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return thunder;
     }
 
-    public void setThunder(Double thunder) {
+    public void setThunder(final Double thunder) {
         this.thunder = thunder;
     }
 
@@ -235,7 +474,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meantempi;
     }
 
-    public void setMeantempi(Double meantempi) {
+    public void setMeantempi(final Double meantempi) {
         this.meantempi = meantempi;
     }
 
@@ -245,7 +484,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Julsnowfalli;
     }
 
-    public void setSince1Julsnowfalli(Double since1Julsnowfalli) {
+    public void setSince1Julsnowfalli(final Double since1Julsnowfalli) {
         this.since1Julsnowfalli = since1Julsnowfalli;
     }
 
@@ -255,7 +494,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanvisi;
     }
 
-    public void setMeanvisi(Double meanvisi) {
+    public void setMeanvisi(final Double meanvisi) {
         this.meanvisi = meanvisi;
     }
 
@@ -265,7 +504,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Jancoolingdegreedaysnormal;
     }
 
-    public void setSince1Jancoolingdegreedaysnormal(Double since1Jancoolingdegreedaysnormal) {
+    public void setSince1Jancoolingdegreedaysnormal(final Double since1Jancoolingdegreedaysnormal) {
         this.since1Jancoolingdegreedaysnormal = since1Jancoolingdegreedaysnormal;
     }
 
@@ -275,7 +514,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxwspdi;
     }
 
-    public void setMaxwspdi(Double maxwspdi) {
+    public void setMaxwspdi(final Double maxwspdi) {
         this.maxwspdi = maxwspdi;
     }
 
@@ -285,7 +524,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanvism;
     }
 
-    public void setMeanvism(Double meanvism) {
+    public void setMeanvism(final Double meanvism) {
         this.meanvism = meanvism;
     }
 
@@ -295,7 +534,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return mintempm;
     }
 
-    public void setMintempm(Double mintempm) {
+    public void setMintempm(final Double mintempm) {
         this.mintempm = mintempm;
     }
 
@@ -305,7 +544,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minhumidity;
     }
 
-    public void setMinhumidity(Double minhumidity) {
+    public void setMinhumidity(final Double minhumidity) {
         this.minhumidity = minhumidity;
     }
 
@@ -315,7 +554,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return mintempi;
     }
 
-    public void setMintempi(Double mintempi) {
+    public void setMintempi(final Double mintempi) {
         this.mintempi = mintempi;
     }
 
@@ -325,7 +564,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return humidity;
     }
 
-    public void setHumidity(Double humidity) {
+    public void setHumidity(final Double humidity) {
         this.humidity = humidity;
     }
 
@@ -335,7 +574,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return monthtodatecoolingdegreedaysnormal;
     }
 
-    public void setMonthtodatecoolingdegreedaysnormal(Double monthtodatecoolingdegreedaysnormal) {
+    public void setMonthtodatecoolingdegreedaysnormal(final Double monthtodatecoolingdegreedaysnormal) {
         this.monthtodatecoolingdegreedaysnormal = monthtodatecoolingdegreedaysnormal;
     }
 
@@ -345,7 +584,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxwspdm;
     }
 
-    public void setMaxwspdm(Double maxwspdm) {
+    public void setMaxwspdm(final Double maxwspdm) {
         this.maxwspdm = maxwspdm;
     }
 
@@ -355,7 +594,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return monthtodateheatingdegreedaysnormal;
     }
 
-    public void setMonthtodateheatingdegreedaysnormal(Double monthtodateheatingdegreedaysnormal) {
+    public void setMonthtodateheatingdegreedaysnormal(final Double monthtodateheatingdegreedaysnormal) {
         this.monthtodateheatingdegreedaysnormal = monthtodateheatingdegreedaysnormal;
     }
 
@@ -365,7 +604,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return rain;
     }
 
-    public void setRain(Double rain) {
+    public void setRain(final Double rain) {
         this.rain = rain;
     }
 
@@ -375,7 +614,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return gdegreedays;
     }
 
-    public void setGdegreedays(Double gdegreedays) {
+    public void setGdegreedays(final Double gdegreedays) {
         this.gdegreedays = gdegreedays;
     }
 
@@ -385,7 +624,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Sepcoolingdegreedaysnormal;
     }
 
-    public void setSince1Sepcoolingdegreedaysnormal(Double since1Sepcoolingdegreedaysnormal) {
+    public void setSince1Sepcoolingdegreedaysnormal(final Double since1Sepcoolingdegreedaysnormal) {
         this.since1Sepcoolingdegreedaysnormal = since1Sepcoolingdegreedaysnormal;
     }
 
@@ -395,7 +634,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return monthtodatecoolingdegreedays;
     }
 
-    public void setMonthtodatecoolingdegreedays(Double monthtodatecoolingdegreedays) {
+    public void setMonthtodatecoolingdegreedays(final Double monthtodatecoolingdegreedays) {
         this.monthtodatecoolingdegreedays = monthtodatecoolingdegreedays;
     }
 
@@ -405,7 +644,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Sepheatingdegreedaysnormal;
     }
 
-    public void setSince1Sepheatingdegreedaysnormal(Double since1Sepheatingdegreedaysnormal) {
+    public void setSince1Sepheatingdegreedaysnormal(final Double since1Sepheatingdegreedaysnormal) {
         this.since1Sepheatingdegreedaysnormal = since1Sepheatingdegreedaysnormal;
     }
 
@@ -415,7 +654,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return heatingdegreedaysnormal;
     }
 
-    public void setHeatingdegreedaysnormal(Double heatingdegreedaysnormal) {
+    public void setHeatingdegreedaysnormal(final Double heatingdegreedaysnormal) {
         this.heatingdegreedaysnormal = heatingdegreedaysnormal;
     }
 
@@ -425,7 +664,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return monthtodatesnowfalli;
     }
 
-    public void setMonthtodatesnowfalli(Double monthtodatesnowfalli) {
+    public void setMonthtodatesnowfalli(final Double monthtodatesnowfalli) {
         this.monthtodatesnowfalli = monthtodatesnowfalli;
     }
 
@@ -435,7 +674,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return mindewptm;
     }
 
-    public void setMindewptm(Double mindewptm) {
+    public void setMindewptm(final Double mindewptm) {
         this.mindewptm = mindewptm;
     }
 
@@ -445,7 +684,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return snow;
     }
 
-    public void setSnow(Double snow) {
+    public void setSnow(final Double snow) {
         this.snow = snow;
     }
 
@@ -455,7 +694,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return monthtodatesnowfallm;
     }
 
-    public void setMonthtodatesnowfallm(Double monthtodatesnowfallm) {
+    public void setMonthtodatesnowfallm(final Double monthtodatesnowfallm) {
         this.monthtodatesnowfallm = monthtodatesnowfallm;
     }
 
@@ -465,7 +704,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return mindewpti;
     }
 
-    public void setMindewpti(Double mindewpti) {
+    public void setMindewpti(final Double mindewpti) {
         this.mindewpti = mindewpti;
     }
 
@@ -475,7 +714,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return heatingdegreedays;
     }
 
-    public void setHeatingdegreedays(Double heatingdegreedays) {
+    public void setHeatingdegreedays(final Double heatingdegreedays) {
         this.heatingdegreedays = heatingdegreedays;
     }
 
@@ -485,7 +724,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return snowdepthm;
     }
 
-    public void setSnowdepthm(Double snowdepthm) {
+    public void setSnowdepthm(final Double snowdepthm) {
         this.snowdepthm = snowdepthm;
     }
 
@@ -495,7 +734,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxdewptm;
     }
 
-    public void setMaxdewptm(Double maxdewptm) {
+    public void setMaxdewptm(final Double maxdewptm) {
         this.maxdewptm = maxdewptm;
     }
 
@@ -505,7 +744,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return fog;
     }
 
-    public void setFog(Double fog) {
+    public void setFog(final Double fog) {
         this.fog = fog;
     }
 
@@ -515,7 +754,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return snowdepthi;
     }
 
-    public void setSnowdepthi(Double snowdepthi) {
+    public void setSnowdepthi(final Double snowdepthi) {
         this.snowdepthi = snowdepthi;
     }
 
@@ -525,7 +764,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxdewpti;
     }
 
-    public void setMaxdewpti(Double maxdewpti) {
+    public void setMaxdewpti(final Double maxdewpti) {
         this.maxdewpti = maxdewpti;
     }
 
@@ -535,7 +774,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxtempm;
     }
 
-    public void setMaxtempm(Double maxtempm) {
+    public void setMaxtempm(final Double maxtempm) {
         this.maxtempm = maxtempm;
     }
 
@@ -545,7 +784,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minwspdi;
     }
 
-    public void setMinwspdi(Double minwspdi) {
+    public void setMinwspdi(final Double minwspdi) {
         this.minwspdi = minwspdi;
     }
 
@@ -555,7 +794,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxtempi;
     }
 
-    public void setMaxtempi(Double maxtempi) {
+    public void setMaxtempi(final Double maxtempi) {
         this.maxtempi = maxtempi;
     }
 
@@ -565,7 +804,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Sepcoolingdegreedays;
     }
 
-    public void setSince1Sepcoolingdegreedays(Double since1Sepcoolingdegreedays) {
+    public void setSince1Sepcoolingdegreedays(final Double since1Sepcoolingdegreedays) {
         this.since1Sepcoolingdegreedays = since1Sepcoolingdegreedays;
     }
 
@@ -575,7 +814,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanpressurem;
     }
 
-    public void setMeanpressurem(Double meanpressurem) {
+    public void setMeanpressurem(final Double meanpressurem) {
         this.meanpressurem = meanpressurem;
     }
 
@@ -585,7 +824,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minwspdm;
     }
 
-    public void setMinwspdm(Double minwspdm) {
+    public void setMinwspdm(final Double minwspdm) {
         this.minwspdm = minwspdm;
     }
 
@@ -595,7 +834,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return coolingdegreedaysnormal;
     }
 
-    public void setCoolingdegreedaysnormal(Double coolingdegreedaysnormal) {
+    public void setCoolingdegreedaysnormal(final Double coolingdegreedaysnormal) {
         this.coolingdegreedaysnormal = coolingdegreedaysnormal;
     }
 
@@ -605,7 +844,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minpressurem;
     }
 
-    public void setMinpressurem(Double minpressurem) {
+    public void setMinpressurem(final Double minpressurem) {
         this.minpressurem = minpressurem;
     }
 
@@ -615,7 +854,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minvisi;
     }
 
-    public void setMinvisi(Double minvisi) {
+    public void setMinvisi(final Double minvisi) {
         this.minvisi = minvisi;
     }
 
@@ -625,7 +864,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return tornado;
     }
 
-    public void setTornado(Double tornado) {
+    public void setTornado(final Double tornado) {
         this.tornado = tornado;
     }
 
@@ -635,7 +874,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meandewpti;
     }
 
-    public void setMeandewpti(Double meandewpti) {
+    public void setMeandewpti(final Double meandewpti) {
         this.meandewpti = meandewpti;
     }
 
@@ -645,7 +884,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxhumidity;
     }
 
-    public void setMaxhumidity(Double maxhumidity) {
+    public void setMaxhumidity(final Double maxhumidity) {
         this.maxhumidity = maxhumidity;
     }
 
@@ -655,7 +894,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minpressurei;
     }
 
-    public void setMinpressurei(Double minpressurei) {
+    public void setMinpressurei(final Double minpressurei) {
         this.minpressurei = minpressurei;
     }
 
@@ -665,7 +904,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return minvism;
     }
 
-    public void setMinvism(Double minvism) {
+    public void setMinvism(final Double minvism) {
         this.minvism = minvism;
     }
 
@@ -675,7 +914,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meandewptm;
     }
 
-    public void setMeandewptm(Double meandewptm) {
+    public void setMeandewptm(final Double meandewptm) {
         this.meandewptm = meandewptm;
     }
 
@@ -685,7 +924,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxpressurem;
     }
 
-    public void setMaxpressurem(Double maxpressurem) {
+    public void setMaxpressurem(final Double maxpressurem) {
         this.maxpressurem = maxpressurem;
     }
 
@@ -695,7 +934,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Jancoolingdegreedays;
     }
 
-    public void setSince1Jancoolingdegreedays(Double since1Jancoolingdegreedays) {
+    public void setSince1Jancoolingdegreedays(final Double since1Jancoolingdegreedays) {
         this.since1Jancoolingdegreedays = since1Jancoolingdegreedays;
     }
 
@@ -705,7 +944,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return hail;
     }
 
-    public void setHail(Double hail) {
+    public void setHail(final Double hail) {
         this.hail = hail;
     }
 
@@ -715,7 +954,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanwindspdm;
     }
 
-    public void setMeanwindspdm(Double meanwindspdm) {
+    public void setMeanwindspdm(final Double meanwindspdm) {
         this.meanwindspdm = meanwindspdm;
     }
 
@@ -725,7 +964,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxpressurei;
     }
 
-    public void setMaxpressurei(Double maxpressurei) {
+    public void setMaxpressurei(final Double maxpressurei) {
         this.maxpressurei = maxpressurei;
     }
 
@@ -735,7 +974,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanwdire;
     }
 
-    public void setMeanwdire(Double meanwdire) {
+    public void setMeanwdire(final Double meanwdire) {
         this.meanwdire = meanwdire;
     }
 
@@ -745,7 +984,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Julheatingdegreedaysnormal;
     }
 
-    public void setSince1Julheatingdegreedaysnormal(Double since1Julheatingdegreedaysnormal) {
+    public void setSince1Julheatingdegreedaysnormal(final Double since1Julheatingdegreedaysnormal) {
         this.since1Julheatingdegreedaysnormal = since1Julheatingdegreedaysnormal;
     }
 
@@ -755,7 +994,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanwdird;
     }
 
-    public void setMeanwdird(Double meanwdird) {
+    public void setMeanwdird(final Double meanwdird) {
         this.meanwdird = meanwdird;
     }
 
@@ -765,7 +1004,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxvism;
     }
 
-    public void setMaxvism(Double maxvism) {
+    public void setMaxvism(final Double maxvism) {
         this.maxvism = maxvism;
     }
 
@@ -775,7 +1014,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return since1Sepheatingdegreedays;
     }
 
-    public void setSince1Sepheatingdegreedays(Double since1Sepheatingdegreedays) {
+    public void setSince1Sepheatingdegreedays(final Double since1Sepheatingdegreedays) {
         this.since1Sepheatingdegreedays = since1Sepheatingdegreedays;
     }
 
@@ -785,7 +1024,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanwindspdi;
     }
 
-    public void setMeanwindspdi(Double meanwindspdi) {
+    public void setMeanwindspdi(final Double meanwindspdi) {
         this.meanwindspdi = meanwindspdi;
     }
 
@@ -795,7 +1034,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return maxvisi;
     }
 
-    public void setMaxvisi(Double maxvisi) {
+    public void setMaxvisi(final Double maxvisi) {
         this.maxvisi = maxvisi;
     }
 
@@ -805,7 +1044,7 @@ public class WeatherDailySummaryDomain implements Serializable {
         return meanpressurei;
     }
 
-    public void setMeanpressurei(Double meanpressurei) {
+    public void setMeanpressurei(final Double meanpressurei) {
         this.meanpressurei = meanpressurei;
     }
 
@@ -815,189 +1054,96 @@ public class WeatherDailySummaryDomain implements Serializable {
         return coolingdegreedays;
     }
 
-    public void setCoolingdegreedays(Double coolingdegreedays) {
+    public void setCoolingdegreedays(final Double coolingdegreedays) {
         this.coolingdegreedays = coolingdegreedays;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof WeatherDailySummaryDomain)) {
+            return false;
+        }
         WeatherDailySummaryDomain that = (WeatherDailySummaryDomain) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (snowfallm != null ? !snowfallm.equals(that.snowfallm) : that.snowfallm != null) return false;
-        if (precipi != null ? !precipi.equals(that.precipi) : that.precipi != null) return false;
-        if (precipsource != null ? !precipsource.equals(that.precipsource) : that.precipsource != null) return false;
-        if (since1Julheatingdegreedays != null ? !since1Julheatingdegreedays.equals(that.since1Julheatingdegreedays) : that.since1Julheatingdegreedays != null)
-            return false;
-        if (snowfalli != null ? !snowfalli.equals(that.snowfalli) : that.snowfalli != null) return false;
-        if (precipm != null ? !precipm.equals(that.precipm) : that.precipm != null) return false;
-        if (meantempm != null ? !meantempm.equals(that.meantempm) : that.meantempm != null) return false;
-        if (since1Julsnowfallm != null ? !since1Julsnowfallm.equals(that.since1Julsnowfallm) : that.since1Julsnowfallm != null)
-            return false;
-        if (monthtodateheatingdegreedays != null ? !monthtodateheatingdegreedays.equals(that.monthtodateheatingdegreedays) : that.monthtodateheatingdegreedays != null)
-            return false;
-        if (thunder != null ? !thunder.equals(that.thunder) : that.thunder != null) return false;
-        if (meantempi != null ? !meantempi.equals(that.meantempi) : that.meantempi != null) return false;
-        if (since1Julsnowfalli != null ? !since1Julsnowfalli.equals(that.since1Julsnowfalli) : that.since1Julsnowfalli != null)
-            return false;
-        if (meanvisi != null ? !meanvisi.equals(that.meanvisi) : that.meanvisi != null) return false;
-        if (since1Jancoolingdegreedaysnormal != null ? !since1Jancoolingdegreedaysnormal.equals(that.since1Jancoolingdegreedaysnormal) : that.since1Jancoolingdegreedaysnormal != null)
-            return false;
-        if (maxwspdi != null ? !maxwspdi.equals(that.maxwspdi) : that.maxwspdi != null) return false;
-        if (meanvism != null ? !meanvism.equals(that.meanvism) : that.meanvism != null) return false;
-        if (mintempm != null ? !mintempm.equals(that.mintempm) : that.mintempm != null) return false;
-        if (minhumidity != null ? !minhumidity.equals(that.minhumidity) : that.minhumidity != null) return false;
-        if (mintempi != null ? !mintempi.equals(that.mintempi) : that.mintempi != null) return false;
-        if (humidity != null ? !humidity.equals(that.humidity) : that.humidity != null) return false;
-        if (monthtodatecoolingdegreedaysnormal != null ? !monthtodatecoolingdegreedaysnormal.equals(that.monthtodatecoolingdegreedaysnormal) : that.monthtodatecoolingdegreedaysnormal != null)
-            return false;
-        if (maxwspdm != null ? !maxwspdm.equals(that.maxwspdm) : that.maxwspdm != null) return false;
-        if (monthtodateheatingdegreedaysnormal != null ? !monthtodateheatingdegreedaysnormal.equals(that.monthtodateheatingdegreedaysnormal) : that.monthtodateheatingdegreedaysnormal != null)
-            return false;
-        if (rain != null ? !rain.equals(that.rain) : that.rain != null) return false;
-        if (gdegreedays != null ? !gdegreedays.equals(that.gdegreedays) : that.gdegreedays != null) return false;
-        if (since1Sepcoolingdegreedaysnormal != null ? !since1Sepcoolingdegreedaysnormal.equals(that.since1Sepcoolingdegreedaysnormal) : that.since1Sepcoolingdegreedaysnormal != null)
-            return false;
-        if (monthtodatecoolingdegreedays != null ? !monthtodatecoolingdegreedays.equals(that.monthtodatecoolingdegreedays) : that.monthtodatecoolingdegreedays != null)
-            return false;
-        if (since1Sepheatingdegreedaysnormal != null ? !since1Sepheatingdegreedaysnormal.equals(that.since1Sepheatingdegreedaysnormal) : that.since1Sepheatingdegreedaysnormal != null)
-            return false;
-        if (heatingdegreedaysnormal != null ? !heatingdegreedaysnormal.equals(that.heatingdegreedaysnormal) : that.heatingdegreedaysnormal != null)
-            return false;
-        if (monthtodatesnowfalli != null ? !monthtodatesnowfalli.equals(that.monthtodatesnowfalli) : that.monthtodatesnowfalli != null)
-            return false;
-        if (mindewptm != null ? !mindewptm.equals(that.mindewptm) : that.mindewptm != null) return false;
-        if (snow != null ? !snow.equals(that.snow) : that.snow != null) return false;
-        if (monthtodatesnowfallm != null ? !monthtodatesnowfallm.equals(that.monthtodatesnowfallm) : that.monthtodatesnowfallm != null)
-            return false;
-        if (mindewpti != null ? !mindewpti.equals(that.mindewpti) : that.mindewpti != null) return false;
-        if (heatingdegreedays != null ? !heatingdegreedays.equals(that.heatingdegreedays) : that.heatingdegreedays != null)
-            return false;
-        if (snowdepthm != null ? !snowdepthm.equals(that.snowdepthm) : that.snowdepthm != null) return false;
-        if (maxdewptm != null ? !maxdewptm.equals(that.maxdewptm) : that.maxdewptm != null) return false;
-        if (fog != null ? !fog.equals(that.fog) : that.fog != null) return false;
-        if (snowdepthi != null ? !snowdepthi.equals(that.snowdepthi) : that.snowdepthi != null) return false;
-        if (maxdewpti != null ? !maxdewpti.equals(that.maxdewpti) : that.maxdewpti != null) return false;
-        if (maxtempm != null ? !maxtempm.equals(that.maxtempm) : that.maxtempm != null) return false;
-        if (minwspdi != null ? !minwspdi.equals(that.minwspdi) : that.minwspdi != null) return false;
-        if (maxtempi != null ? !maxtempi.equals(that.maxtempi) : that.maxtempi != null) return false;
-        if (since1Sepcoolingdegreedays != null ? !since1Sepcoolingdegreedays.equals(that.since1Sepcoolingdegreedays) : that.since1Sepcoolingdegreedays != null)
-            return false;
-        if (meanpressurem != null ? !meanpressurem.equals(that.meanpressurem) : that.meanpressurem != null)
-            return false;
-        if (minwspdm != null ? !minwspdm.equals(that.minwspdm) : that.minwspdm != null) return false;
-        if (coolingdegreedaysnormal != null ? !coolingdegreedaysnormal.equals(that.coolingdegreedaysnormal) : that.coolingdegreedaysnormal != null)
-            return false;
-        if (minpressurem != null ? !minpressurem.equals(that.minpressurem) : that.minpressurem != null) return false;
-        if (minvisi != null ? !minvisi.equals(that.minvisi) : that.minvisi != null) return false;
-        if (tornado != null ? !tornado.equals(that.tornado) : that.tornado != null) return false;
-        if (meandewpti != null ? !meandewpti.equals(that.meandewpti) : that.meandewpti != null) return false;
-        if (maxhumidity != null ? !maxhumidity.equals(that.maxhumidity) : that.maxhumidity != null) return false;
-        if (minpressurei != null ? !minpressurei.equals(that.minpressurei) : that.minpressurei != null) return false;
-        if (minvism != null ? !minvism.equals(that.minvism) : that.minvism != null) return false;
-        if (meandewptm != null ? !meandewptm.equals(that.meandewptm) : that.meandewptm != null) return false;
-        if (maxpressurem != null ? !maxpressurem.equals(that.maxpressurem) : that.maxpressurem != null) return false;
-        if (since1Jancoolingdegreedays != null ? !since1Jancoolingdegreedays.equals(that.since1Jancoolingdegreedays) : that.since1Jancoolingdegreedays != null)
-            return false;
-        if (hail != null ? !hail.equals(that.hail) : that.hail != null) return false;
-        if (meanwindspdm != null ? !meanwindspdm.equals(that.meanwindspdm) : that.meanwindspdm != null) return false;
-        if (maxpressurei != null ? !maxpressurei.equals(that.maxpressurei) : that.maxpressurei != null) return false;
-        if (meanwdire != null ? !meanwdire.equals(that.meanwdire) : that.meanwdire != null) return false;
-        if (since1Julheatingdegreedaysnormal != null ? !since1Julheatingdegreedaysnormal.equals(that.since1Julheatingdegreedaysnormal) : that.since1Julheatingdegreedaysnormal != null)
-            return false;
-        if (meanwdird != null ? !meanwdird.equals(that.meanwdird) : that.meanwdird != null) return false;
-        if (maxvism != null ? !maxvism.equals(that.maxvism) : that.maxvism != null) return false;
-        if (since1Sepheatingdegreedays != null ? !since1Sepheatingdegreedays.equals(that.since1Sepheatingdegreedays) : that.since1Sepheatingdegreedays != null)
-            return false;
-        if (meanwindspdi != null ? !meanwindspdi.equals(that.meanwindspdi) : that.meanwindspdi != null) return false;
-        if (maxvisi != null ? !maxvisi.equals(that.maxvisi) : that.maxvisi != null) return false;
-        if (meanpressurei != null ? !meanpressurei.equals(that.meanpressurei) : that.meanpressurei != null)
-            return false;
-        if (coolingdegreedays != null ? !coolingdegreedays.equals(that.coolingdegreedays) : that.coolingdegreedays != null)
-            return false;
-
-        return true;
+        return Objects.equals(getId(), that.getId())
+                && Objects.equals(getData(), that.getData())
+                && Objects.equals(getDate(), that.getDate())
+                && Objects.equals(getSnowfallm(), that.getSnowfallm())
+                && Objects.equals(getPrecipi(), that.getPrecipi())
+                && Objects.equals(getPrecipsource(), that.getPrecipsource())
+                && Objects.equals(getSince1Julheatingdegreedays(), that.getSince1Julheatingdegreedays())
+                && Objects.equals(getSnowfalli(), that.getSnowfalli())
+                && Objects.equals(getPrecipm(), that.getPrecipm())
+                && Objects.equals(getMeantempm(), that.getMeantempm())
+                && Objects.equals(getSince1Julsnowfallm(), that.getSince1Julsnowfallm())
+                && Objects.equals(getMonthtodateheatingdegreedays(), that.getMonthtodateheatingdegreedays())
+                && Objects.equals(getThunder(), that.getThunder())
+                && Objects.equals(getMeantempi(), that.getMeantempi())
+                && Objects.equals(getSince1Julsnowfalli(), that.getSince1Julsnowfalli())
+                && Objects.equals(getMeanvisi(), that.getMeanvisi())
+                && Objects.equals(getSince1Jancoolingdegreedaysnormal(), that.getSince1Jancoolingdegreedaysnormal())
+                && Objects.equals(getMaxwspdi(), that.getMaxwspdi())
+                && Objects.equals(getMeanvism(), that.getMeanvism())
+                && Objects.equals(getMintempm(), that.getMintempm())
+                && Objects.equals(getMinhumidity(), that.getMinhumidity())
+                && Objects.equals(getMintempi(), that.getMintempi())
+                && Objects.equals(getHumidity(), that.getHumidity())
+                && Objects.equals(getMonthtodatecoolingdegreedaysnormal(), that.getMonthtodatecoolingdegreedaysnormal())
+                && Objects.equals(getMaxwspdm(), that.getMaxwspdm())
+                && Objects.equals(getMonthtodateheatingdegreedaysnormal(), that.getMonthtodateheatingdegreedaysnormal())
+                && Objects.equals(getRain(), that.getRain())
+                && Objects.equals(getGdegreedays(), that.getGdegreedays())
+                && Objects.equals(getSince1Sepcoolingdegreedaysnormal(), that.getSince1Sepcoolingdegreedaysnormal())
+                && Objects.equals(getMonthtodatecoolingdegreedays(), that.getMonthtodatecoolingdegreedays())
+                && Objects.equals(getSince1Sepheatingdegreedaysnormal(), that.getSince1Sepheatingdegreedaysnormal())
+                && Objects.equals(getHeatingdegreedaysnormal(), that.getHeatingdegreedaysnormal())
+                && Objects.equals(getMonthtodatesnowfalli(), that.getMonthtodatesnowfalli())
+                && Objects.equals(getMindewptm(), that.getMindewptm())
+                && Objects.equals(getSnow(), that.getSnow())
+                && Objects.equals(getMonthtodatesnowfallm(), that.getMonthtodatesnowfallm())
+                && Objects.equals(getMindewpti(), that.getMindewpti())
+                && Objects.equals(getHeatingdegreedays(), that.getHeatingdegreedays())
+                && Objects.equals(getSnowdepthm(), that.getSnowdepthm())
+                && Objects.equals(getMaxdewptm(), that.getMaxdewptm())
+                && Objects.equals(getFog(), that.getFog())
+                && Objects.equals(getSnowdepthi(), that.getSnowdepthi())
+                && Objects.equals(getMaxdewpti(), that.getMaxdewpti())
+                && Objects.equals(getMaxtempm(), that.getMaxtempm())
+                && Objects.equals(getMinwspdi(), that.getMinwspdi())
+                && Objects.equals(getMaxtempi(), that.getMaxtempi())
+                && Objects.equals(getSince1Sepcoolingdegreedays(), that.getSince1Sepcoolingdegreedays())
+                && Objects.equals(getMeanpressurem(), that.getMeanpressurem())
+                && Objects.equals(getMinwspdm(), that.getMinwspdm())
+                && Objects.equals(getCoolingdegreedaysnormal(), that.getCoolingdegreedaysnormal())
+                && Objects.equals(getMinpressurem(), that.getMinpressurem())
+                && Objects.equals(getMinvisi(), that.getMinvisi())
+                && Objects.equals(getTornado(), that.getTornado())
+                && Objects.equals(getMeandewpti(), that.getMeandewpti())
+                && Objects.equals(getMaxhumidity(), that.getMaxhumidity())
+                && Objects.equals(getMinpressurei(), that.getMinpressurei())
+                && Objects.equals(getMinvism(), that.getMinvism())
+                && Objects.equals(getMeandewptm(), that.getMeandewptm())
+                && Objects.equals(getMaxpressurem(), that.getMaxpressurem())
+                && Objects.equals(getSince1Jancoolingdegreedays(), that.getSince1Jancoolingdegreedays())
+                && Objects.equals(getHail(), that.getHail())
+                && Objects.equals(getMeanwindspdm(), that.getMeanwindspdm())
+                && Objects.equals(getMaxpressurei(), that.getMaxpressurei())
+                && Objects.equals(getMeanwdire(), that.getMeanwdire())
+                && Objects.equals(getSince1Julheatingdegreedaysnormal(), that.getSince1Julheatingdegreedaysnormal())
+                && Objects.equals(getMeanwdird(), that.getMeanwdird())
+                && Objects.equals(getMaxvism(), that.getMaxvism())
+                && Objects.equals(getSince1Sepheatingdegreedays(), that.getSince1Sepheatingdegreedays())
+                && Objects.equals(getMeanwindspdi(), that.getMeanwindspdi())
+                && Objects.equals(getMaxvisi(), that.getMaxvisi())
+                && Objects.equals(getMeanpressurei(), that.getMeanpressurei())
+                && Objects.equals(getCoolingdegreedays(), that.getCoolingdegreedays())
+                && Objects.equals(getWeatherDomain(), that.getWeatherDomain());
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (data != null ? data.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (snowfallm != null ? snowfallm.hashCode() : 0);
-        result = 31 * result + (precipi != null ? precipi.hashCode() : 0);
-        result = 31 * result + (precipsource != null ? precipsource.hashCode() : 0);
-        result = 31 * result + (since1Julheatingdegreedays != null ? since1Julheatingdegreedays.hashCode() : 0);
-        result = 31 * result + (snowfalli != null ? snowfalli.hashCode() : 0);
-        result = 31 * result + (precipm != null ? precipm.hashCode() : 0);
-        result = 31 * result + (meantempm != null ? meantempm.hashCode() : 0);
-        result = 31 * result + (since1Julsnowfallm != null ? since1Julsnowfallm.hashCode() : 0);
-        result = 31 * result + (monthtodateheatingdegreedays != null ? monthtodateheatingdegreedays.hashCode() : 0);
-        result = 31 * result + (thunder != null ? thunder.hashCode() : 0);
-        result = 31 * result + (meantempi != null ? meantempi.hashCode() : 0);
-        result = 31 * result + (since1Julsnowfalli != null ? since1Julsnowfalli.hashCode() : 0);
-        result = 31 * result + (meanvisi != null ? meanvisi.hashCode() : 0);
-        result = 31 * result + (since1Jancoolingdegreedaysnormal != null ? since1Jancoolingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (maxwspdi != null ? maxwspdi.hashCode() : 0);
-        result = 31 * result + (meanvism != null ? meanvism.hashCode() : 0);
-        result = 31 * result + (mintempm != null ? mintempm.hashCode() : 0);
-        result = 31 * result + (minhumidity != null ? minhumidity.hashCode() : 0);
-        result = 31 * result + (mintempi != null ? mintempi.hashCode() : 0);
-        result = 31 * result + (humidity != null ? humidity.hashCode() : 0);
-        result = 31 * result + (monthtodatecoolingdegreedaysnormal != null ? monthtodatecoolingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (maxwspdm != null ? maxwspdm.hashCode() : 0);
-        result = 31 * result + (monthtodateheatingdegreedaysnormal != null ? monthtodateheatingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (rain != null ? rain.hashCode() : 0);
-        result = 31 * result + (gdegreedays != null ? gdegreedays.hashCode() : 0);
-        result = 31 * result + (since1Sepcoolingdegreedaysnormal != null ? since1Sepcoolingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (monthtodatecoolingdegreedays != null ? monthtodatecoolingdegreedays.hashCode() : 0);
-        result = 31 * result + (since1Sepheatingdegreedaysnormal != null ? since1Sepheatingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (heatingdegreedaysnormal != null ? heatingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (monthtodatesnowfalli != null ? monthtodatesnowfalli.hashCode() : 0);
-        result = 31 * result + (mindewptm != null ? mindewptm.hashCode() : 0);
-        result = 31 * result + (snow != null ? snow.hashCode() : 0);
-        result = 31 * result + (monthtodatesnowfallm != null ? monthtodatesnowfallm.hashCode() : 0);
-        result = 31 * result + (mindewpti != null ? mindewpti.hashCode() : 0);
-        result = 31 * result + (heatingdegreedays != null ? heatingdegreedays.hashCode() : 0);
-        result = 31 * result + (snowdepthm != null ? snowdepthm.hashCode() : 0);
-        result = 31 * result + (maxdewptm != null ? maxdewptm.hashCode() : 0);
-        result = 31 * result + (fog != null ? fog.hashCode() : 0);
-        result = 31 * result + (snowdepthi != null ? snowdepthi.hashCode() : 0);
-        result = 31 * result + (maxdewpti != null ? maxdewpti.hashCode() : 0);
-        result = 31 * result + (maxtempm != null ? maxtempm.hashCode() : 0);
-        result = 31 * result + (minwspdi != null ? minwspdi.hashCode() : 0);
-        result = 31 * result + (maxtempi != null ? maxtempi.hashCode() : 0);
-        result = 31 * result + (since1Sepcoolingdegreedays != null ? since1Sepcoolingdegreedays.hashCode() : 0);
-        result = 31 * result + (meanpressurem != null ? meanpressurem.hashCode() : 0);
-        result = 31 * result + (minwspdm != null ? minwspdm.hashCode() : 0);
-        result = 31 * result + (coolingdegreedaysnormal != null ? coolingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (minpressurem != null ? minpressurem.hashCode() : 0);
-        result = 31 * result + (minvisi != null ? minvisi.hashCode() : 0);
-        result = 31 * result + (tornado != null ? tornado.hashCode() : 0);
-        result = 31 * result + (meandewpti != null ? meandewpti.hashCode() : 0);
-        result = 31 * result + (maxhumidity != null ? maxhumidity.hashCode() : 0);
-        result = 31 * result + (minpressurei != null ? minpressurei.hashCode() : 0);
-        result = 31 * result + (minvism != null ? minvism.hashCode() : 0);
-        result = 31 * result + (meandewptm != null ? meandewptm.hashCode() : 0);
-        result = 31 * result + (maxpressurem != null ? maxpressurem.hashCode() : 0);
-        result = 31 * result + (since1Jancoolingdegreedays != null ? since1Jancoolingdegreedays.hashCode() : 0);
-        result = 31 * result + (hail != null ? hail.hashCode() : 0);
-        result = 31 * result + (meanwindspdm != null ? meanwindspdm.hashCode() : 0);
-        result = 31 * result + (maxpressurei != null ? maxpressurei.hashCode() : 0);
-        result = 31 * result + (meanwdire != null ? meanwdire.hashCode() : 0);
-        result = 31 * result + (since1Julheatingdegreedaysnormal != null ? since1Julheatingdegreedaysnormal.hashCode() : 0);
-        result = 31 * result + (meanwdird != null ? meanwdird.hashCode() : 0);
-        result = 31 * result + (maxvism != null ? maxvism.hashCode() : 0);
-        result = 31 * result + (since1Sepheatingdegreedays != null ? since1Sepheatingdegreedays.hashCode() : 0);
-        result = 31 * result + (meanwindspdi != null ? meanwindspdi.hashCode() : 0);
-        result = 31 * result + (maxvisi != null ? maxvisi.hashCode() : 0);
-        result = 31 * result + (meanpressurei != null ? meanpressurei.hashCode() : 0);
-        result = 31 * result + (coolingdegreedays != null ? coolingdegreedays.hashCode() : 0);
-        return result;
+        return Objects.hash(getId(), getData(), getDate(), getSnowfallm(), getPrecipi(), getPrecipsource(), getSince1Julheatingdegreedays(), getSnowfalli(), getPrecipm(), getMeantempm(), getSince1Julsnowfallm(), getMonthtodateheatingdegreedays(), getThunder(), getMeantempi(), getSince1Julsnowfalli(), getMeanvisi(), getSince1Jancoolingdegreedaysnormal(), getMaxwspdi(), getMeanvism(), getMintempm(), getMinhumidity(), getMintempi(), getHumidity(), getMonthtodatecoolingdegreedaysnormal(), getMaxwspdm(), getMonthtodateheatingdegreedaysnormal(), getRain(), getGdegreedays(), getSince1Sepcoolingdegreedaysnormal(), getMonthtodatecoolingdegreedays(), getSince1Sepheatingdegreedaysnormal(), getHeatingdegreedaysnormal(), getMonthtodatesnowfalli(), getMindewptm(), getSnow(), getMonthtodatesnowfallm(), getMindewpti(), getHeatingdegreedays(), getSnowdepthm(), getMaxdewptm(), getFog(), getSnowdepthi(), getMaxdewpti(), getMaxtempm(), getMinwspdi(), getMaxtempi(), getSince1Sepcoolingdegreedays(), getMeanpressurem(), getMinwspdm(), getCoolingdegreedaysnormal(), getMinpressurem(), getMinvisi(), getTornado(), getMeandewpti(), getMaxhumidity(), getMinpressurei(), getMinvism(), getMeandewptm(), getMaxpressurem(), getSince1Jancoolingdegreedays(), getHail(), getMeanwindspdm(), getMaxpressurei(), getMeanwdire(), getSince1Julheatingdegreedaysnormal(), getMeanwdird(), getMaxvism(), getSince1Sepheatingdegreedays(), getMeanwindspdi(), getMaxvisi(), getMeanpressurei(), getCoolingdegreedays(), getWeatherDomain());
     }
 }

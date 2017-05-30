@@ -1,35 +1,14 @@
 package ru.irtech.controller;
 
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.irtech.domain.WeatherDailySummaryDomain;
 import ru.irtech.domain.WeatherDomain;
 import ru.irtech.service.WeatherService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 
 /*
@@ -111,30 +90,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/weather")
 public class WeatherController {
-
-    @Autowired
+    /**
+     * Service for working with weather.
+     */
     private WeatherService weatherService;
 
-    private EntityManager entityManager;
-
-    public EntityManager getEntityManager() {
-        return entityManager;
+    private WeatherService getWeatherService() {
+        return weatherService;
     }
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    @Autowired
+    public void setWeatherService(final WeatherService weatherService) {
+        this.weatherService = weatherService;
     }
 
+    /**
+     *  Test method.
+     * @return response.
+     */
     @RequestMapping("")
     public String index() {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTimeInMillis(0);
-        calendar.set(Calendar.YEAR,2005);
-        calendar.set(Calendar.MONTH,1);
-        calendar.set(Calendar.DAY_OF_MONTH,25);
-        WeatherDomain wd = weatherService.getWeatherByDateAndRegion(calendar, "RU/Moscow");
-        if (wd !=null) {
+        WeatherDomain wd = getWeatherService().getWeatherByDateAndRegion(calendar, "RU/Moscow");
+        if (wd != null) {
             return wd.toString();
         } else {
             return "";

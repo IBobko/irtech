@@ -1,6 +1,7 @@
 package ru.irtech.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -8,7 +9,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "settings", schema = "public", catalog = "irtech")
 public class SettingsDomain {
+    /**
+     * Key.
+     */
     private String key;
+    /**
+     * Value.
+     */
+
     private String value;
 
     @Id
@@ -17,7 +25,7 @@ public class SettingsDomain {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(final String key) {
         this.key = key;
     }
 
@@ -27,28 +35,25 @@ public class SettingsDomain {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
-    @SuppressWarnings("RedundantIfStatement")
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SettingsDomain)) {
+            return false;
+        }
         SettingsDomain that = (SettingsDomain) o;
-
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-
-        return true;
+        return Objects.equals(getKey(), that.getKey())
+                && Objects.equals(getValue(), that.getValue());
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
+        return Objects.hash(getKey(), getValue());
     }
 }

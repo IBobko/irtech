@@ -3,7 +3,7 @@ package ru.irtech.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.Objects;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -11,26 +11,36 @@ import java.util.Set;
 @Entity
 @Table(name = "weather")
 public class WeatherDomain implements Serializable {
+    /**
+     * Primary key.
+     */
     private Integer id;
+    /**
+     * Region.
+     */
     private String city;
+    /**
+     * JSON data.
+     */
     private String weather;
+    /**
+     * Date.
+     */
     private Timestamp date;
+    /**
+     * Daily summary.
+     */
+    private WeatherDailySummaryDomain weatherDailySummary;
 
-    @OneToOne(cascade = CascadeType.REMOVE,mappedBy ="weatherDomain")
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "weatherDomain")
     @PrimaryKeyJoinColumn
     public WeatherDailySummaryDomain getWeatherDailySummary() {
         return weatherDailySummary;
     }
 
-    public void setWeatherDailySummary(WeatherDailySummaryDomain weatherDailySummary) {
+    public void setWeatherDailySummary(final WeatherDailySummaryDomain weatherDailySummary) {
         this.weatherDailySummary = weatherDailySummary;
     }
-
-    private WeatherDailySummaryDomain weatherDailySummary;
-
-
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
@@ -40,7 +50,7 @@ public class WeatherDomain implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -50,7 +60,7 @@ public class WeatherDomain implements Serializable {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
@@ -60,7 +70,7 @@ public class WeatherDomain implements Serializable {
         return weather;
     }
 
-    public void setWeather(String weather) {
+    public void setWeather(final String weather) {
         this.weather = weather;
     }
 
@@ -70,34 +80,28 @@ public class WeatherDomain implements Serializable {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(final Timestamp date) {
         this.date = date;
     }
 
-    @SuppressWarnings("RedundantIfStatement")
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof WeatherDomain)) {
+            return false;
+        }
         WeatherDomain that = (WeatherDomain) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (weather != null ? !weather.equals(that.weather) : that.weather != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-
-        return true;
+        return Objects.equals(getId(), that.getId())
+                && Objects.equals(getCity(), that.getCity())
+                && Objects.equals(getWeather(), that.getWeather())
+                && Objects.equals(getDate(), that.getDate())
+                && Objects.equals(getWeatherDailySummary(), that.getWeatherDailySummary());
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (weather != null ? weather.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        return result;
+        return Objects.hash(getId(), getCity(), getWeather(), getDate(), getWeatherDailySummary());
     }
-
-
 }
