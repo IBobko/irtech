@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Created by Iggytoto on 16.04.2017.
  * Base importer class
  */
-abstract class BaseImporter implements ICsvImporter {
+abstract class BaseImporter  {
     /**
      * Method that returns connection to database.
      *
