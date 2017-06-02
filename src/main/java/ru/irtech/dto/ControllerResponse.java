@@ -4,6 +4,12 @@ package ru.irtech.dto;
  * Created by Iggytoto on 29.04.2017.
  */
 public class ControllerResponse {
+
+    /**
+     * Ok message tag
+     */
+    protected static String OK_MESSAGE = "OK";
+
     /**
      * Message.
      */

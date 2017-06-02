@@ -5,7 +5,7 @@ package ru.irtech.dto;
  * Class represents result for UI graphical representation of correlation between family status and mean grades of the
  * student.
  */
-public class FamilyToGradesCorrelationResponse extends ControllerResponse {
+public class FamilyStatusToGradesCorrelationResponse extends ControllerResponse {
     /**
      * Correlation value by term grades.
      */
@@ -22,8 +22,8 @@ public class FamilyToGradesCorrelationResponse extends ControllerResponse {
      * @param termsValue  term grades correlation.
      * @param yearlyValue yearly grades correlation.
      */
-    public FamilyToGradesCorrelationResponse(final double termsValue, final double yearlyValue) {
-        super("OK");
+    public FamilyStatusToGradesCorrelationResponse(final double termsValue, final double yearlyValue) {
+        super(OK_MESSAGE);
         termsCorrelation = termsValue;
         yearlyCorrelation = yearlyValue;
     }

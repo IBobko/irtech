@@ -28,7 +28,7 @@ public class AdviceResponse extends ControllerResponse {
      * @param id            advice id.
      */
     public AdviceResponse(final String adviceMessage, final String imageResource, final int id) {
-        super("OK");
+        super(OK_MESSAGE);
         this.adviceMessage = adviceMessage;
         this.imageResource = imageResource;
         this.adviceId = id;
