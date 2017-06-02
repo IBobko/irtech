@@ -96,12 +96,11 @@ public class WeatherDomain implements Serializable {
         return Objects.equals(getId(), that.getId())
                 && Objects.equals(getCity(), that.getCity())
                 && Objects.equals(getWeather(), that.getWeather())
-                && Objects.equals(getDate(), that.getDate())
-                && Objects.equals(getWeatherDailySummary(), that.getWeatherDailySummary());
+                && Objects.equals(getDate(), that.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCity(), getWeather(), getDate(), getWeatherDailySummary());
+        return Objects.hash(getId(), getCity(), getWeather(), getDate());
     }
 }

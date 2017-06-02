@@ -15,81 +15,90 @@ import java.util.Objects;
 @Table(name = "weather_daily_summary")
 public class WeatherDailySummaryDomain implements Serializable {
     /**
-     * id.
+     * This id corresponds to WeatherDomain id. .
      */
     private Integer id;
+
     /**
-     * data.
+     * JSON data of the received data.
      */
     private String data;
+
     /**
-     * date.
+     * Date of weather.
      */
     private Calendar date;
+
     /**
-     * snowfallm.
+     * The maximal falling snow.
      */
     private Double snowfallm;
+
     /**
-     * snowfallm.
-     */
-    private Double precipi;
-    /**
-     * snowfallm.
-     */
-    private Double precipsource;
-    /**
-     * snowfallm.
-     */
-    private Double since1Julheatingdegreedays;
-    /**
-     * snowfallm.
+     * The minimal falling snow.
      */
     private Double snowfalli;
+
     /**
-     * snowfallm.
+     * The minimal precipitation.
+     */
+    private Double precipi;
+
+    /**
+     * The maximal precipitation.
      */
     private Double precipm;
+
     /**
-     * snowfallm.
+     * The precipitation source.
+     */
+    private Double precipsource;
+
+    /**
+     * Since 1 Jul heating degree days.
+     */
+    private Double since1Julheatingdegreedays;
+
+    /**
+     * The maximal mean temperature.
      */
     private Double meantempm;
+
     /**
-     * snowfallm.
-     */
-    private Double since1Julsnowfallm;
-    /**
-     * snowfallm.
-     */
-    private Double monthtodateheatingdegreedays;
-    /**
-     * snowfallm.
-     */
-    private Double thunder;
-    /**
-     * snowfallm.
+     * The minimal mean temperature.
      */
     private Double meantempi;
+
     /**
-     * snowfallm.
+     * Since 1 Jul the maximal falling snow.
+     */
+    private Double since1Julsnowfallm;
+
+    /**
+     * Since 1 Jul the minimal falling snow.
      */
     private Double since1Julsnowfalli;
+
     /**
-     * snowfallm.
+     * The month to date heating degree days.
      */
-    private Double meanvisi;
+    private Double monthtodateheatingdegreedays;
+
     /**
-     * snowfallm.
+     * The thunder.
+     */
+    private Double thunder;
+
+    /**
+     * Since 1 Jan cooling degree days normal.
      */
     private Double since1Jancoolingdegreedaysnormal;
+
     /**
-     * snowfallm.
+     * snowfallm. // Возможно скорость ветра
      */
     private Double maxwspdi;
-    /**
-     * snowfallm.
-     */
-    private Double meanvism;
+
     /**
      * snowfallm.
      */
@@ -102,6 +111,7 @@ public class WeatherDailySummaryDomain implements Serializable {
      * snowfallm.
      */
     private Double mintempi;
+
     /**
      * snowfallm.
      */
@@ -118,10 +128,12 @@ public class WeatherDailySummaryDomain implements Serializable {
      * snowfallm.
      */
     private Double monthtodateheatingdegreedaysnormal;
+
     /**
-     * snowfallm.
+     * The rain.
      */
     private Double rain;
+
     /**
      * snowfallm.
      */
@@ -151,10 +163,12 @@ public class WeatherDailySummaryDomain implements Serializable {
      * snowfallm.
      */
     private Double mindewptm;
+
     /**
-     * snowfallm.
+     * The snow.
      */
     private Double snow;
+
     /**
      * snowfallm.
      */
@@ -175,10 +189,12 @@ public class WeatherDailySummaryDomain implements Serializable {
      * snowfallm.
      */
     private Double maxdewptm;
+
     /**
-     * snowfallm.
+     * The fog.
      */
     private Double fog;
+
     /**
      * snowfallm.
      */
@@ -223,14 +239,15 @@ public class WeatherDailySummaryDomain implements Serializable {
      * snowfallm.
      */
     private Double minvisi;
+
     /**
-     * snowfallm.
+     * the tornado.
      */
     private Double tornado;
+
     /**
      * snowfallm.
      */
-
     private Double meandewpti;
     /**
      * snowfallm.
@@ -262,10 +279,10 @@ public class WeatherDailySummaryDomain implements Serializable {
      */
 
     private Double since1Jancoolingdegreedays;
-    /**
-     * snowfallm.
-     */
 
+    /**
+     * The hail.
+     */
     private Double hail;
 
     /**
@@ -277,52 +294,65 @@ public class WeatherDailySummaryDomain implements Serializable {
      */
 
     private Double maxpressurei;
-    /**
-     * snowfallm.
-     */
 
-    private Double meanwdire;
     /**
-     * snowfallm.
+     * Since 1 Jul heating degree days normal.
      */
-
     private Double since1Julheatingdegreedaysnormal;
-    /**
-     * snowfallm.
-     */
 
-    private Double meanwdird;
     /**
-     * snowfallm.
+     * Since 1 Sep heating degree days.
      */
-
-    private Double maxvism;
-    /**
-     * snowfallm.
-     */
-
     private Double since1Sepheatingdegreedays;
 
     /**
-     * snowfallm.
+     * The mean minimal wind speed.
      */
     private Double meanwindspdi;
+
     /**
-     * snowfallm.
+     * The minimal mean pressure.
+     */
+    private Double meanpressurei;
+
+    /**
+     * The cooling degree days.
+     */
+    private Double coolingdegreedays;
+
+    /**
+     * //todo Unrecognized parameter maxvisi.
      */
 
     private Double maxvisi;
 
     /**
-     * snowfallm.
+     * //todo Unrecognized parameter maxvism.
      */
-    private Double meanpressurei;
+    private Double maxvism;
+
     /**
-     * snowfallm.
+     * //todo Unrecognized parameter meanwdird.
      */
-    private Double coolingdegreedays;
+    private Double meanwdird;
+
     /**
-     * snowfallm.
+     * //todo Unrecognized parameter meanwdire.
+     */
+    private Double meanwdire;
+
+    /**
+     * //todo Unrecognized parameter meanvisi.
+     */
+    private Double meanvisi;
+
+    /**
+     * //todo Unrecognized parameter meanvism.
+     */
+    private Double meanvism;
+
+    /**
+     * The parent of this daily statistic..
      */
     private WeatherDomain weatherDomain;
 
@@ -369,7 +399,7 @@ public class WeatherDailySummaryDomain implements Serializable {
     }
 
     @Basic
-    @Column(name = "snowfallm", nullable = true, precision = 0)
+    @Column(name = "snowfallm")
     public Double getSnowfallm() {
         return snowfallm;
     }

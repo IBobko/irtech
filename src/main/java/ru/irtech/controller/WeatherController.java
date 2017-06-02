@@ -4,6 +4,8 @@ package ru.irtech.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.irtech.domain.WeatherDomain;
@@ -13,6 +15,8 @@ import ru.irtech.service.WeatherService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /*
@@ -111,16 +115,39 @@ public class WeatherController {
     /**
      * Index method.
      *
-     * @param  request Request Object.
-     * @param  form form Object.
-     * @param  model Model.
+     * @param request       Request Object.
+     * @param filterForm    form Object.
+     * @param bindingResult Binding result.
+     * @param model         Model.
      * @return response.
      */
     @RequestMapping("")
-    public String index(final HttpServletRequest request, final WeatherForm form, final Model model) {
-        request.setAttribute("s", "s");
-        //model.addAllAttributes(request.getA)
+    public String index(final HttpServletRequest request, @Validated final WeatherForm filterForm, final BindingResult bindingResult, final Model model) {
+        if (request.getMethod().equals("POST")) {
+            model.addAttribute("filterForm", filterForm);
+            if (!bindingResult.hasErrors()) {
+                final Calendar fromCalendar = new GregorianCalendar();
+                fromCalendar.setTimeInMillis(0);
+                fromCalendar.set(Calendar.YEAR, filterForm.getYearFrom());
+                fromCalendar.set(Calendar.MONTH, filterForm.getMonFrom() - 1);
+                fromCalendar.set(Calendar.DAY_OF_MONTH, filterForm.getDayFrom());
+                final Calendar toCalendar = new GregorianCalendar();
+                toCalendar.set(Calendar.YEAR, filterForm.getYearTo());
+                toCalendar.set(Calendar.MONTH, filterForm.getMonTo() - 1);
+                toCalendar.set(Calendar.DAY_OF_MONTH, filterForm.getDayTo());
 
+                Set<WeatherDomain> weatherDomainSet = new HashSet<>();
+                while (fromCalendar.compareTo(toCalendar) < 0) {
+                    WeatherDomain wetherDomain = getWeatherService().getWeatherByDateAndRegion(fromCalendar, filterForm.getRegion());
+                    weatherDomainSet.add(wetherDomain);
+                    fromCalendar.roll(Calendar.DAY_OF_MONTH, true);
+                }
+                model.addAttribute("weathers", weatherDomainSet);
+            }
+        }
+        if (!model.containsAttribute("filterForm")) {
+            model.addAttribute("filterForm", new WeatherForm());
+        }
         return "weather/index";
     }
 

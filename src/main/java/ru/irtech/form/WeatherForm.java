@@ -1,37 +1,90 @@
 package ru.irtech.form;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 public class WeatherForm {
     /**
-     * Region.
+     * Minimum allowed year.
      */
-    private String region;
+    private static final int MIN_YEAR = 2000;
+
     /**
-     * Year from.
+     * Maximal allowed year.
      */
-    private Integer yearFrom;
+    private static final int MAX_YEAR = 2017;
+
     /**
-     * Month from.
+     * Minimal allowed month.
      */
-    private Integer monFrom;
+    private static final int MIN_MONTH = 1;
+
     /**
-     * Day from.
+     * Maximal allowed month.
      */
-    private Integer dayFrom;
+    private static final int MAX_MONTH = 12;
+
     /**
-     * Year to.
+     * Minimal allowed day.
      */
-    private Integer yearTo;
+    private static final int MIN_DAY = 1;
+
     /**
-     * Month to.
+     * Maximal allowed day.
      */
-    private Integer monto;
+    private static final int MAX_DAY = 31;
+
     /**
-     * Day to.
+     * Region. /todo предоставить list regions.
      */
-    private Integer dayTo;
+    @NotNull
+    private String region = "RU/Moscow";
+    /**
+     * Starting year which must be no less WeatherForm.MIN_YEAR and no more WeatherForm.MAX_YEAR.
+     */
+    @NotNull
+    @Min(value = MIN_YEAR)
+    @Max(value = MAX_YEAR)
+    private Integer yearFrom = MAX_YEAR;
+    /**
+     * Starting month from which must be no less 1 and no more 12.
+     */
+    @NotNull
+    @Min(value = MIN_MONTH)
+    @Max(value = MAX_MONTH)
+    private Integer monFrom = MIN_MONTH;
+    /**
+     * Starting day which must be no less 1 and no more 31.
+     */
+    @NotNull
+    @Min(value = MIN_DAY)
+    @Max(value = MAX_DAY)
+    private Integer dayFrom = MIN_DAY;
+    /**
+     * Finishing year which must be no less 2000 and no more than the current year.
+     */
+    @NotNull
+    @Min(value = MIN_YEAR)
+    @Max(value = MAX_YEAR)
+    private Integer yearTo = MAX_YEAR;
+    /**
+     * Finishing month from which must be no less 1 and no more 12.
+     */
+    @NotNull
+    @Min(value = MIN_MONTH)
+    @Max(value = MAX_MONTH)
+    private Integer monTo = MIN_MONTH;
+    /**
+     * Finishing day from which must be no less 1 and no more 31.
+     */
+    @NotNull
+    @Min(value = MIN_DAY)
+    @Max(value = MAX_DAY)
+    private Integer dayTo = MIN_DAY;
 
     public String getRegion() {
         return region;
@@ -73,12 +126,12 @@ public class WeatherForm {
         this.yearTo = yearTo;
     }
 
-    public Integer getMonto() {
-        return monto;
+    public Integer getMonTo() {
+        return monTo;
     }
 
-    public void setMonto(final Integer monto) {
-        this.monto = monto;
+    public void setMonTo(final Integer monTo) {
+        this.monTo = monTo;
     }
 
     public Integer getDayTo() {

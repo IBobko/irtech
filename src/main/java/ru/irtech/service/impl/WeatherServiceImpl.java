@@ -101,8 +101,13 @@ public class WeatherServiceImpl implements WeatherService {
         return simpleDateFormat;
     }
 
-
-    @Override
+    /**
+     * This method downloads history for some date in some region.
+     *
+     * @param calendar Date for which we seek weather.
+     * @param region   Region for which we seek weather with country code. For example "RU/Moscow".
+     * @return JSON formatted data or null if error occurred.
+     */
     public String downloadHistoryForDay(final Calendar calendar, final String region) {
         if (calendar == null) {
             return null;
@@ -197,15 +202,26 @@ public class WeatherServiceImpl implements WeatherService {
         return null;
     }
 
-    @Override
+    /**
+     * This method is used for full request of history response and returns JSONArray of daily summary.
+     *
+     * @param fullResponse Full response about history from server.
+     * @return JSONArray with daily summary.
+     */
     public JSONArray getDailySummary(final String fullResponse) {
         JSONObject obj = new JSONObject(fullResponse);
         return obj.getJSONObject("history").getJSONArray("dailysummary");
 
     }
 
-    @Override
-    public WeatherDomain downloadAndSave(final Calendar calendar, final String region) {
+    /**
+     * Download and save to database the weather for concrete date and region.
+     *
+     * @param calendar Date.
+     * @param region   Region.
+     * @return WeatherDomain or null.
+     */
+    private WeatherDomain downloadAndSave(final Calendar calendar, final String region) {
         String response = downloadHistoryForDay(calendar, region);
         if (response == null) {
             return null;

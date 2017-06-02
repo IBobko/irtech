@@ -77,7 +77,7 @@ public class AdviserApplication {
      * @return Transaction manager.
      */
     @Bean
-    public DataSourceTransactionManager mysqlTx() {
+    public DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(primaryDataSource());
     }
 
