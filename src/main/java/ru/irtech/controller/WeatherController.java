@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import ru.irtech.domain.WeatherDomain;
 import ru.irtech.form.WeatherForm;
 import ru.irtech.service.WeatherService;
@@ -111,10 +110,15 @@ public class WeatherController {
 
     /**
      * Index method.
+     *
+     * @param  request Request Object.
+     * @param  form form Object.
+     * @param  model Model.
      * @return response.
      */
     @RequestMapping("")
-    public String index(final HttpServletRequest request, final WeatherForm form,final Model model) {
+    public String index(final HttpServletRequest request, final WeatherForm form, final Model model) {
+        request.setAttribute("s", "s");
         //model.addAllAttributes(request.getA)
 
         return "weather/index";
@@ -122,7 +126,8 @@ public class WeatherController {
 
 
     /**
-     *  Test method.
+     * Test method.
+     *
      * @return response.
      */
     @ResponseBody
