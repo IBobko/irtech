@@ -2,11 +2,16 @@ package ru.irtech.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.irtech.domain.WeatherDomain;
+import ru.irtech.form.WeatherForm;
 import ru.irtech.service.WeatherService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -87,7 +92,7 @@ import java.util.GregorianCalendar;
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
-@RestController
+@Controller
 @RequestMapping("/weather")
 public class WeatherController {
     /**
@@ -105,11 +110,26 @@ public class WeatherController {
     }
 
     /**
-     *  Test method.
+     * Index method.
      * @return response.
      */
     @RequestMapping("")
-    public String index() {
+    public String index(final HttpServletRequest request, final WeatherForm form,final Model model) {
+        //model.addAllAttributes(request.getA)
+
+        return "weather/index";
+    }
+
+
+    /**
+     *  Test method.
+     * @return response.
+     */
+    @ResponseBody
+    @RequestMapping("/test")
+    public String test() {
+
+
         Calendar calendar = new GregorianCalendar();
         WeatherDomain wd = getWeatherService().getWeatherByDateAndRegion(calendar, "RU/Moscow");
         if (wd != null) {
