@@ -26,10 +26,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -234,7 +231,7 @@ public class WeatherServiceImpl implements WeatherService {
      * Saves history of weather to database.
      *
      * @param response JSON format of history weather.
-     * @param region Region.
+     * @param region   Region.
      * @return WeatherDomain or null.
      */
     private WeatherDomain saveHistoryResponse(final String response, final String region) {
@@ -287,7 +284,9 @@ public class WeatherServiceImpl implements WeatherService {
         dcalendar.set(Calendar.DAY_OF_MONTH, dateJson.getInt("mday"));
         dcalendar.set(Calendar.MONTH, dateJson.getInt("mon") - 1);
 
-        jsonObject.keySet().forEach(s -> {
+        final Iterator<String> iter = jsonObject.keys();
+        while (iter.hasNext()) {
+            final String s = iter.next();
             try {
                 if (!s.equals("date") && !s.equals("precipsource") && !s.equals("meanwdire")) {
                     //entityManager.createNativeQuery("ALTER TABLE public.weather_daily_summary ADD "+s+" NUMERIC NULL;").executeUpdate();
@@ -295,7 +294,7 @@ public class WeatherServiceImpl implements WeatherService {
                     final Method method = getMethod(dailySummaryDomain.getClass(), s);
 
                     if (method == null) {
-                        return;
+                        continue;
                     }
 
                     Double value = null;
@@ -313,8 +312,7 @@ public class WeatherServiceImpl implements WeatherService {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-
-        });
+        }
 
         dailySummaryDomain.setDate(dcalendar);
         dailySummaryDomain.setWeatherDomain(weatherDomain);

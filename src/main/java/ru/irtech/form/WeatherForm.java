@@ -141,4 +141,17 @@ public class WeatherForm {
     public void setDayTo(final Integer dayTo) {
         this.dayTo = dayTo;
     }
+
+    @Override
+    public String toString() {
+        return "WeatherForm{"
+                + "region='" + region + '\''
+                + ", yearFrom=" + yearFrom
+                + ", monFrom=" + monFrom
+                + ", dayFrom=" + dayFrom
+                + ", yearTo=" + yearTo
+                + ", monTo=" + monTo
+                + ", dayTo=" + dayTo
+                + '}';
+    }
 }

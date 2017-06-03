@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import ru.irtech.domain.WeatherDomain;
 import ru.irtech.form.WeatherForm;
 import ru.irtech.service.WeatherService;
@@ -149,25 +148,5 @@ public class WeatherController {
             model.addAttribute("filterForm", new WeatherForm());
         }
         return "weather/index";
-    }
-
-
-    /**
-     * Test method.
-     *
-     * @return response.
-     */
-    @ResponseBody
-    @RequestMapping("/test")
-    public String test() {
-
-
-        Calendar calendar = new GregorianCalendar();
-        WeatherDomain wd = getWeatherService().getWeatherByDateAndRegion(calendar, "RU/Moscow");
-        if (wd != null) {
-            return wd.toString();
-        } else {
-            return "";
-        }
     }
 }

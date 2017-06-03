@@ -4,61 +4,75 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
-
     <link rel="stylesheet" href="resources/css/external/datetimepicker/bootstrap-datetimepicker.min.css"/>
 
+    <style type="text/css">
+        body {
+            padding: 10px;
+        }
+
+        .filter {
+            display: flex;
+        }
+
+        .filter div {
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
-
-<a href="https://www.wunderground.com/"><img src="https://icons.wxug.com/logos/JPG/wundergroundLogo_4c_horz.jpg" border="0"/></a>
+<a href="https://www.wunderground.com/">
+    <img src="https://icons.wxug.com/logos/JPG/wundergroundLogo_4c_horz.jpg" border="0"/>
+</a>
 <h1>Getting weather from <a href="https://www.wunderground.com/">wunderground</a> service.</h1>
 
-    <form th method="post" th:object="${filterForm}">
+<form th method="post" th:object="${filterForm}">
+    <div class="filter">
         <div>
-            <label th:for="region">Регион</label>
+            <label th:for="region">Region</label>
             <br/>
-
             <input type="text" id="region" name="region" th:value="*{region}"/>
         </div>
         <div>
-            <label th:for="yearFrom">Год начала</label>
+            <label th:for="yearFrom">Starting year</label>
             <br/>
             <p th:if="${#fields.hasErrors('yearFrom')}" th:errors="*{yearFrom}">Incorrect date</p>
-            <input type="text" th:class="${#fields.hasErrors('yearFrom')}? fieldError" name="yearFrom" th:value="*{yearFrom}"/>
+            <input type="text" th:class="${#fields.hasErrors('yearFrom')}? fieldError" name="yearFrom"
+                   th:value="*{yearFrom}"/>
         </div>
         <div>
-            <label th:for="monFrom">Месяц начала</label>
+            <label th:for="monFrom">Starting month</label>
             <br/>
             <input type="text" id="monFrom" name="monFrom" th:value="${filterForm.monFrom}"/>
         </div>
         <div>
-            <label th:for="dayFrom">День начала</label>
+            <label th:for="dayFrom">Starting day</label>
             <br/>
             <input type="text" name="dayFrom" th:value="*{dayFrom}"/>
         </div>
         <div>
-            <label th:for="yearTo">Год окончания</label>
+            <label th:for="yearTo">Finishing year</label>
             <br/>
             <input type="text" name="yearTo" th:value="*{yearTo}"/>
         </div>
         <div>
-            <label th:for="monTo">Месяц окончания</label>
+            <label th:for="monTo">Finishing month</label>
             <br/>
             <input type="text" name="monTo" th:value="*{monTo}"/>
         </div>
         <div>
-            <label th:for="monTo">День окончания</label>
+            <label th:for="monTo">Finishing day</label>
             <br/>
             <input type="text" name="dayTo" th:value="*{monTo}"/>
         </div>
-
-        <input type="submit" value="Собрать"/>
-
-    </form>
+    </div>
+    <div style="margin: 5px;">
+        <input type="submit" value="Obtain"/>
+    </div>
+</form>
 
 
 <table width="10000">
@@ -139,75 +153,205 @@
     <tr th:each="weather: ${weathers}">
         <td th:text="${weather.city}">city</td>
         <td th:text="${weather.date}">date</td>
-        <td th:text="${weather.weatherDailySummary.snowfallm != null ? weather.weatherDailySummary.snowfallm : ''}">snowfallm</td>
-        <td th:text="${weather.weatherDailySummary.snowfalli != null ? weather.weatherDailySummary.snowfalli : ''}">snowfalli</td>
-        <td th:text="${weather.weatherDailySummary.precipm != null ? weather.weatherDailySummary.precipm : ''}">precepm</td>
-        <td th:text="${weather.weatherDailySummary.precipi != null ? weather.weatherDailySummary.precipi : ''}">precepi</td>
-        <td th:text="${weather.weatherDailySummary.precipsource != null ? weather.weatherDailySummary.precipsource : ''}">precipsource</td>
-        <td th:text="${weather.weatherDailySummary.since1Julheatingdegreedays != null ? weather.weatherDailySummary.since1Julheatingdegreedays : ''}">since1Julheatingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.meantempm != null ? weather.weatherDailySummary.meantempm : ''}">meantempm</td>
-        <td th:text="${weather.weatherDailySummary.meantempi != null ? weather.weatherDailySummary.meantempi : ''}">meantempi</td>
-        <td th:text="${weather.weatherDailySummary.since1Julsnowfallm != null ? weather.weatherDailySummary.since1Julsnowfallm : ''}">since1Julsnowfallm</td>
-        <td th:text="${weather.weatherDailySummary.since1Julsnowfalli != null ? weather.weatherDailySummary.since1Julsnowfalli : ''}">since1Julsnowfalli</td>
-        <td th:text="${weather.weatherDailySummary.monthtodateheatingdegreedays != null ? weather.weatherDailySummary.monthtodateheatingdegreedays : ''}">monthtodateheatingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.thunder != null ? weather.weatherDailySummary.thunder : ''}">thunder</td>
+        <td th:text="${weather.weatherDailySummary.snowfallm != null ? weather.weatherDailySummary.snowfallm : ''}">
+            snowfallm
+        </td>
+        <td th:text="${weather.weatherDailySummary.snowfalli != null ? weather.weatherDailySummary.snowfalli : ''}">
+            snowfalli
+        </td>
+        <td th:text="${weather.weatherDailySummary.precipm != null ? weather.weatherDailySummary.precipm : ''}">
+            precepm
+        </td>
+        <td th:text="${weather.weatherDailySummary.precipi != null ? weather.weatherDailySummary.precipi : ''}">
+            precepi
+        </td>
+        <td th:text="${weather.weatherDailySummary.precipsource != null ? weather.weatherDailySummary.precipsource : ''}">
+            precipsource
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Julheatingdegreedays != null ? weather.weatherDailySummary.since1Julheatingdegreedays : ''}">
+            since1Julheatingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.meantempm != null ? weather.weatherDailySummary.meantempm : ''}">
+            meantempm
+        </td>
+        <td th:text="${weather.weatherDailySummary.meantempi != null ? weather.weatherDailySummary.meantempi : ''}">
+            meantempi
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Julsnowfallm != null ? weather.weatherDailySummary.since1Julsnowfallm : ''}">
+            since1Julsnowfallm
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Julsnowfalli != null ? weather.weatherDailySummary.since1Julsnowfalli : ''}">
+            since1Julsnowfalli
+        </td>
+        <td th:text="${weather.weatherDailySummary.monthtodateheatingdegreedays != null ? weather.weatherDailySummary.monthtodateheatingdegreedays : ''}">
+            monthtodateheatingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.thunder != null ? weather.weatherDailySummary.thunder : ''}">
+            thunder
+        </td>
         <td th:text="${weather.weatherDailySummary.rain != null ? weather.weatherDailySummary.rain : ''}">rain</td>
         <td th:text="${weather.weatherDailySummary.snow != null ? weather.weatherDailySummary.snow : ''}">snow</td>
         <td th:text="${weather.weatherDailySummary.fog != null ? weather.weatherDailySummary.fog : ''}">fog</td>
-        <td th:text="${weather.weatherDailySummary.tornado != null ? weather.weatherDailySummary.tornado : ''}">tornado</td>
+        <td th:text="${weather.weatherDailySummary.tornado != null ? weather.weatherDailySummary.tornado : ''}">
+            tornado
+        </td>
         <td th:text="${weather.weatherDailySummary.hail != null ? weather.weatherDailySummary.hail : ''}">hail</td>
-        <td th:text="${weather.weatherDailySummary.since1Jancoolingdegreedaysnormal != null ? weather.weatherDailySummary.since1Jancoolingdegreedaysnormal : ''}">since1Jancoolingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.maxwspdi != null ? weather.weatherDailySummary.maxwspdi : ''}">maxwspdi</td>
-        <td th:text="${weather.weatherDailySummary.mintempm != null ? weather.weatherDailySummary.mintempm : ''}">mintempm</td>
-        <td th:text="${weather.weatherDailySummary.minhumidity != null ? weather.weatherDailySummary.minhumidity : ''}">minhumidity</td>
-        <td th:text="${weather.weatherDailySummary.mintempi != null ? weather.weatherDailySummary.mintempi : ''}">mintempi</td>
-        <td th:text="${weather.weatherDailySummary.humidity != null ? weather.weatherDailySummary.humidity : ''}">humidity</td>
-        <td th:text="${weather.weatherDailySummary.monthtodatecoolingdegreedaysnormal != null ? weather.weatherDailySummary.monthtodatecoolingdegreedaysnormal : ''}">monthtodatecoolingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.maxwspdm != null ? weather.weatherDailySummary.maxwspdm : ''}">maxwspdm</td>
-        <td th:text="${weather.weatherDailySummary.monthtodateheatingdegreedaysnormal != null ? weather.weatherDailySummary.monthtodateheatingdegreedaysnormal : ''}">monthtodateheatingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.gdegreedays != null ? weather.weatherDailySummary.gdegreedays : ''}">gdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.since1Sepcoolingdegreedaysnormal != null ? weather.weatherDailySummary.since1Sepcoolingdegreedaysnormal : ''}">since1Sepcoolingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.monthtodatecoolingdegreedays != null ? weather.weatherDailySummary.monthtodatecoolingdegreedays : ''}">monthtodatecoolingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.since1Sepheatingdegreedaysnormal != null ? weather.weatherDailySummary.since1Sepheatingdegreedaysnormal : ''}">since1Sepheatingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.heatingdegreedaysnormal != null ? weather.weatherDailySummary.heatingdegreedaysnormal : ''}">heatingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.monthtodatesnowfalli != null ? weather.weatherDailySummary.monthtodatesnowfalli : ''}">monthtodatesnowfalli</td>
-        <td th:text="${weather.weatherDailySummary.mindewptm != null ? weather.weatherDailySummary.mindewptm : ''}">mindewptm</td>
-        <td th:text="${weather.weatherDailySummary.monthtodatesnowfallm != null ? weather.weatherDailySummary.monthtodatesnowfallm : ''}">monthtodatesnowfallm</td>
-        <td th:text="${weather.weatherDailySummary.mindewpti != null ? weather.weatherDailySummary.mindewpti : ''}">mindewpti</td>
-        <td th:text="${weather.weatherDailySummary.heatingdegreedays != null ? weather.weatherDailySummary.heatingdegreedays : ''}">heatingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.snowdepthm != null ? weather.weatherDailySummary.snowdepthm : ''}">snowdepthm</td>
-        <td th:text="${weather.weatherDailySummary.maxdewptm != null ? weather.weatherDailySummary.maxdewptm : ''}">maxdewptm</td>
-        <td th:text="${weather.weatherDailySummary.snowdepthi != null ? weather.weatherDailySummary.snowdepthi : ''}">snowdepthi</td>
-        <td th:text="${weather.weatherDailySummary.maxdewpti != null ? weather.weatherDailySummary.maxdewpti : ''}">maxdewpti</td>
-        <td th:text="${weather.weatherDailySummary.maxtempm != null ? weather.weatherDailySummary.maxtempm : ''}">maxtempm</td>
-        <td th:text="${weather.weatherDailySummary.minwspdi != null ? weather.weatherDailySummary.minwspdi : ''}">minwspdi</td>
-        <td th:text="${weather.weatherDailySummary.maxtempi != null ? weather.weatherDailySummary.maxtempi : ''}">maxtempi</td>
-        <td th:text="${weather.weatherDailySummary.since1Sepcoolingdegreedays != null ? weather.weatherDailySummary.since1Sepcoolingdegreedays : ''}">since1Sepcoolingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.meanpressurem != null ? weather.weatherDailySummary.meanpressurem : ''}">meanpressurem</td>
-        <td th:text="${weather.weatherDailySummary.minwspdm != null ? weather.weatherDailySummary.minwspdm : ''}">minwspdm</td>
-        <td th:text="${weather.weatherDailySummary.coolingdegreedaysnormal != null ? weather.weatherDailySummary.coolingdegreedaysnormal : ''}">coolingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.minpressurem != null ? weather.weatherDailySummary.minvism : ''}">minpressurem</td>
-        <td th:text="${weather.weatherDailySummary.minvisi != null ? weather.weatherDailySummary.minvisi : ''}">minvisi</td>
-        <td th:text="${weather.weatherDailySummary.meandewpti != null ? weather.weatherDailySummary.meandewpti : ''}">meandewpti</td>
-        <td th:text="${weather.weatherDailySummary.maxhumidity != null ? weather.weatherDailySummary.maxhumidity : ''}">maxhumidity</td>
-        <td th:text="${weather.weatherDailySummary.minpressurei != null ? weather.weatherDailySummary.minpressurei : ''}">minpressurei</td>
-        <td th:text="${weather.weatherDailySummary.minvism != null ? weather.weatherDailySummary.minvism : ''}">minvism</td>
-        <td th:text="${weather.weatherDailySummary.meandewptm != null ? weather.weatherDailySummary.meandewptm : ''}">meandewptm</td>
-        <td th:text="${weather.weatherDailySummary.maxpressurem != null ? weather.weatherDailySummary.maxpressurem : ''}">maxpressurem</td>
-        <td th:text="${weather.weatherDailySummary.since1Jancoolingdegreedays != null ? weather.weatherDailySummary.since1Jancoolingdegreedays : ''}">since1Jancoolingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.meanwindspdm != null ? weather.weatherDailySummary.meanwindspdm : ''}">meanwindspdm</td>
-        <td th:text="${weather.weatherDailySummary.maxpressurei != null ? weather.weatherDailySummary.maxpressurei : ''}">maxpressurei</td>
-        <td th:text="${weather.weatherDailySummary.since1Julheatingdegreedaysnormal != null ? weather.weatherDailySummary.since1Julheatingdegreedaysnormal : ''}">since1Julheatingdegreedaysnormal</td>
-        <td th:text="${weather.weatherDailySummary.since1Sepheatingdegreedays != null ? weather.weatherDailySummary.since1Sepheatingdegreedays : ''}">since1Sepheatingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.meanwindspdi != null ? weather.weatherDailySummary.meanwindspdi : ''}">meanwindspdi</td>
-        <td th:text="${weather.weatherDailySummary.meanpressurei != null ? weather.weatherDailySummary.meanpressurei : ''}">meanpressurei</td>
-        <td th:text="${weather.weatherDailySummary.coolingdegreedays != null ? weather.weatherDailySummary.coolingdegreedays : ''}">coolingdegreedays</td>
-        <td th:text="${weather.weatherDailySummary.maxvisi != null ? weather.weatherDailySummary.maxvisi : ''}">maxvisi</td>
-        <td th:text="${weather.weatherDailySummary.maxvism != null ? weather.weatherDailySummary.maxvism : ''}">maxvism</td>
-        <td th:text="${weather.weatherDailySummary.meanwdird != null ? weather.weatherDailySummary.meanwdird : ''}">meanwdird</td>
-        <td th:text="${weather.weatherDailySummary.meanwdire != null ? weather.weatherDailySummary.meanwdire : ''}">meanwdire</td>
-        <td th:text="${weather.weatherDailySummary.meanvisi != null ? weather.weatherDailySummary.meanvisi : ''}">meanvisi</td>
-        <td th:text="${weather.weatherDailySummary.meanvism != null ? weather.weatherDailySummary.meanvism : ''}">meanvism</td>
+        <td th:text="${weather.weatherDailySummary.since1Jancoolingdegreedaysnormal != null ? weather.weatherDailySummary.since1Jancoolingdegreedaysnormal : ''}">
+            since1Jancoolingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxwspdi != null ? weather.weatherDailySummary.maxwspdi : ''}">
+            maxwspdi
+        </td>
+        <td th:text="${weather.weatherDailySummary.mintempm != null ? weather.weatherDailySummary.mintempm : ''}">
+            mintempm
+        </td>
+        <td th:text="${weather.weatherDailySummary.minhumidity != null ? weather.weatherDailySummary.minhumidity : ''}">
+            minhumidity
+        </td>
+        <td th:text="${weather.weatherDailySummary.mintempi != null ? weather.weatherDailySummary.mintempi : ''}">
+            mintempi
+        </td>
+        <td th:text="${weather.weatherDailySummary.humidity != null ? weather.weatherDailySummary.humidity : ''}">
+            humidity
+        </td>
+        <td th:text="${weather.weatherDailySummary.monthtodatecoolingdegreedaysnormal != null ? weather.weatherDailySummary.monthtodatecoolingdegreedaysnormal : ''}">
+            monthtodatecoolingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxwspdm != null ? weather.weatherDailySummary.maxwspdm : ''}">
+            maxwspdm
+        </td>
+        <td th:text="${weather.weatherDailySummary.monthtodateheatingdegreedaysnormal != null ? weather.weatherDailySummary.monthtodateheatingdegreedaysnormal : ''}">
+            monthtodateheatingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.gdegreedays != null ? weather.weatherDailySummary.gdegreedays : ''}">
+            gdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Sepcoolingdegreedaysnormal != null ? weather.weatherDailySummary.since1Sepcoolingdegreedaysnormal : ''}">
+            since1Sepcoolingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.monthtodatecoolingdegreedays != null ? weather.weatherDailySummary.monthtodatecoolingdegreedays : ''}">
+            monthtodatecoolingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Sepheatingdegreedaysnormal != null ? weather.weatherDailySummary.since1Sepheatingdegreedaysnormal : ''}">
+            since1Sepheatingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.heatingdegreedaysnormal != null ? weather.weatherDailySummary.heatingdegreedaysnormal : ''}">
+            heatingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.monthtodatesnowfalli != null ? weather.weatherDailySummary.monthtodatesnowfalli : ''}">
+            monthtodatesnowfalli
+        </td>
+        <td th:text="${weather.weatherDailySummary.mindewptm != null ? weather.weatherDailySummary.mindewptm : ''}">
+            mindewptm
+        </td>
+        <td th:text="${weather.weatherDailySummary.monthtodatesnowfallm != null ? weather.weatherDailySummary.monthtodatesnowfallm : ''}">
+            monthtodatesnowfallm
+        </td>
+        <td th:text="${weather.weatherDailySummary.mindewpti != null ? weather.weatherDailySummary.mindewpti : ''}">
+            mindewpti
+        </td>
+        <td th:text="${weather.weatherDailySummary.heatingdegreedays != null ? weather.weatherDailySummary.heatingdegreedays : ''}">
+            heatingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.snowdepthm != null ? weather.weatherDailySummary.snowdepthm : ''}">
+            snowdepthm
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxdewptm != null ? weather.weatherDailySummary.maxdewptm : ''}">
+            maxdewptm
+        </td>
+        <td th:text="${weather.weatherDailySummary.snowdepthi != null ? weather.weatherDailySummary.snowdepthi : ''}">
+            snowdepthi
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxdewpti != null ? weather.weatherDailySummary.maxdewpti : ''}">
+            maxdewpti
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxtempm != null ? weather.weatherDailySummary.maxtempm : ''}">
+            maxtempm
+        </td>
+        <td th:text="${weather.weatherDailySummary.minwspdi != null ? weather.weatherDailySummary.minwspdi : ''}">
+            minwspdi
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxtempi != null ? weather.weatherDailySummary.maxtempi : ''}">
+            maxtempi
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Sepcoolingdegreedays != null ? weather.weatherDailySummary.since1Sepcoolingdegreedays : ''}">
+            since1Sepcoolingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanpressurem != null ? weather.weatherDailySummary.meanpressurem : ''}">
+            meanpressurem
+        </td>
+        <td th:text="${weather.weatherDailySummary.minwspdm != null ? weather.weatherDailySummary.minwspdm : ''}">
+            minwspdm
+        </td>
+        <td th:text="${weather.weatherDailySummary.coolingdegreedaysnormal != null ? weather.weatherDailySummary.coolingdegreedaysnormal : ''}">
+            coolingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.minpressurem != null ? weather.weatherDailySummary.minvism : ''}">
+            minpressurem
+        </td>
+        <td th:text="${weather.weatherDailySummary.minvisi != null ? weather.weatherDailySummary.minvisi : ''}">
+            minvisi
+        </td>
+        <td th:text="${weather.weatherDailySummary.meandewpti != null ? weather.weatherDailySummary.meandewpti : ''}">
+            meandewpti
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxhumidity != null ? weather.weatherDailySummary.maxhumidity : ''}">
+            maxhumidity
+        </td>
+        <td th:text="${weather.weatherDailySummary.minpressurei != null ? weather.weatherDailySummary.minpressurei : ''}">
+            minpressurei
+        </td>
+        <td th:text="${weather.weatherDailySummary.minvism != null ? weather.weatherDailySummary.minvism : ''}">
+            minvism
+        </td>
+        <td th:text="${weather.weatherDailySummary.meandewptm != null ? weather.weatherDailySummary.meandewptm : ''}">
+            meandewptm
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxpressurem != null ? weather.weatherDailySummary.maxpressurem : ''}">
+            maxpressurem
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Jancoolingdegreedays != null ? weather.weatherDailySummary.since1Jancoolingdegreedays : ''}">
+            since1Jancoolingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanwindspdm != null ? weather.weatherDailySummary.meanwindspdm : ''}">
+            meanwindspdm
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxpressurei != null ? weather.weatherDailySummary.maxpressurei : ''}">
+            maxpressurei
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Julheatingdegreedaysnormal != null ? weather.weatherDailySummary.since1Julheatingdegreedaysnormal : ''}">
+            since1Julheatingdegreedaysnormal
+        </td>
+        <td th:text="${weather.weatherDailySummary.since1Sepheatingdegreedays != null ? weather.weatherDailySummary.since1Sepheatingdegreedays : ''}">
+            since1Sepheatingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanwindspdi != null ? weather.weatherDailySummary.meanwindspdi : ''}">
+            meanwindspdi
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanpressurei != null ? weather.weatherDailySummary.meanpressurei : ''}">
+            meanpressurei
+        </td>
+        <td th:text="${weather.weatherDailySummary.coolingdegreedays != null ? weather.weatherDailySummary.coolingdegreedays : ''}">
+            coolingdegreedays
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxvisi != null ? weather.weatherDailySummary.maxvisi : ''}">
+            maxvisi
+        </td>
+        <td th:text="${weather.weatherDailySummary.maxvism != null ? weather.weatherDailySummary.maxvism : ''}">
+            maxvism
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanwdird != null ? weather.weatherDailySummary.meanwdird : ''}">
+            meanwdird
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanwdire != null ? weather.weatherDailySummary.meanwdire : ''}">
+            meanwdire
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanvisi != null ? weather.weatherDailySummary.meanvisi : ''}">
+            meanvisi
+        </td>
+        <td th:text="${weather.weatherDailySummary.meanvism != null ? weather.weatherDailySummary.meanvism : ''}">
+            meanvism
+        </td>
     </tr>
 </table>
 
