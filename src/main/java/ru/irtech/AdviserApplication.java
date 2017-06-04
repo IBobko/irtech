@@ -7,8 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-//import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import ru.irtech.filter.AdvisorCorsFilter;
 import ru.irtech.filter.JavascriptFilter;
@@ -55,7 +54,7 @@ public class AdviserApplication {
      * @return primary datasource.
      */
     @Bean
-    @Primary
+    //@Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();
@@ -66,20 +65,20 @@ public class AdviserApplication {
      *
      * @return gained data datasource.
      */
-    @Bean
-    @ConfigurationProperties(prefix = "spring.dataDatasource")
-    public DataSource secondaryDataSource() {
-        return DataSourceBuilder.create().build();
-    }
+    //@Bean
+    //@ConfigurationProperties(prefix = "spring.dataDatasource")
+    //public DataSource secondaryDataSource() {
+    //   return DataSourceBuilder.create().build();
+    //}
 
     /**
      * This is transaction manager for primary datasource.
      *
      * @return Transaction manager.
      */
- /*   @Bean("dataTx")
-    public DataSourceTransactionManager mysqlTx() {
-        return new DataSourceTransactionManager(secondaryDataSource());
+    @Bean
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(primaryDataSource());
     }
 
     /**
