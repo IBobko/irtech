@@ -45,9 +45,10 @@ var InnopolisAdviser = {
 
             // add css and html advisor template to current view
             $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
-                + "/resources/css/adviser" + mobile + '.css">');
+                + "/resources/css/adviser" + '.css"/><link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
+                + "/resources/css/font" + mobile + '.css"/>');
             $.ajax({
-                url: this.jsHostLocation + "/templates/adviser" + mobile + ".html",
+                url: this.jsHostLocation + "/templates/adviser" + ".html",
                 async: false
             }).done(function (content) {
                 $('body').append(content);
@@ -60,6 +61,8 @@ var InnopolisAdviser = {
 
             //initial advice check
             this.checkInitAdvice();
+
+            $('.ui-loader').remove();
         }
         ,
 
@@ -82,7 +85,8 @@ var InnopolisAdviser = {
             this.hideAdvice();
             this.hideAdvisor();
             this.separateClicks(this);
-            this.advisorSkinsLoad(this)
+            this.onTapHold(this);
+            this.advisorSkinsLoad(this);
         }
         ,
 
@@ -191,6 +195,16 @@ var InnopolisAdviser = {
                     self.clicks = 0;             //after action performed, reset counter
                 }
             });
+        }
+        ,
+
+        onTapHold: function (self) {
+            console.log(1);
+            $("#advisorContent").bind("taphold", tapholdHandler);
+            function tapholdHandler(event) {
+                console.log(3);
+                self.advisorDoubleClick(self);
+            }
         }
         ,
 
