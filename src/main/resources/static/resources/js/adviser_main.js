@@ -164,6 +164,7 @@ var InnopolisAdviser = {
 // When the user double clicks on advisor
 // then ability to show other advisors is on
         advisorDoubleClick: function (self) {
+            $('.ui-loader').remove();
             if (!self.changeOpen) {
                 self.showDiv("advisorChange");
                 self.changeOpen = true;
