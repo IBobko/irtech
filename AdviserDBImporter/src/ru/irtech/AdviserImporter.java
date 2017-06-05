@@ -1,51 +1,107 @@
 package ru.irtech;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.thymeleaf.util.StringUtils;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 
 public class AdviserImporter {
+
+    private static final Integer MAX_THREADS = 800;
+    private static final Integer TIME_FOR_WAIT = 500;
     /**
      * The path to the error file.
      */
     final static private Path ERRORS_FILE = Paths.get("./errors.txt");
+    private String[] LACK_OF_TABLES = {"SG_ST_VARIANTS",
+            "GETPOSTYPES",
+            "GETCOMMONSCHOOLTERMS",
+            "SGGHours",
+            "YEAR_TEACHER_SUBJ",
+            "SG_GRADES",
+            "SG_CLASSES_TERMS",
+            "STUDENTS_EDUC_RANGES",
+            "UserParamValues",
+            "GETSTAFFINFO",
+            "GET_CURICULUM_BY_SUBJGROUPS",
+            "GET_MOV_EOS_DOU_EX",
+            "GET_STUDENTSCLASSES",
+            "CLS_ST_VARIANTS",
+            "STUDENTS_YEARS_CATEGORIES_2",
+            "STUDENTS_YEARS_CATEGORIES",
+            "INDICATORS_RELATIONS_ALL",
+            "GET_SY_CLASSESGRADES",
+            "SG_TEACHERS",
+            "SG_ST_VARIANTS_UNION",
+            "CSGHours",
+            "GETYEARTOTALS",
+            "StudentsRanges",
+            "ST_IUPGRADES_VARIANTS",
+            "sysdiagrams",
+            "EM_PROVINCES",
+            "FOUNDERS_WITH_PARENTS",
+            "STUDENTS_SCHOOLS_CATEGORIES",
+            "GET_NUMBER_OF_STUDENTS_UDOD",
+            "UserParamItems",
+            "CLS_ST_VARIANTS_CLASSIC",
+            "YEAR_TEACHER_ClASSES",
+            "CSG_GRADES",
+            "SGHours",
+            "REVISIONSYEARSSECTIONS",
+            "USER_YEAR_PARAMETERS",
+            "UserParamDates",
+            "EM_DISTRICTS",
+            "GET_PARENTPAY_DEBT",
+            "ST_GRADES_VARIANTS",
+            "YEAR_TEACHER_GRADES",
+            "STUDENTS_DATERANGES_CATEGORIES",
+            "STAFFTERMSUMS",
+            "GET_CUR_HOURS_BY_CLASS",
+            "TOTALS_AND_LAST_TERM_YEARTOTALS",
+            "SGG_CLASSES_TERMS_STUDENTS",
+            "EM_CITIES",
+            "INDICATORS_RELATIONS_ROOTS",
+            "SG_TEACHERS_TERMS",
+            "ISG_GRADES",
+            "SG_CLASSES",
+            "SG_ACTIVITIES_GRADINGSYSTEMS",
+            "SGG_ST_VARIANTS_IUP"};
+    private List<Future> futures = new CopyOnWriteArrayList<>();
 
     /**
-     *  The start method.
+     * The start method.
+     *
      * @param args The first parameter is the directory path with the database dump.
-     * @throws IOException .
+     * @throws IOException  .
      * @throws SQLException .
      */
     public static void main(String[] args) throws IOException, SQLException, InterruptedException {
         if (args.length < 1) {
             System.out.println("Data folder is not specified.");
         }
-
+        Logger.getLogger("").removeHandler(Logger.getLogger("").getHandlers()[0]);
         final AdviserImporter importer = new AdviserImporter();
         importer.startLoading(args[0]);
     }
 
     /**
      * The initializing of the logging file.
+     *
      * @throws IOException .
      */
     private void startLogging() throws IOException {
@@ -54,12 +110,12 @@ public class AdviserImporter {
     }
 
 
-
     /**
      * Append message to the end of the errors file.
      *
      * @param text Message for appending.
      */
+    @SuppressWarnings("unused")
     private void appendToErrorsFile(final String text) {
         try {
             Files.write(ERRORS_FILE, text.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
@@ -69,217 +125,93 @@ public class AdviserImporter {
         }
     }
 
-
-
-
     private void startLoading(String pathToDump) throws SQLException, IOException, InterruptedException {
+        startLogging();
+        final Path rootPath = Paths.get(pathToDump);
+        long times = System.currentTimeMillis();
+        long totalSize = 0;
 
-            startLogging();
+        List<String> lackOfTables = Arrays.asList(LACK_OF_TABLES);
+        for (int i = 0; i < lackOfTables.size(); i++) {
+            lackOfTables.set(i, lackOfTables.get(i).toUpperCase());
+        }
 
-            final Path rootPath = Paths.get(pathToDump);
-
-            long times = System.currentTimeMillis();
-
-            if (Files.isDirectory(rootPath)) {
-                try (final DirectoryStream<Path> stream = Files.newDirectoryStream(rootPath)) {
-                    final List<Path> paths = new ArrayList<>();
-                    final ExecutorService executorService = Executors.newCachedThreadPool();
-                    for (final Path path : stream) {
+        if (Files.isDirectory(rootPath)) {
+            try (final DirectoryStream<Path> stream = Files.newDirectoryStream(rootPath)) {
+                final List<Path> paths = new ArrayList<>();
+                final ExecutorService executorService = Executors.newCachedThreadPool();
+                final ExecutorService executorServiceForDb = Executors.newFixedThreadPool(MAX_THREADS);
+                long totalFileSize = 0;
+                for (final Path path : stream) {
+                    if (!lackOfTables.contains(path.getFileName().toString().toUpperCase())) {
+                        paths.add(path);
                         long fileSize = Files.size(path);
-                        if (fileSize < 25 * 1024) {
-                            paths.add(path);
+                        totalFileSize += fileSize;
+                    }
+                }
+                final long TOTAL_FILE_SIZE = totalFileSize;
+
+                for (final Path path : paths) {
+                    totalSize += Files.size(path);
+                    final long TOTAL_SIZE = totalSize;
+                    truncateTable(path.getFileName().toString());
+                    executorService.submit(() -> {
+                        final DividerIntoParts dividerIntoParts;
+                        try {
+                            dividerIntoParts = new DividerIntoParts(path);
+                        } catch (IOException e) {
+                            return;
+                        }
+                        for (int i = 0; i < dividerIntoParts.getSize(); i++) {
+                            final Integer currentIndex = i;
+                            try {
+                                final LoaderThread loaderThread = new LoaderThread(path, dividerIntoParts.getPart(currentIndex));
+                                final Future future = executorServiceForDb.submit(loaderThread);
+                                futures.add(future);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        System.out.println("Already done: " + (TOTAL_SIZE * 100 / TOTAL_FILE_SIZE) + "%");
+                    });
+                }
+                executorService.shutdown();
+                final List<Future> futures_temp = new ArrayList<>();
+                futures_temp.addAll(futures);
+                while (futures_temp.size() != 0) {
+                    for (final Future future : futures) {
+                        if (future.isDone() || future.isCancelled()) {
+                            futures_temp.remove(future);
                         }
                     }
+                    Thread.sleep(TIME_FOR_WAIT);
+                }
+                executorServiceForDb.shutdown();
 
-                    final CountDownLatch doneSignal = new CountDownLatch(paths.size());
-                    for (final Path path: paths) {
-
-                        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-                        dataSource.setDriverClassName("org.postgresql.Driver");
-                        dataSource.setUrl("jdbc:postgresql://localhost/irtech_test_data1");
-                        dataSource.setUsername("postgres");
-                        dataSource.setPassword("1");
-                        final Connection connection = dataSource.getConnection();
-
-
-                        final LoaderThread loaderThread = new LoaderThread(doneSignal, path, connection);
-                        executorService.submit(loaderThread);
-                        break;
-                    }
-                    executorService.shutdown();
-                    doneSignal.await();
-                    System.out.println("Done");
-
-                    System.out.println(System.currentTimeMillis() - times);
-
-                }// catch (IOException e) {
-                 //   appendToErrorsFile(e.getMessage());
-                 //   throw new RuntimeException(e);
-                //}
+                System.out.println("Done");
+                System.out.println("Time:" + (System.currentTimeMillis() - times));
+                System.out.println("Size:" + totalSize + " bytes");
             }
         }
-
-    /**
-     * Parsing one file.
-     *
-     * @param path      Path to file.
-     * @throws FileNotFoundException        if found not exists.
-     * @throws UnsupportedEncodingException if Encoding do not supported.
-     */
-    private void loadingData(final Path path, final Connection connection) throws FileNotFoundException, UnsupportedEncodingException, SQLException {
-        if (Files.isRegularFile(path)) {
-            final Statement statement = connection.createStatement();
-            final String tableName = path.getFileName().toString();
-            try {
-                statement.execute("TRUNCATE TABLE " + tableName);
-            } catch (Exception e) {
-                final String message = tableName + " : " + e.getMessage() + "\n";
-                appendToErrorsFile(message);
-                return;
-            }
-
-            final InputStream inputStream = new FileInputStream(path.toString());
-            final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-
-            try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
-                final String[] columns;
-                String sCurrentLine = br.readLine();
-                if (sCurrentLine != null) {
-                    columns = sCurrentLine.split(";");
-                } else {
-                    return;
-                }
-
-                final List<String> columnsArray = Arrays.asList(columns).subList(1, columns.length);
-                String sql = "INSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")";
-                System.out.println(sql);
-
-                int currentLine = 0;
-                while ((sCurrentLine = br.readLine()) != null) {
-                    currentLine++;
-                    final StringBuilder executedString = new StringBuilder(sql);
-                    try {
-                        final List<String> tmpArgumentsArray = formingArgumentsArray(sCurrentLine);
-                        executedString.append("(").append(StringUtils.join(tmpArgumentsArray, ",")).append(");");
-                        statement.execute(executedString.toString());
-                    } catch (Exception e) {
-                        String message = tableName + " : Line: " + currentLine + "; " + e.getMessage() + "\n";
-                        appendToErrorsFile(message);
-                    }
-                }
-
-            } catch (IOException e) {
-                appendToErrorsFile(e.getMessage());
-            }
-
-        }
-
     }
 
-    /**
-     * Parsing one file.
-     *
-     * @param path Path to file.
-     * @param fop  SQL Connection;
-     * @throws FileNotFoundException        if found not exists.
-     * @throws UnsupportedEncodingException if Encoding do not supported.
-     */
-    private void loadingDataToFile(final Path path, final FileOutputStream fop) throws FileNotFoundException, UnsupportedEncodingException {
-        if (Files.isRegularFile(path)) {
-            final String tableName = path.getFileName().toString();
-
-            try {
-                fop.write(("TRUNCATE TABLE " + tableName + ";\n").getBytes());
-
-                fop.flush();
-            } catch (Exception e) {
-                final String message = tableName + " : " + e.getMessage() + "\n";
-                appendToErrorsFile(message);
-                return;
-            }
-
-            final InputStream inputStream = new FileInputStream(path.toString());
-            final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-
-            try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
-                final String[] columns;
-                String sCurrentLine = br.readLine();
-                if (sCurrentLine != null) {
-                    columns = sCurrentLine.split(";");
-                } else {
-                    return;
-                }
-
-                final List<String> columnsArray = Arrays.asList(columns).subList(1, columns.length);
-                String sql = "\nINSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")" + " VALUES ";
-                System.out.println(sql);
-
-                int currentLine = 0;
-                while ((sCurrentLine = br.readLine()) != null) {
-                    currentLine++;
-                    final StringBuilder executedString = new StringBuilder(sql);
-                    try {
-                        final List<String> tmpArgumentsArray = formingArgumentsArray(sCurrentLine);
-                        executedString.append("(").append(StringUtils.join(tmpArgumentsArray, ",")).append(");\n");
-                        fop.write(executedString.toString().getBytes());
-                    } catch (Exception e) {
-                        String message = tableName + " : Line: " + currentLine + "; " + e.getMessage() + "\n";
-                        appendToErrorsFile(message);
-                    }
-                }
-            } catch (IOException e) {
-                appendToErrorsFile(e.getMessage());
-            }
-
-        }
-
-    }
-
-    /**
-     * This function converts the value to SQL format and adds quotes if value is not empty and replaces value to null if so.
-     *
-     * @param value Original value which stored in CVS file.
-     * @return Translated value or empty string if value is null.
-     */
-    private String formingValue(String value) {
-        if (value == null) return "";
+    private void truncateTable(String tableName) throws SQLException {
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost/irtech_test_data2");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("1");
+        final Connection connection = dataSource.getConnection();
+        final Statement statement = connection.createStatement();
         try {
-            final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-            final Date date = sdf.parse(value);
-            SimpleDateFormat simpleDateFormatOfDatabase = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            value = simpleDateFormatOfDatabase.format(date);
-        } catch (final ParseException ignored) {
+            statement.execute("TRUNCATE TABLE " + tableName);
+        } catch (Exception e) {
+            final String message = tableName + " : " + e.getMessage() + "\n";
+            System.out.println(message);
+            //appendToErrorsFile(message);
+        } finally {
+            statement.close();
+            connection.close();
         }
-
-        if (value.equals("")) {
-            value = "null";
-        } else {
-            value = StringEscapeUtils.escapeSql(value);
-            value = "'" + value + "'";
-        }
-        return value.replace(",", ".");
     }
-
-    /**
-     * This function forms array with correct values for forming of SQL.
-     *
-     * @param line Original line from CSV file.
-     * @return Arrays of connect value for forming SQL or empty array if line is null.
-     * @throws IndexOutOfBoundsException if String has an error.
-     */
-    private List<String> formingArgumentsArray(final String line) throws IndexOutOfBoundsException {
-        final List<String> result = new ArrayList<>();
-        if (line == null) return result;
-        final String[] arguments = line.split(";");
-        result.addAll(Arrays.asList(arguments));
-        result.remove(0);
-        if (line.endsWith(";")) {
-            result.add("");
-        }
-        for (int i = 0; i < result.size(); i++) {
-            result.set(i, formingValue(result.get(i)));
-        }
-        return result;
-    }
-
 }

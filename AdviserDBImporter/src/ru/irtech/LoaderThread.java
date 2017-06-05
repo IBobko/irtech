@@ -1,6 +1,9 @@
 package ru.irtech;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.postgresql.util.PSQLException;
+import org.postgresql.util.ServerErrorMessage;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.thymeleaf.util.StringUtils;
 
 import java.io.*;
@@ -15,111 +18,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 public class LoaderThread implements Runnable {
-    private final CountDownLatch doneSignal;
-    private Path path;
+    private final Path path;
     private Connection connection;
+    private final PartOfFile partOfFile;
 
-    LoaderThread(CountDownLatch doneSignal, final Path path, final Connection connection) throws IOException {
-        this.doneSignal = doneSignal;
+    LoaderThread(final Path path, final PartOfFile partOfFile) throws IOException {
         this.path = path;
-        this.connection = connection;
-        System.out.println(path.getFileName() + " " + Files.size(path));
-    }
-
-    private PartOfFile divideIntoParts() throws IOException {
-        final InputStream inputStreamReader = new FileInputStream(path.toString());
-        final long portion = 1000;
-        final List<Long> positions = new ArrayList<>();
-        long currentPosition = 0;
-
-        final StringBuilder columns = new StringBuilder();
-        char ch = 0;
-        while (ch != '\n') {
-            int chi = inputStreamReader.read();
-            currentPosition++;
-            ch = (char) chi;
-            columns.append(ch);
-        }
-        positions.add(currentPosition);
-        main:
-        while (inputStreamReader.skip(portion) == portion) {
-            currentPosition += portion;
-            while (true) {
-                int r = inputStreamReader.read();
-                if (r == -1) {
-                    break main;
-                }
-                char c = (char) r;
-                if (c == '\n') {
-                    positions.add(currentPosition);
-                    currentPosition++;
-                    break;
-                }
-                currentPosition++;
-            }
-        }
-        final PartOfFile partOfFile = new PartOfFile();
-        partOfFile.columns = columns.toString();
-        partOfFile.parts = positions;
-        return partOfFile;
+        System.out.println(path.getFileName() + ". Part: " + partOfFile.getFrom() + " from " + Files.size(path));
+        this.partOfFile = partOfFile;
     }
 
     @Override
     public void run() {
         System.out.println(Thread.currentThread().getName() + " is started");
-
         try {
-
-            List<Long> positions = divideIntoParts().parts;
-
-            for (int i = 0; i < positions.size(); i++) {
-                long last;
-                if (i == positions.size() - 1) {
-                    last = -1;
-                } else {
-                    last = positions.get(i + 1);
-                }
-                printInterval(positions.get(i), last);
-                System.out.println("---------------------------------");
-            }
-
-
-            //loadingData();
-
+            final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+            dataSource.setDriverClassName("org.postgresql.Driver");
+            dataSource.setUrl("jdbc:postgresql://localhost/irtech_test_data2");
+            dataSource.setUsername("postgres");
+            dataSource.setPassword("1");
+            connection = dataSource.getConnection();
+            loadingData();
         } catch (Exception e) {
             e.printStackTrace();
-
-
         }
-        doneSignal.countDown();
-    }
-
-
-    private void printInterval(long from, long to) throws Exception {
-        final InputStream inputStream = new FileInputStream(path.toString());
-        from = inputStream.skip(from);
-
-        final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-
-
-        try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
-            String sCurrentLine;
-            long read = 0;
-            while ((sCurrentLine = br.readLine()) != null) {
-                read += sCurrentLine.getBytes().length + 2;
-                System.out.println(sCurrentLine);
-                if (to != -1 && read + from >= to) {
-                    break;
-                }
-
-            }
-        }
+        System.out.println(Thread.currentThread().getName() + " finished.");
     }
 
     /**
@@ -128,71 +56,67 @@ public class LoaderThread implements Runnable {
      * @throws FileNotFoundException        if found not exists.
      * @throws UnsupportedEncodingException if Encoding do not supported.
      */
-    private void loadingData() throws FileNotFoundException, UnsupportedEncodingException, SQLException {
+    private void loadingData() throws IOException, SQLException {
         if (Files.isRegularFile(path)) {
-            final Statement statement = connection.createStatement();
-            final String tableName = path.getFileName().toString();
-            try {
-                statement.execute("TRUNCATE TABLE " + tableName);
-            } catch (Exception e) {
-                final String message = tableName + " : " + e.getMessage() + "\n";
-                System.out.println(message);
-                //appendToErrorsFile(message);
-                return;
-            }
+            try (final Statement statement = connection.createStatement()) {
+                final String tableName = path.getFileName().toString();
+                final Long to = partOfFile.getTo();
+                final InputStream inputStream = new FileInputStream(path.toString());
+                final Long from = inputStream.skip(partOfFile.getFrom());
 
-            final InputStream inputStream = new FileInputStream(path.toString());
+                final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
 
-
-            final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-
-
-            try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
-                final String[] columns;
-                String sCurrentLine = br.readLine();
-                if (sCurrentLine != null) {
-                    columns = sCurrentLine.split(";");
-                } else {
-                    return;
-                }
-
-                final List<String> columnsArray = Arrays.asList(columns).subList(1, columns.length);
-                String sql = "INSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")";
-
-                int currentLine = 0;
-                int iter = 1;
-                try {
+                final List<String> columnsArray = partOfFile.getColumns().subList(1, partOfFile.getColumns().size());
+                final String sql = "INSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")";
+                List<Integer> notNullColumns = new ArrayList<>();
+                try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
+                    String sCurrentLine;
+                    long read = 0;
                     while ((sCurrentLine = br.readLine()) != null) {
-                        currentLine++;
-                        final StringBuilder executedString = new StringBuilder(sql);
-
-                        final List<String> tmpArgumentsArray = formingArgumentsArray(sCurrentLine);
-                        executedString.append(" VALUES(").append(StringUtils.join(tmpArgumentsArray, ",")).append(");");
-                        System.out.println(executedString.toString());
-
-                        statement.addBatch(executedString.toString());
-
-                        if (((double) currentLine / (double) 10 * (double) iter) > 1) {
-                            statement.executeBatch();
-                            iter++;
-                            statement.clearBatch();
+                        read += sCurrentLine.getBytes().length + DividerIntoParts.NUMBER_BYTES_OF_END_OF_STRING;
+                        if (to != null && read + from >= to) {
+                            break;
                         }
-
+                        while (true) {
+                            final StringBuilder executedString = new StringBuilder(sql);
+                            final List<String> tmpArgumentsArray = formingArgumentsArray(sCurrentLine, notNullColumns);
+                            executedString.append(" VALUES(").append(StringUtils.join(tmpArgumentsArray, ",")).append(");");
+                            try {
+                                statement.execute(executedString.toString());
+                                break;
+                            } catch (PSQLException e) {
+                                if (e.getSQLState().equals("42P01")) {
+                                    return;
+                                } else if (e.getSQLState().equals("23502")) {
+                                    ServerErrorMessage serverErrorMessage = e.getServerErrorMessage();
+                                    for (int i = 0; i < columnsArray.size(); i++) {
+                                        if (columnsArray.get(i).equalsIgnoreCase(serverErrorMessage.getColumn())) {
+                                            System.out.println(serverErrorMessage.getColumn());
+                                            notNullColumns.add(i);
+                                            break;
+                                        }
+                                    }
+                                } else if (e.getSQLState().equals("42601")) {
+                                    break;
+                                } else if (e.getSQLState().equals("42804")) {
+                                    break;
+                                } else if (e.getSQLState().equals("22P02")) {
+                                    break;
+                                } else {
+                                    e.printStackTrace();
+                                    break;
+                                }
+                            }
+                        }
                     }
                 } catch (Exception e) {
-                    String message = tableName + " : Line: " + currentLine + "; " + e.getMessage() + "\n";
-                    System.out.println(message);
+                    //String message = tableName + " : Line: " + currentLine + "; " + e.getMessage() + "\n";
+                    //System.out.println(message);
                     //appendToErrorsFile(message);
                 }
-
-
-                statement.executeBatch();
-                System.out.println("The end");
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } finally {
+                connection.close();
             }
-
         }
 
     }
@@ -203,7 +127,7 @@ public class LoaderThread implements Runnable {
      * @param value Original value which stored in CVS file.
      * @return Translated value or empty string if value is null.
      */
-    private String formingValue(String value) {
+    private String formingValue(String value,boolean notNull) {
         if (value == null) return "";
         try {
             final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -213,11 +137,24 @@ public class LoaderThread implements Runnable {
         } catch (final ParseException ignored) {
         }
 
-        if (value.equals("")) {
-            value = "null";
-        } else {
-            value = StringEscapeUtils.escapeSql(value);
-            value = "'" + value + "'";
+        switch (value) {
+            case "False":
+                value = "0";
+                break;
+            case "True":
+                value = "1";
+                break;
+            case "":
+                if (notNull) {
+                    value = "''";
+                } else {
+                    value = "null";
+                }
+                break;
+            default:
+                value = StringEscapeUtils.escapeSql(value);
+                value = "'" + value + "'";
+                break;
         }
         return value.replace(",", ".");
     }
@@ -229,19 +166,19 @@ public class LoaderThread implements Runnable {
      * @return Arrays of connect value for forming SQL or empty array if line is null.
      * @throws IndexOutOfBoundsException if String has an error.
      */
-    private List<String> formingArgumentsArray(final String line) throws IndexOutOfBoundsException {
+    private List<String> formingArgumentsArray(final String line,List<Integer> notNullColumns) throws IndexOutOfBoundsException {
         final List<String> result = new ArrayList<>();
         if (line == null) return result;
-        final String[] arguments = line.split(";");
+        final String[] arguments = line.split(";",-1);
         result.addAll(Arrays.asList(arguments));
         result.remove(0);
-        if (line.endsWith(";")) {
-            result.add("");
-        }
         for (int i = 0; i < result.size(); i++) {
-            result.set(i, formingValue(result.get(i)));
+            boolean notNull = false;
+            if (notNullColumns.contains(i)) {
+                notNull = true;
+            }
+            result.set(i, formingValue(result.get(i),notNull));
         }
         return result;
     }
-
 }
