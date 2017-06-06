@@ -1,11 +1,13 @@
-package ru.irtech.dto;
+package ru.irtech.dto.FamilyStatus;
+
+import ru.irtech.dto.ControllerResponse;
 
 /**
  * Created by Iggytoto on 02.06.2017.
  * Represents response that holds the data about family status and mean grades by categories for the requested period
  * of time.
  */
-public class FamilyStatusToGradesRelationResponse extends ControllerResponse{
+public class FamilyStatusToGradesRelationResponse extends ControllerResponse {
 
     /**
      *  Set that represents full family grade percentages.

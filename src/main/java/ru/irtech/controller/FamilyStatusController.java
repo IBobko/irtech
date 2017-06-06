@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.irtech.dto.ControllerResponse;
-import ru.irtech.dto.FamilyStatusToGradesRelationResponse;
+import ru.irtech.dto.FamilyStatus.FamilyStatusToGradesRelationResponse;
+import ru.irtech.dto.FamilyStatus.FamilyStatusToSchoolsRelationResponse;
 
 import java.util.Date;
 
@@ -27,23 +28,46 @@ public class FamilyStatusController {
     @ResponseBody
     public ControllerResponse getFamilyStatuToGradesRelationTable() {
         try {
-            return getResponse(new Date(0), new Date());
+            return getFamilyStatusToGradesRelationResponse(new Date(0), new Date());
         } catch (Exception e) {
             return new ControllerResponse(e.getMessage());
         }
     }
 
+    /**
+     * Main get method that returns table for all data that presetned in given period.
+     *
+     * @param fromDate start of the period.
+     * @param toDate   end of the period.
+     * @return  FamilyStatusToGradesRelationResponse object
+     */
     @RequestMapping(value = "/familyStatusToGradesRelationTableByPeriod", method = RequestMethod.GET)
     @ResponseBody
     public ControllerResponse getFamilyStatusToGradesRelationTable(
             @RequestParam("fromDate") String fromDate,
             @RequestParam("toDate") String toDate) {
-
         try {
-            return getResponse(new Date(fromDate), new Date(toDate));
+            return getFamilyStatusToGradesRelationResponse(new Date(fromDate), new Date(toDate));
         } catch (Exception e) {
             return new ControllerResponse(e.getMessage());
         }
+    }
+
+    /**
+     * Method that returns all schools family status percentage
+     *
+     * @return
+     */
+    public ControllerResponse getAllschoolsFalimyStatus(){
+        try{
+            return getFamilyStatusToSchoolsRelationResponse();
+        }
+        catch (Exception e){
+           return new ControllerResponse(e.getMessage());
+        }
+    }
+
+    private FamilyStatusToSchoolsRelationResponse getFamilyStatusToSchoolsRelationResponse() {
     }
 
     /**
@@ -52,7 +76,7 @@ public class FamilyStatusController {
      * @param fromDate Period start
      * @param fromDate Period end
      */
-    private FamilyStatusToGradesRelationResponse getResponse(final Date fromDate, final Date toDate) {
+    private FamilyStatusToGradesRelationResponse getFamilyStatusToGradesRelationResponse(final Date fromDate, final Date toDate) {
         double[] fullFamilyResults = new double[]{0.33, 0.33, 0.33};
         double[] notFullFamilyResults = new double[]{0.33, 0.33, 0.33};
 

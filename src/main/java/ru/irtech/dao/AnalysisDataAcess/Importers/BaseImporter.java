@@ -1,5 +1,9 @@
 package ru.irtech.dao.AnalysisDataAcess.Importers;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,5 +33,20 @@ abstract class BaseImporter  {
             e.printStackTrace();
         }
         return connection;
+    }
+
+    /**
+     * Method that reads all file data to single string.
+     * In this class it should be applied only to sql load to string.
+     * @param path
+     * @param encoding
+     * @return
+     * @throws IOException
+     */
+    protected String readSql(String path, Charset encoding)
+            throws IOException
+    {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 }

@@ -10,7 +10,7 @@ import ru.irtech.dao.AnalysisDataAcess.DataBaseList;
 import ru.irtech.dao.AnalysisDataAcess.Importers.ICsvImporter;
 import ru.irtech.dao.AnalysisDataAcess.Importers.StudentsTermsYearlyMarks;
 import ru.irtech.dto.ControllerResponse;
-import ru.irtech.dto.FamilyStatusToGradesCorrelationResponse;
+import ru.irtech.dto.FamilyStatus.FamilyStatusToGradesCorrelationResponse;
 
 import java.io.File;
 import java.io.IOException;

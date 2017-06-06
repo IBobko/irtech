@@ -1,4 +1,6 @@
-package ru.irtech.dto;
+package ru.irtech.dto.FamilyStatus;
+
+import ru.irtech.dto.ControllerResponse;
 
 /**
  * Created by Iggytoto on 29.04.2017.
