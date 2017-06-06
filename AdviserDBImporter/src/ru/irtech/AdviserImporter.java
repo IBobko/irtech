@@ -198,9 +198,9 @@ public class AdviserImporter {
     private void truncateTable(String tableName) throws SQLException {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost/irtech_test_data2");
+        dataSource.setUrl("jdbc:postgresql://localhost/irtech_data");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("1");
+        dataSource.setPassword("yOklqXf4");
         final Connection connection = dataSource.getConnection();
         final Statement statement = connection.createStatement();
         try {

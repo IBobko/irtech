@@ -39,9 +39,9 @@ public class LoaderThread implements Runnable {
         try {
             final DriverManagerDataSource dataSource = new DriverManagerDataSource();
             dataSource.setDriverClassName("org.postgresql.Driver");
-            dataSource.setUrl("jdbc:postgresql://localhost/irtech_test_data2");
+            dataSource.setUrl("jdbc:postgresql://localhost/irtech_data");
             dataSource.setUsername("postgres");
-            dataSource.setPassword("1");
+            dataSource.setPassword("yOklqXf4");
             connection = dataSource.getConnection();
             loadingData();
         } catch (Exception e) {
