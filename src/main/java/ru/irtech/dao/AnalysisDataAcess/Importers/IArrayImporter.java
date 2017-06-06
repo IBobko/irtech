@@ -1,8 +1,12 @@
 package ru.irtech.dao.AnalysisDataAcess.Importers;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by Iggytoto on 06.06.2017.
- *
+ * <p>
  * Generic interface of T to implement the data importer
  */
 public interface IArrayImporter<T> {
@@ -12,5 +16,15 @@ public interface IArrayImporter<T> {
      * @param databaseName database name to import from
      * @return
      */
-    T[] importData(String databaseName);
+    List<T> importAllData(final String databaseName);
+
+    /**
+     * Method that returns array of T in the given period.
+     *
+     * @param databaseName database name to import from.
+     * @param dateFrom     from time.
+     * @param dateTo       to time.
+     * @return
+     */
+    List<T> importData(final String databaseName, final Date dateFrom, final Date dateTo);
 }

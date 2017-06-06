@@ -22,7 +22,7 @@ public class StudentFamilyStatus {
      * @param studentId
      * @param isFamilyFull
      */
-    public StudentFamilyStatus(Integer studentId, boolean isFamilyFull) {
+    public StudentFamilyStatus(final Integer studentId, final boolean isFamilyFull) {
         this.studentId = studentId;
         this.isFamilyFull = isFamilyFull;
     }

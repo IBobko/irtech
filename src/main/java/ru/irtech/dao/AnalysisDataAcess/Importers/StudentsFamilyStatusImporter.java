@@ -8,12 +8,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Iggytoto on 06.06.2017.
  * <p>
- * Class that acess database and returns array of student's family statuses
+ * Class that access database and returns array of student's family statuses
  */
 public class StudentsFamilyStatusImporter extends BaseImporter implements IArrayImporter<StudentFamilyStatus> {
 
@@ -39,21 +40,46 @@ public class StudentsFamilyStatusImporter extends BaseImporter implements IArray
     /**
      * Get the family statuses.
      *
-     * @param databaseName database name to import from
+     * @param databaseName database name to import from.
      * @return
      */
     @Override
-    public StudentFamilyStatus[] importData(String databaseName) {
-        return new StudentFamilyStatus[0];
+    public List<StudentFamilyStatus> importAllData(String databaseName) {
+        Connection connection = getConnection(databaseName);
+        List<StudentFamilyStatus> statuses = queryStudentsFamilyStatus(connection, new Date(0), new Date());
+
+        return statuses;
     }
 
-    private List<Integer> queryStudentIds(final Connection connection) {
-        List<Integer> result = new ArrayList<>();
+    /**
+     * Get the family statuses within the given period
+     *
+     * @param databaseName database name to import from.
+     * @param dateFrom     from time.
+     * @param dateTo       to time.
+     * @return
+     */
+    @Override
+    public List<StudentFamilyStatus> importData(final String databaseName, final Date dateFrom, final Date dateTo) {
+        Connection connection = getConnection(databaseName);
+        List<StudentFamilyStatus> statuses = queryStudentsFamilyStatus(connection, dateFrom, dateTo);
+
+        return statuses;
+    }
+
+    /**
+     * Query student family statuses.
+     *
+     * @param connection
+     * @return
+     */
+    private List<StudentFamilyStatus> queryStudentsFamilyStatus(final Connection connection, final Date from, final Date to) {
+        List<StudentFamilyStatus> result = new ArrayList<>();
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(allStudentsQuery);
             while (rs.next()) {
-                result.add(rs.getInt(1));
+                result.add(new StudentFamilyStatus(rs.getInt(1), rs.getInt(2) >= 2));
             }
             rs.close();
             st.close();

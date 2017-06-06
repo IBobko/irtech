@@ -14,12 +14,19 @@ public class SchoolDto {
     private final String name;
 
     /**
+     * School id.
+     */
+    private final Integer schoolid;
+
+    /**
      * C-tor.
      *
-     * @param name SchoolName
+     * @param name     SchoolName
+     * @param schoolid schoolid
      */
-    public SchoolDto(String name) {
+    public SchoolDto(String name, Integer schoolid) {
         this.name = name;
+        this.schoolid = schoolid;
     }
 
     /**
@@ -29,5 +36,14 @@ public class SchoolDto {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets school id.
+     *
+     * @return
+     */
+    public Integer getSchoolid() {
+        return schoolid;
     }
 }
