@@ -1,6 +1,8 @@
 package ru.irtech.analysis.OutliersAndExtremes;
 
-import javafx.util.Pair;
+
+
+import ru.irtech.analysis.Pair;
 
 import java.util.List;
 
