@@ -12,7 +12,13 @@ import java.sql.SQLException;
  * Created by Iggytoto on 16.04.2017.
  * Base importer class
  */
-abstract class BaseImporter  {
+abstract class BaseImporter {
+
+    /**
+     * SQL folder path.
+     */
+    protected static final String SQL_FOLDER_PATH = "src/main/java/ru/irtech/dao/AnalysisDataAcess/Importers/SqlScripts/";
+
     /**
      * Method that returns connection to database.
      *
@@ -28,7 +34,7 @@ abstract class BaseImporter  {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://innsgo.ru:5432/" + databaseName, "postgres", "yOklqXf4");
+                    "jdbc:postgresql://188.130.155.86:5432/" + databaseName, "postgres", "yOklqXf4");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,15 +44,15 @@ abstract class BaseImporter  {
     /**
      * Method that reads all file data to single string.
      * In this class it should be applied only to sql load to string.
+     *
      * @param path
      * @param encoding
      * @return
      * @throws IOException
      */
     protected String readSql(String path, Charset encoding)
-            throws IOException
-    {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
+            throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(SQL_FOLDER_PATH + path));
         return new String(encoded, encoding);
     }
 }

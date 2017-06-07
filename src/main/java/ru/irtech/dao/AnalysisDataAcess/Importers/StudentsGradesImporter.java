@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +45,11 @@ public class StudentsGradesImporter extends BaseImporter implements IArrayImport
     public List<StudentMeanGrade> importAllData(final String databaseName) {
         Connection connection = getConnection(databaseName);
         return queryStudentsFamilyStatus(connection);
+    }
+
+    @Override
+    public List<StudentMeanGrade> importData(String databaseName, Date dateFrom, Date dateTo) {
+        return null;
     }
 
     /**

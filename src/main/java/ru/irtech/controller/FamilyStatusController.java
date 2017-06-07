@@ -204,6 +204,10 @@ public class FamilyStatusController {
      * @return percentages.
      */
     private double[] countParams(final List<StudentMeanGrade> grades) {
+        if(grades.size() == 0){
+            return new double[3];
+        }
+        
         double[] results = new double[3];
 
         int best = 0;
