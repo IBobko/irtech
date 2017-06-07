@@ -1,3 +1,3 @@
-select r.STUDENTID as 'userid', AVG(r.RESULT) as 'average'
+select r.STUDENTID , AVG(r.RESULT)
 	from RESULTS as r
 	group by r.STUDENTID

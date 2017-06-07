@@ -207,7 +207,7 @@ public class FamilyStatusController {
         if(grades.size() == 0){
             return new double[3];
         }
-        
+
         double[] results = new double[3];
 
         int best = 0;

@@ -1,12 +1,12 @@
-select s1.USERID as 'userid', s2.count as 'parentscount'
+select s1.USERID , s2.count
 from
-	(select DISTINCT u.USERID as 'userid'
+	(select DISTINCT u.USERID
 	from users as u
 	inner join USERSROLES as ur
 		on u.USERID=ur.USERID
 		) s1
 inner join
-	(select COUNT(fi.USERID) as 'count' , fi.USERID as 'userid'
+	(select COUNT(fi.USERID), fi.USERID
 	from FAMILYINFO as fi
 		where fi.RELATIONSHIPTYPEID between 7 and 8
 		group by fi.USERID) s2
