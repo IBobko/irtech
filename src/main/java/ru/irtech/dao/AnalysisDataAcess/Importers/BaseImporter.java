@@ -22,8 +22,8 @@ abstract class BaseImporter {
     /**
      * Method that returns connection to database.
      *
-     * @param databaseName database name to connect to
-     * @return java.sql.Connection instance or NULL if something bad happened
+     * @param databaseName database name to connect to.
+     * @return java.sql.Connection instance or NULL if something bad happened.
      */
     Connection getConnection(final String databaseName) {
         try {
@@ -45,12 +45,12 @@ abstract class BaseImporter {
      * Method that reads all file data to single string.
      * In this class it should be applied only to sql load to string.
      *
-     * @param path
-     * @param encoding
-     * @return
-     * @throws IOException
+     * @param path     path to file.
+     * @param encoding encoding.
+     * @return complete file in one string.
+     * @throws IOException when had it.
      */
-    protected String readSql(String path, Charset encoding)
+    protected String readSql(final String path, final Charset encoding)
             throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(SQL_FOLDER_PATH + path));
         return new String(encoded, encoding);

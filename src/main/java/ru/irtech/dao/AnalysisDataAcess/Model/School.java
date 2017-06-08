@@ -22,10 +22,10 @@ public class School {
     /**
      * C-tor.
      *
-     * @param schoolId
-     * @param studentsId
+     * @param schoolId   school id.
+     * @param studentsId students id.
      */
-    public School(Integer schoolId, List<Integer> studentsId) {
+    public School(final Integer schoolId, final List<Integer> studentsId) {
         this.schoolId = schoolId;
         this.studentsId = studentsId;
     }
@@ -33,7 +33,7 @@ public class School {
     /**
      * gets school id.
      *
-     * @return
+     * @return school id.
      */
     public Integer getSchoolId() {
         return schoolId;
@@ -42,7 +42,7 @@ public class School {
     /**
      * gets arrays of students id.
      *
-     * @return
+     * @return students id.
      */
     public List<Integer> getStudentsId() {
         return studentsId;

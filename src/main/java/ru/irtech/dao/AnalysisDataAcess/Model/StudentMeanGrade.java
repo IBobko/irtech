@@ -2,7 +2,7 @@ package ru.irtech.dao.AnalysisDataAcess.Model;
 
 /**
  * Created by Iggytoto on 06.06.2017.
- *
+ * <p>
  * Class that represents student mean grade.
  */
 public class StudentMeanGrade {
@@ -20,10 +20,10 @@ public class StudentMeanGrade {
     /**
      * C-tor.
      *
-     * @param studentId
-     * @param meanGrade
+     * @param studentId student id.
+     * @param meanGrade mean grade.
      */
-    public StudentMeanGrade(final Integer studentId,final double meanGrade) {
+    public StudentMeanGrade(final Integer studentId, final double meanGrade) {
         this.studentId = studentId;
         this.meanGrade = meanGrade;
     }
@@ -31,7 +31,7 @@ public class StudentMeanGrade {
     /**
      * gets student id.
      *
-     * @return
+     * @return id.
      */
     public Integer getStudentId() {
         return studentId;
@@ -40,7 +40,7 @@ public class StudentMeanGrade {
     /**
      * gets mean grade.
      *
-     * @return
+     * @return grade.
      */
     public double getMeanGrade() {
         return meanGrade;

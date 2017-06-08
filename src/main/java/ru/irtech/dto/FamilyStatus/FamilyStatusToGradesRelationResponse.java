@@ -10,30 +10,45 @@ import ru.irtech.dto.ControllerResponse;
 public class FamilyStatusToGradesRelationResponse extends ControllerResponse {
 
     /**
-     *  Set that represents full family grade percentages.
-     *      [0] -   percent of 1000-800 grades of all full family students.
-     *      [1] -   percent of 799-500 grades of all full family students.
-     *      [2] -   percent of <500 grades of all full family students.
+     * sets length.
+     */
+    private static final int SETS_LENGTH = 3;
+
+    /**
+     * Set that represents full family grade percentages.
+     * [0] -   percent of 1000-800 grades of all full family students.
+     * [1] -   percent of 799-500 grades of all full family students.
+     * [2] -   percent of <500 grades of all full family students.
      */
     private final double[] fullFamilySet;
 
     /**
      * Set that represents not full family grade percentages.
-     *      [0] -   percent of 1000-800 grades of all not full family students.
-     *      [1] -   percent of 799-500 grades of all not full family students.
-     *      [2] -   percent of <500 grades of all not full family students.*/
+     * [0] -   percent of 1000-800 grades of all not full family students.
+     * [1] -   percent of 799-500 grades of all not full family students.
+     * [2] -   percent of <500 grades of all not full family students.
+     */
     private final double[] notFullFamilySet;
 
     /**
      * Main c-tor.
      *
-     * @param fullFamilySet
-     * @param notFullFamilySet
+     * @param fullFamilySet    set of full family percentages.
+     * @param notFullFamilySet set of not full family percentages.
      */
     public FamilyStatusToGradesRelationResponse(final double[] fullFamilySet, final double[] notFullFamilySet) {
         super(OK_MESSAGE);
         this.fullFamilySet = fullFamilySet;
         this.notFullFamilySet = notFullFamilySet;
+    }
+
+    /**
+     * Gets sets length.
+     *
+     * @return sets length.
+     */
+    public static int getSetsLength() {
+        return SETS_LENGTH;
     }
 
     /**

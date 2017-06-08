@@ -19,7 +19,7 @@ public class StudentsGradesImporter extends BaseImporter implements IArrayImport
     /**
      * Sql filenames.
      */
-    private final static String ALL_STUDENTS_GRADES_SQL_FILENAME = "AllStudentsGrades.sql";
+    private static final String ALL_STUDENTS_GRADES_SQL_FILENAME = "AllStudentsGrades.sql";
 
     /**
      * Sql queries.
@@ -29,7 +29,7 @@ public class StudentsGradesImporter extends BaseImporter implements IArrayImport
     /**
      * C-tor.
      *
-     * @throws IOException
+     * @throws IOException when fails to read sql query.
      */
     public StudentsGradesImporter() throws IOException {
         this.allStudentsGradesQuery = readSql(ALL_STUDENTS_GRADES_SQL_FILENAME, Charset.defaultCharset());
@@ -39,7 +39,7 @@ public class StudentsGradesImporter extends BaseImporter implements IArrayImport
      * Main import method.
      *
      * @param databaseName database name to import from
-     * @return
+     * @return list of grades.
      */
     @Override
     public List<StudentMeanGrade> importAllData(final String databaseName) {
@@ -47,16 +47,24 @@ public class StudentsGradesImporter extends BaseImporter implements IArrayImport
         return queryStudentsFamilyStatus(connection);
     }
 
+    /**
+     * Imports data for the period.
+     *
+     * @param databaseName database name to import from.
+     * @param dateFrom     from time.
+     * @param dateTo       to time.
+     * @return null.
+     */
     @Override
-    public List<StudentMeanGrade> importData(String databaseName, Date dateFrom, Date dateTo) {
+    public List<StudentMeanGrade> importData(final String databaseName, final Date dateFrom, final Date dateTo) {
         return null;
     }
 
     /**
      * Query to base that returns array of students mean grades.
      *
-     * @param connection
-     * @return
+     * @param connection database connection.
+     * @return list of grades.
      */
     private List<StudentMeanGrade> queryStudentsFamilyStatus(final Connection connection) {
         List<StudentMeanGrade> result = new ArrayList<>();

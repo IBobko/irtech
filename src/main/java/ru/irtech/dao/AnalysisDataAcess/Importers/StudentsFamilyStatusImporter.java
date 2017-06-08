@@ -21,7 +21,7 @@ public class StudentsFamilyStatusImporter extends BaseImporter implements IArray
     /**
      * Sql filenames.
      */
-    private final static String ALL_STUDENTS_SQL_FILENAME = "AllStudentsFamilyStatus.sql";
+    private static final String ALL_STUDENTS_SQL_FILENAME = "AllStudentsFamilyStatus.sql";
 
     /**
      * Sql queries.
@@ -31,7 +31,7 @@ public class StudentsFamilyStatusImporter extends BaseImporter implements IArray
     /**
      * C-tor.
      *
-     * @throws IOException
+     * @throws IOException when fail to read the sql query file.
      */
     public StudentsFamilyStatusImporter() throws IOException {
         this.allStudentsQuery = readSql(ALL_STUDENTS_SQL_FILENAME, Charset.defaultCharset());
@@ -41,10 +41,10 @@ public class StudentsFamilyStatusImporter extends BaseImporter implements IArray
      * Get the family statuses.
      *
      * @param databaseName database name to import from.
-     * @return
+     * @return list of statuses.
      */
     @Override
-    public List<StudentFamilyStatus> importAllData(String databaseName) {
+    public List<StudentFamilyStatus> importAllData(final String databaseName) {
         Connection connection = getConnection(databaseName);
         List<StudentFamilyStatus> statuses = queryStudentsFamilyStatus(connection, new Date(0), new Date());
 
@@ -52,12 +52,12 @@ public class StudentsFamilyStatusImporter extends BaseImporter implements IArray
     }
 
     /**
-     * Get the family statuses within the given period
+     * Get the family statuses within the given period.
      *
      * @param databaseName database name to import from.
      * @param dateFrom     from time.
      * @param dateTo       to time.
-     * @return
+     * @return list of statuses.
      */
     @Override
     public List<StudentFamilyStatus> importData(final String databaseName, final Date dateFrom, final Date dateTo) {
@@ -70,8 +70,10 @@ public class StudentsFamilyStatusImporter extends BaseImporter implements IArray
     /**
      * Query student family statuses.
      *
-     * @param connection
-     * @return
+     * @param connection sql connection.
+     * @param from       begin of period.
+     * @param to         end of period.
+     * @return list of statuses.
      */
     private List<StudentFamilyStatus> queryStudentsFamilyStatus(final Connection connection, final Date from, final Date to) {
         List<StudentFamilyStatus> result = new ArrayList<>();

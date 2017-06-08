@@ -27,11 +27,11 @@ public class SchoolFamilyStatus {
     /**
      * C-tor.
      *
-     * @param fullFamilyPercentage
-     * @param notFullFamilyPercentage
-     * @param school
+     * @param fullFamilyPercentage    full family statuses percentage.
+     * @param notFullFamilyPercentage not full family statuses percentage.
+     * @param school                  school object
      */
-    public SchoolFamilyStatus(double fullFamilyPercentage, double notFullFamilyPercentage, SchoolDto school) {
+    public SchoolFamilyStatus(final double fullFamilyPercentage, final double notFullFamilyPercentage, final SchoolDto school) {
         this.fullFamilyPercentage = fullFamilyPercentage;
         this.notFullFamilyPercentage = notFullFamilyPercentage;
         this.school = school;
@@ -40,7 +40,7 @@ public class SchoolFamilyStatus {
     /**
      * Returns related full family percentage.
      *
-     * @return
+     * @return percentage.
      */
     public double getFullFamilyPercentage() {
         return fullFamilyPercentage;
@@ -49,7 +49,7 @@ public class SchoolFamilyStatus {
     /**
      * Returns related not full family percentage.
      *
-     * @return
+     * @return percentage.
      */
     public double getNotFullFamilyPercentage() {
         return notFullFamilyPercentage;
@@ -58,7 +58,7 @@ public class SchoolFamilyStatus {
     /**
      * Returns related school object.
      *
-     * @return
+     * @return school.
      */
     public SchoolDto getSchool() {
         return school;

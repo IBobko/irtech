@@ -2,7 +2,7 @@ package ru.irtech.dao.AnalysisDataAcess.Model;
 
 /**
  * Created by Iggytoto on 06.06.2017.
- *
+ * <p>
  * Class that represents single student family status.[
  */
 public class StudentFamilyStatus {
@@ -19,8 +19,8 @@ public class StudentFamilyStatus {
     /**
      * C-tor.
      *
-     * @param studentId
-     * @param isFamilyFull
+     * @param studentId    student id.
+     * @param isFamilyFull family full indicator.
      */
     public StudentFamilyStatus(final Integer studentId, final boolean isFamilyFull) {
         this.studentId = studentId;
@@ -30,7 +30,7 @@ public class StudentFamilyStatus {
     /**
      * gets the family status.
      *
-     * @return
+     * @return family full indicator.
      */
     public boolean isFamilyFull() {
         return isFamilyFull;
@@ -39,7 +39,7 @@ public class StudentFamilyStatus {
     /**
      * gets student id.
      *
-     * @return
+     * @return student id.
      */
     public Integer getStudentId() {
         return studentId;

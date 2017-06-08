@@ -15,16 +15,28 @@ import java.util.List;
 public class SchoolsImporter extends BaseImporter implements IArrayImporter<School> {
 
     /**
-     * Sql filenames.
+     * All schools sql query filenames.
      */
-    private final static String ALL_SCHOOLS_SQL_FILENAME = "AllSchools.sql";
-    private final static String SCHOOLS_STUDENTS_SQL_FILENAME = "SchoolStudents.sql";
-    private final static String SCHOOL_ID_SQL_TAG = "@SCHOOLID";
+    private static final String ALL_SCHOOLS_SQL_FILENAME = "AllSchools.sql";
 
     /**
-     * Sql queries.
+     * All students for schools sql filename.
+     */
+    private static final String SCHOOLS_STUDENTS_SQL_FILENAME = "SchoolStudents.sql";
+
+    /**
+     * School id sql tag to replace.
+     */
+    private static final String SCHOOL_ID_SQL_TAG = "@SCHOOLID";
+
+    /**
+     * Sql query.
      */
     private final String allSchoolsQuery;
+
+    /**
+     * Sql query.
+     */
     private final String schoolsStudentsQuery;
 
     /**
@@ -39,10 +51,10 @@ public class SchoolsImporter extends BaseImporter implements IArrayImporter<Scho
      * Returns list of all schools with students.
      *
      * @param databaseName database name to import from
-     * @return
+     * @return list of schools.
      */
     @Override
-    public List<School> importAllData(String databaseName) {
+    public List<School> importAllData(final String databaseName) {
         Connection connection = getConnection(databaseName);
         return querySchools(connection);
     }
@@ -53,18 +65,18 @@ public class SchoolsImporter extends BaseImporter implements IArrayImporter<Scho
      * @param databaseName database name to import from.
      * @param dateFrom     from time.
      * @param dateTo       to time.
-     * @return
+     * @return null.
      */
     @Override
-    public List<School> importData(String databaseName, Date dateFrom, Date dateTo) {
+    public List<School> importData(final String databaseName, final Date dateFrom, final Date dateTo) {
         return null;
     }
 
     /**
      * Query student family statuses.
      *
-     * @param connection
-     * @return
+     * @param connection connection to database.
+     * @return List of schools.
      */
     private List<School> querySchools(final Connection connection) {
         List<Integer> schools = new ArrayList<>();

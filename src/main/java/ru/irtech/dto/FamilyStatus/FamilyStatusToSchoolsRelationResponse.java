@@ -10,16 +10,16 @@ import ru.irtech.dto.ControllerResponse;
 public class FamilyStatusToSchoolsRelationResponse extends ControllerResponse {
 
     /**
-     * Packed data;
+     * Packed data.
      */
     private final SchoolFamilyStatus[] schoolStatuses;
 
     /**
      * C-tor.
      *
-     * @param schoolStatuses
+     * @param schoolStatuses school statuses.
      */
-    public FamilyStatusToSchoolsRelationResponse(SchoolFamilyStatus[] schoolStatuses) {
+    public FamilyStatusToSchoolsRelationResponse(final SchoolFamilyStatus[] schoolStatuses) {
         super(OK_MESSAGE);
         this.schoolStatuses = schoolStatuses;
     }
@@ -27,7 +27,7 @@ public class FamilyStatusToSchoolsRelationResponse extends ControllerResponse {
     /**
      * Gets the statuses.
      *
-     * @return
+     * @return statuses.
      */
     public SchoolFamilyStatus[] getSchoolStatuses() {
         return schoolStatuses;

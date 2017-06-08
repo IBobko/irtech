@@ -6,9 +6,9 @@ package ru.irtech.dto;
 public class ControllerResponse {
 
     /**
-     * Ok message tag
+     * Ok message tag.
      */
-    protected static String OK_MESSAGE = "OK";
+    protected static final String OK_MESSAGE = "OK";
 
     /**
      * Message.

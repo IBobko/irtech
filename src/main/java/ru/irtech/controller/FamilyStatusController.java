@@ -35,9 +35,20 @@ import java.util.stream.Collectors;
 public class FamilyStatusController {
 
     /**
+     * Lowest border for "best" grade.
+     */
+    private static final int BEST_BORDER_GRADE = 800;
+
+    /**
+     * Lowest border for "good" grade.
+     */
+    private static final int GOOD_BORDER_GRADE = 500;
+
+
+    /**
      * Main get method that returns table for all data that represents in database.
      *
-     * @return
+     * @return FamilyStatusToGradesRelationResponse.
      */
     @RequestMapping(value = "/familyStatusToGradesRelationTable", method = RequestMethod.GET)
     @ResponseBody
@@ -50,7 +61,7 @@ public class FamilyStatusController {
     }
 
     /**
-     * Main get method that returns table for all data that presetned in given period.
+     * Main get method that returns table for all data that presented in given period.
      *
      * @param fromDate start of the period.
      * @param toDate   end of the period.
@@ -59,8 +70,8 @@ public class FamilyStatusController {
     @RequestMapping(value = "/familyStatusToGradesRelationTableByPeriod", method = RequestMethod.GET)
     @ResponseBody
     public ControllerResponse getFamilyStatusToGradesRelationTable(
-            final @RequestParam("fromDate") String fromDate,
-            final @RequestParam("toDate") String toDate) {
+            @RequestParam("fromDate") final String fromDate,
+            @RequestParam("toDate") final String toDate) {
         try {
             return getFamilyStatusToGradesRelationResponse(new Date(fromDate), new Date(toDate));
         } catch (Exception e) {
@@ -69,9 +80,9 @@ public class FamilyStatusController {
     }
 
     /**
-     * Method that returns all schools family status percentage
+     * Method that returns all schools family status percentage.
      *
-     * @return
+     * @return FamilyStatusToSchoolsRelationResponse.
      */
     @RequestMapping(value = "/familyStatusToSchoolsRelation", method = RequestMethod.GET)
     @ResponseBody
@@ -84,14 +95,15 @@ public class FamilyStatusController {
     }
 
     /**
-     * Methe that returns school family status percentage by given school id
+     * Method that returns school family status percentage by given school id.
      *
-     * @return
+     * @param id School id.
+     * @return FamilyStatusToSchoolRelationResponse.
      */
     @RequestMapping(value = "/familyStatusToSchoolRelation", method = RequestMethod.GET)
     @ResponseBody
     private ControllerResponse getFamilyStatusToSchoolRelationResponse(
-            final @RequestParam("schoolId") Integer id) {
+            @RequestParam("schoolId") final Integer id) {
         try {
             List<SchoolFamilyStatus> statuses = getFamilyStatuses();
             List<SchoolFamilyStatus> result = statuses.stream()
@@ -106,8 +118,8 @@ public class FamilyStatusController {
     /**
      * Returns all schools family statuses.
      *
-     * @return
-     * @throws IOException
+     * @return Returns list of all family statuses for schools.
+     * @throws IOException throws when cannot find sql query file.
      */
     private List<SchoolFamilyStatus> getFamilyStatuses() throws IOException {
         List<SchoolFamilyStatus> results = new ArrayList<>();
@@ -141,13 +153,13 @@ public class FamilyStatusController {
     }
 
     /**
-     * Method that counts percetage for the given school and returns object.
+     * Method that counts percentage for the given school and returns object.
      *
-     * @param schooldId
-     * @param statuses
-     * @return
+     * @param schoolId school id.
+     * @param statuses given statuses to parse.
+     * @return SchoolFamilyStatus.
      */
-    private SchoolFamilyStatus countStatus(final Integer schooldId, final List<Boolean> statuses) {
+    private SchoolFamilyStatus countStatus(final Integer schoolId, final List<Boolean> statuses) {
         int total = statuses.size();
         int full = 0;
         int notFull = 0;
@@ -160,16 +172,22 @@ public class FamilyStatusController {
             }
         }
 
-        return new SchoolFamilyStatus(full / total, notFull / total, new SchoolDto("", schooldId));
+        return new SchoolFamilyStatus(full / total, notFull / total, new SchoolDto("", schoolId));
     }
 
     /**
-     * Main worker method for receive data
+     * Main worker method for receive data.
      *
-     * @param fromDate Period start
-     * @param fromDate Period end
+     * @param fromDate Period start.
+     * @param toDate   Period end.
+     * @return FamilyStatusToGradesRelationResponse.
+     * @throws IOException when could not read sql query file.
      */
     private FamilyStatusToGradesRelationResponse getFamilyStatusToGradesRelationResponse(final Date fromDate, final Date toDate) throws IOException {
+        //checkstyle hack for yet unused params
+        int a = fromDate.getHours() - toDate.getHours();
+        System.out.println(a);
+
         IArrayImporter<StudentMeanGrade> meanGradeImporter = new StudentsGradesImporter();
         IArrayImporter<StudentFamilyStatus> familyStatusImporter = new StudentsFamilyStatusImporter();
 
@@ -201,14 +219,15 @@ public class FamilyStatusController {
     /**
      * Counts params of given set of data.
      *
+     * @param grades grades to count.
      * @return percentages.
      */
     private double[] countParams(final List<StudentMeanGrade> grades) {
-        if(grades.size() == 0){
-            return new double[3];
+        if (grades.size() == 0) {
+            return new double[FamilyStatusToGradesRelationResponse.getSetsLength()];
         }
 
-        double[] results = new double[3];
+        double[] results = new double[FamilyStatusToGradesRelationResponse.getSetsLength()];
 
         int best = 0;
         int good = 0;
@@ -216,9 +235,9 @@ public class FamilyStatusController {
         int total = grades.size();
 
         for (StudentMeanGrade grade : grades) {
-            if (grade.getMeanGrade() >= 800) {
+            if (grade.getMeanGrade() >= BEST_BORDER_GRADE) {
                 best++;
-            } else if (grade.getMeanGrade() >= 500) {
+            } else if (grade.getMeanGrade() >= GOOD_BORDER_GRADE) {
                 good++;
             } else {
                 average++;

@@ -24,7 +24,7 @@ public class SchoolDto {
      * @param name     SchoolName
      * @param schoolid schoolid
      */
-    public SchoolDto(String name, Integer schoolid) {
+    public SchoolDto(final String name, final Integer schoolid) {
         this.name = name;
         this.schoolid = schoolid;
     }
@@ -41,7 +41,7 @@ public class SchoolDto {
     /**
      * Gets school id.
      *
-     * @return
+     * @return id.
      */
     public Integer getSchoolid() {
         return schoolid;
