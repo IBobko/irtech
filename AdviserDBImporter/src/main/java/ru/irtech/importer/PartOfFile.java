@@ -1,4 +1,4 @@
-package ru.irtech;
+package ru.irtech.importer;
 
 import java.util.List;
 

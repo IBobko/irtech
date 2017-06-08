@@ -1,4 +1,4 @@
-package ru.irtech;
+package ru.irtech.importer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
