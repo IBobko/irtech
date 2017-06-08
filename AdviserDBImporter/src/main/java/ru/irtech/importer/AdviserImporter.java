@@ -230,7 +230,6 @@ public class AdviserImporter {
                                         System.out.println("Already done: " + (alreadyDoneBytes * PERCENT_100 / finalTotalFileSize) + "% or Made " + alreadyDoneBytes + " from " + finalTotalFileSize);
                                     }
                                 }
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -238,12 +237,12 @@ public class AdviserImporter {
                     });
                 }
                 executorService.shutdown();
-                final List<Future<Long>> futuresTemp = new ArrayList<>();
-                futuresTemp.addAll(futures);
-                while (futuresTemp.size() != 0) {
-                    for (final Future<Long> future : futures) {
+                while (futures.size() != 0) {
+                    final List<Future<Long>> futuresTemp = new ArrayList<>();
+                    futuresTemp.addAll(futures);
+                    for (final Future<Long> future : futuresTemp) {
                         if (future.isDone() || future.isCancelled()) {
-                            futuresTemp.remove(future);
+                            futures.remove(future);
                             try {
                                 alreadyDoneBytes += future.get();
                                 System.out.println("Already done: " + (alreadyDoneBytes * PERCENT_100 / finalTotalFileSize) + "% or Made " + alreadyDoneBytes + " from " + finalTotalFileSize);
