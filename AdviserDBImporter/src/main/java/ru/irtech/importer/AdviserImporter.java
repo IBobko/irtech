@@ -190,17 +190,17 @@ public class AdviserImporter {
 
                                 final List<Future> futures_temp = new ArrayList<>();
                                 futures_temp.addAll(futures);
-                                for (final Future future1 : futures_temp) {
-                                    if (future1.isDone() || future1.isCancelled()) {
-                                        ALREADY_DONE_BYTES += (Long) future1.get();
-                                        futures.remove(future1);
+                                for (final Future future_temp : futures_temp) {
+                                    if (future_temp.isDone() || future_temp.isCancelled()) {
+                                        ALREADY_DONE_BYTES += (Long) future_temp.get();
+                                        futures.remove(future_temp);
+                                        System.out.println("Already done: " + (ALREADY_DONE_BYTES * 100 / TOTAL_FILE_SIZE) + "% or Made " + ALREADY_DONE_BYTES + " from " + TOTAL_FILE_SIZE);
                                     }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-                        System.out.println("Already done: " + (ALREADY_DONE_BYTES * 100 / TOTAL_FILE_SIZE) + "% or Made " + ALREADY_DONE_BYTES + " from " + TOTAL_FILE_SIZE);
                     });
                 }
                 executorService.shutdown();
