@@ -23,21 +23,37 @@ import java.util.concurrent.Callable;
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 public class LoaderThread implements Callable<Long> {
+    /**
+     * An instance of java.nio.file.Path that contains the path to the current file.
+     */
     private final Path path;
+
+    /**
+     * The connection to database.
+     */
     private Connection connection;
+
+    /**
+     * The part of file for performing.
+     */
     private final PartOfFile partOfFile;
 
-    LoaderThread(final Path path, final PartOfFile partOfFile) throws IOException {
+    /**
+     * The constructor which initialize variables.
+     *
+     * @param path An instance of java.nio.file.Path that contains the path to the current file.
+     * @param partOfFile The part of file for performing.
+     */
+    LoaderThread(final Path path, final PartOfFile partOfFile) {
         this.path = path;
-        System.out.println(path.getFileName() + ". Part: " + partOfFile.getFrom() + " from " + Files.size(path));
         this.partOfFile = partOfFile;
     }
 
     /**
-     * Parsing one file.
+     * Inserts the interval of the file to the database.
      *
-     * @throws FileNotFoundException        if found not exists.
-     * @throws UnsupportedEncodingException if Encoding do not supported.
+     * @throws IOException .
+     * @throws SQLException .
      */
     private void loadingData() throws IOException, SQLException {
         if (Files.isRegularFile(path)) {
@@ -74,7 +90,6 @@ public class LoaderThread implements Callable<Long> {
                                     ServerErrorMessage serverErrorMessage = e.getServerErrorMessage();
                                     for (int i = 0; i < columnsArray.size(); i++) {
                                         if (columnsArray.get(i).equalsIgnoreCase(serverErrorMessage.getColumn())) {
-                                            System.out.println(serverErrorMessage.getColumn());
                                             notNullColumns.add(i);
                                             break;
                                         }
@@ -107,11 +122,15 @@ public class LoaderThread implements Callable<Long> {
     /**
      * This function converts the value to SQL format and adds quotes if value is not empty and replaces value to null if so.
      *
-     * @param value Original value which stored in CVS file.
+     * @param v Original value which stored in CVS file.
+     * @param notNull True if value must not be null.
      * @return Translated value or empty string if value is null.
      */
-    private String formingValue(String value,boolean notNull) {
-        if (value == null) return "";
+    private String formingValue(final String v, final boolean notNull) {
+        if (v == null) {
+            return "";
+        }
+        String value = v;
         try {
             final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
             final Date date = sdf.parse(value);
@@ -146,13 +165,16 @@ public class LoaderThread implements Callable<Long> {
      * This function forms array with correct values for forming of SQL.
      *
      * @param line Original line from CSV file.
+     * @param notNullColumns List of not null columns.
      * @return Arrays of connect value for forming SQL or empty array if line is null.
      * @throws IndexOutOfBoundsException if String has an error.
      */
-    private List<String> formingArgumentsArray(final String line,List<Integer> notNullColumns) throws IndexOutOfBoundsException {
+    private List<String> formingArgumentsArray(final String line, final List<Integer> notNullColumns) throws IndexOutOfBoundsException {
         final List<String> result = new ArrayList<>();
-        if (line == null) return result;
-        final String[] arguments = line.split(";",-1);
+        if (line == null) {
+            return result;
+        }
+        final String[] arguments = line.split(";", -1);
         result.addAll(Arrays.asList(arguments));
         result.remove(0);
         for (int i = 0; i < result.size(); i++) {
@@ -160,21 +182,21 @@ public class LoaderThread implements Callable<Long> {
             if (notNullColumns.contains(i)) {
                 notNull = true;
             }
-            result.set(i, formingValue(result.get(i),notNull));
+            result.set(i, formingValue(result.get(i), notNull));
         }
         return result;
     }
 
     @Override
     public Long call() throws Exception {
-        System.out.println(Thread.currentThread().getName() + " is started");
+        System.out.println(Thread.currentThread().getName() + " is started. The table is " + path.getFileName().toString());
         try {
             connection = AdviserImporter.getDriverManagerDataSource().getConnection();
             loadingData();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(Thread.currentThread().getName() + " finished.");
+        System.out.println(Thread.currentThread().getName() + " finished. The table is " + path.getFileName().toString());
         long sizeOfFile = Files.size(path);
         if (partOfFile.getTo() == null) {
             return sizeOfFile - partOfFile.getFrom();

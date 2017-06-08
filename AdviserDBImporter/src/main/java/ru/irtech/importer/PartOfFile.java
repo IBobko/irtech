@@ -5,19 +5,28 @@ import java.util.List;
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
+@SuppressWarnings("WeakerAccess")
 public class PartOfFile {
     /**
-     * Columns which presents in file.
+     * Table columns, which are presented at the beginning of the file.
      */
     private List<String> columns;
+
+    /**
+     * The beginning of the interval file.
+     */
     private Long from;
+
+    /**
+     * The interval end of the file.
+     */
     private Long to;
 
     public List<String> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<String> columns) {
+    public void setColumns(final List<String> columns) {
         this.columns = columns;
     }
 
@@ -25,7 +34,7 @@ public class PartOfFile {
         return from;
     }
 
-    public void setFrom(Long from) {
+    public void setFrom(final Long from) {
         this.from = from;
     }
 
@@ -33,7 +42,7 @@ public class PartOfFile {
         return to;
     }
 
-    public void setTo(Long to) {
+    public void setTo(final Long to) {
         this.to = to;
     }
 }

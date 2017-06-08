@@ -11,29 +11,51 @@ import java.util.List;
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
+@SuppressWarnings("WeakerAccess")
 public class DividerIntoParts {
-    static final Integer NUMBER_BYTES_OF_END_OF_STRING = 2;
-    private final static long PORTION = 512 * 1024;
-    private final Path path;
     /**
-     * Columns which presents in file.
+     * The size of the two characters: \r\n.
+     * If the file contains a newline in Unix notation this number should be replaced by 1.
+     */
+    static final Integer NUMBER_BYTES_OF_END_OF_STRING = 2;
+
+    /**
+     * Contains the number of how many bytes should contain one portion.
+     */
+    private static final long PORTION = 512 * 1024;
+
+    /**
+     * An instance of java.nio.file.Path that contains the path to the current file.
+     */
+    private final Path path;
+
+    /**
+     * Table columns, which are presented at the beginning of the file.
      */
     private List<String> columns;
+
     /**
-     * Intervals.
+     * The intervals on the file.
      */
     private List<Long> parts;
 
+    /**
+     * Constructor that initializes variables and
+     * holds all the necessary calculations for the division file.
+     *
+     * @param path An instance of java.nio.file.Path that contains the path to the current file.
+     * @throws IOException May occur when working with streams.
+     */
     DividerIntoParts(final Path path) throws IOException {
         this.path = path;
-        final InputStream inputStreamReader = new FileInputStream(path.toString());
+        final InputStream inputStreamReader = new FileInputStream(getPath().toString());
         final List<Long> positions = new ArrayList<>();
 
         long currentPosition = 0;
 
         final StringBuilder columns = new StringBuilder();
         char ch;
-        while ((ch = (char)inputStreamReader.read())!= '\r') {
+        while ((ch = (char) inputStreamReader.read()) != '\r') {
             currentPosition++;
             columns.append(ch);
         }
@@ -59,7 +81,6 @@ public class DividerIntoParts {
                 }
             }
         }
-
         parts = positions;
     }
 
@@ -75,13 +96,25 @@ public class DividerIntoParts {
         return path;
     }
 
-
+    /**
+     * Returns the size of the parts which are divided from the file.
+     *
+     * @return The size of the parts.
+     */
     public Integer getSize() {
         return this.parts.size();
     }
 
-    public PartOfFile getPart(int i) {
-        if (i + 1 > getSize() || i < 0) return null;
+    /**
+     * Returns the intervals of the individual parts of the index.
+     *
+     * @param i the index of part.
+     * @return PartOfFile instance.
+     */
+    public PartOfFile getPart(final int i) {
+        if (i + 1 > getSize() || i < 0) {
+            return null;
+        }
         final PartOfFile partOfFile = new PartOfFile();
         partOfFile.setColumns(getColumns());
         partOfFile.setFrom(getParts().get(i));

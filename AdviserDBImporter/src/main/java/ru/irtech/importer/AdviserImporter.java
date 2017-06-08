@@ -3,7 +3,6 @@ package ru.irtech.importer;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,31 +11,47 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 
 public class AdviserImporter {
+    /**
+     * 100%.
+     */
+    private static final int PERCENT_100 = 100;
+
+    /**
+     * The maximal amount of threads. It must be no more than postgres allows connections.
+     */
     private static final Integer MAX_THREADS = 800;
+
+    /**
+     * The time for the thread waiting.
+     */
     private static final Integer TIME_FOR_WAIT = 500;
+
     /**
      * The path to the error file.
      */
-    final static private Path ERRORS_FILE = Paths.get("./errors.txt");
-    private static volatile Long ALREADY_DONE_BYTES = 0L;
+    private static final Path ERRORS_FILE = Paths.get("./errors.txt");
+
+    /**
+     * Properties with database connection data.
+     */
     private static Properties properties = new Properties();
 
-    static {
-        System.setProperty("org.apache.commons.logging.Log",
-                "org.apache.commons.logging.impl.NoOpLog");
-    }
+    /**
+     * Amount of bytes which already are performed.
+     */
+    private volatile Long alreadyDoneBytes = 0L;
 
-    private String[] LACK_OF_TABLES = {"SG_ST_VARIANTS",
+    /**
+     * Tables which is not existed in database.
+     */
+    private String[] lackOfTables = {"SG_ST_VARIANTS",
             "GETPOSTYPES",
             "GETCOMMONSCHOOLTERMS",
             "SGGHours",
@@ -89,20 +104,25 @@ public class AdviserImporter {
             "SG_CLASSES",
             "SG_ACTIVITIES_GRADINGSYSTEMS",
             "SGG_ST_VARIANTS_IUP"};
-    private List<Future> futures = new CopyOnWriteArrayList<>();
+
+    /**
+     * List of active threads.
+     */
+    private List<Future<Long>> futures = new CopyOnWriteArrayList<>();
 
     private static Properties getProperties() {
         return properties;
     }
 
     /**
-     * The start method.
+     * The starting method.
      *
      * @param args The first parameter is the directory path with the database dump.
-     * @throws IOException  .
+     * @throws IOException .
      * @throws SQLException .
+     * @throws InterruptedException .
      */
-    public static void main(String[] args) throws IOException, SQLException, InterruptedException, URISyntaxException {
+    public static void main(final String[] args) throws IOException, SQLException, InterruptedException {
         if (args.length < 1) {
             System.out.println("Data folder is not specified.");
         }
@@ -111,6 +131,11 @@ public class AdviserImporter {
         importer.startLoading(args[0]);
     }
 
+    /**
+     * Returns new instance of DriverManagerDataSource.
+     *
+     * @return DriverManagerDataSource.
+     */
     static DriverManagerDataSource getDriverManagerDataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(getProperties().getProperty("db.driver"));
@@ -131,7 +156,7 @@ public class AdviserImporter {
     }
 
     /**
-     * Append message to the end of the errors file.
+     * Appends message to the end of the errors file.
      *
      * @param text Message for appending.
      */
@@ -145,13 +170,21 @@ public class AdviserImporter {
         }
     }
 
-    private void startLoading(String pathToDump) throws SQLException, IOException, InterruptedException {
+    /**
+     * The starting job.
+     *
+     * @param pathToDump Folder with CVS files.
+     * @throws SQLException .
+     * @throws IOException .
+     * @throws InterruptedException .
+     */
+    private void startLoading(final String pathToDump) throws SQLException, IOException, InterruptedException {
         startLogging();
         final Path rootPath = Paths.get(pathToDump);
         long times = System.currentTimeMillis();
         long totalSize = 0;
 
-        final List<String> lackOfTables = Arrays.asList(LACK_OF_TABLES);
+        final List<String> lackOfTables = Arrays.asList(this.lackOfTables);
         for (int i = 0; i < lackOfTables.size(); i++) {
             lackOfTables.set(i, lackOfTables.get(i).toUpperCase());
         }
@@ -169,7 +202,7 @@ public class AdviserImporter {
                         totalFileSize += fileSize;
                     }
                 }
-                final long TOTAL_FILE_SIZE = totalFileSize;
+                final long finalTotalFileSize = totalFileSize;
 
                 for (final Path path : paths) {
                     totalSize += Files.size(path);
@@ -185,18 +218,19 @@ public class AdviserImporter {
                             final Integer currentIndex = i;
                             try {
                                 final LoaderThread loaderThread = new LoaderThread(path, dividerIntoParts.getPart(currentIndex));
-                                final Future future = executorServiceForDb.submit(loaderThread);
+                                final Future<Long> future = executorServiceForDb.submit(loaderThread);
                                 futures.add(future);
 
-                                final List<Future> futures_temp = new ArrayList<>();
-                                futures_temp.addAll(futures);
-                                for (final Future future_temp : futures_temp) {
-                                    if (future_temp.isDone() || future_temp.isCancelled()) {
-                                        ALREADY_DONE_BYTES += (Long) future_temp.get();
-                                        futures.remove(future_temp);
-                                        System.out.println("Already done: " + (ALREADY_DONE_BYTES * 100 / TOTAL_FILE_SIZE) + "% or Made " + ALREADY_DONE_BYTES + " from " + TOTAL_FILE_SIZE);
+                                final List<Future<Long>> futuresTemp = new ArrayList<>();
+                                futuresTemp.addAll(futures);
+                                for (final Future<Long> futureTemp : futuresTemp) {
+                                    if (futureTemp.isDone() || futureTemp.isCancelled()) {
+                                        alreadyDoneBytes += futureTemp.get();
+                                        futures.remove(futureTemp);
+                                        System.out.println("Already done: " + (alreadyDoneBytes * PERCENT_100 / finalTotalFileSize) + "% or Made " + alreadyDoneBytes + " from " + finalTotalFileSize);
                                     }
                                 }
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -204,12 +238,18 @@ public class AdviserImporter {
                     });
                 }
                 executorService.shutdown();
-                final List<Future> futures_temp = new ArrayList<>();
-                futures_temp.addAll(futures);
-                while (futures_temp.size() != 0) {
-                    for (final Future future : futures) {
+                final List<Future<Long>> futuresTemp = new ArrayList<>();
+                futuresTemp.addAll(futures);
+                while (futuresTemp.size() != 0) {
+                    for (final Future<Long> future : futures) {
                         if (future.isDone() || future.isCancelled()) {
-                            futures_temp.remove(future);
+                            futuresTemp.remove(future);
+                            try {
+                                alreadyDoneBytes += future.get();
+                                System.out.println("Already done: " + (alreadyDoneBytes * PERCENT_100 / finalTotalFileSize) + "% or Made " + alreadyDoneBytes + " from " + finalTotalFileSize);
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     Thread.sleep(TIME_FOR_WAIT);
@@ -223,7 +263,13 @@ public class AdviserImporter {
         }
     }
 
-    private void truncateTable(String tableName) throws SQLException {
+    /**
+     * Truncates the table.
+     *
+     * @param tableName The table name.
+     * @throws SQLException .
+     */
+    private void truncateTable(final String tableName) throws SQLException {
         final Connection connection = getDriverManagerDataSource().getConnection();
         final Statement statement = connection.createStatement();
         try {
