@@ -24,7 +24,7 @@ abstract class BaseImporter implements ICsvImporter {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://innsgo.ru:5432/" + databaseName, "postgres", "yOklqXf4");
+                    "jdbc:postgresql://188.130.155.86:5432/" + databaseName, "postgres", "yOklqXf4");
         } catch (SQLException e) {
             e.printStackTrace();
         }

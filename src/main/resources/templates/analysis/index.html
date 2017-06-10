@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Will enter params here</title>
+</head>
+<body>
+<h1>Assignment grades</h1>
+
+<form th method="post" th:action="${/assignment}">
+    <div class="filter">
+        <div>
+            <label th:for="region">Region</label>
+            <br/>
+            <input type="text" id="region" name="region" th:value="*{region}"/>
+        </div>
+        <div>
+            <label th:for="yearFrom">Starting year</label>
+            <br/>
+            <p th:if="${#fields.hasErrors('yearFrom')}" th:errors="*{yearFrom}">Incorrect date</p>
+            <input type="text" th:class="${#fields.hasErrors('yearFrom')}? fieldError" name="yearFrom"
+                   th:value="*{yearFrom}"/>
+        </div>
+        <div>
+            <label th:for="monFrom">Starting month</label>
+            <br/>
+            <input type="text" id="monFrom" name="monFrom" th:value="${filterForm.monFrom}"/>
+        </div>
+        <div>
+            <label th:for="dayFrom">Starting day</label>
+            <br/>
+            <input type="text" name="dayFrom" th:value="*{dayFrom}"/>
+        </div>
+        <div>
+            <label th:for="yearTo">Finishing year</label>
+            <br/>
+            <input type="text" name="yearTo" th:value="*{yearTo}"/>
+        </div>
+        <div>
+            <label th:for="monTo">Finishing month</label>
+            <br/>
+            <input type="text" name="monTo" th:value="*{monTo}"/>
+        </div>
+        <div>
+            <label th:for="monTo">Finishing day</label>
+            <br/>
+            <input type="text" name="dayTo" th:value="*{monTo}"/>
+        </div>
+    </div>
+    <div style="margin: 5px;">
+        <input type="submit" value="Obtain"/>
+    </div>
+</form>
+<h1>Quarter grades</h1>
+<h1>Year grades</h1>
+</body>
+</html>
