@@ -137,9 +137,15 @@ public class WeatherController {
 
                 Set<WeatherDomain> weatherDomainSet = new HashSet<>();
                 while (fromCalendar.compareTo(toCalendar) < 0) {
-                    WeatherDomain wetherDomain = getWeatherService().getWeatherByDateAndRegion(fromCalendar, filterForm.getRegion());
-                    weatherDomainSet.add(wetherDomain);
-                    fromCalendar.roll(Calendar.DAY_OF_MONTH, true);
+                    WeatherDomain wetherDomain = null;
+                    try {
+                        wetherDomain = getWeatherService().getWeatherByDateAndRegion(fromCalendar, filterForm.getRegion());
+                        weatherDomainSet.add(wetherDomain);
+                        fromCalendar.roll(Calendar.DAY_OF_MONTH, true);
+                    } catch (Exception e) {
+                        model.addAttribute("errors", e);
+                        break;
+                    }
                 }
                 model.addAttribute("weathers", weatherDomainSet);
             }

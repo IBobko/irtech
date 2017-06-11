@@ -174,7 +174,7 @@ public class LoaderThread implements Callable<Long> {
         if (line == null) {
             return result;
         }
-        final String[] arguments = line.split(";", -1);
+        final String[] arguments = line.split(",", -1);
         result.addAll(Arrays.asList(arguments));
         result.remove(0);
         for (int i = 0; i < result.size(); i++) {

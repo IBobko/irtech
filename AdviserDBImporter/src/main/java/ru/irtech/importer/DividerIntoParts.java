@@ -63,7 +63,7 @@ public class DividerIntoParts {
         inputStreamReader.read();
         currentPosition += NUMBER_BYTES_OF_END_OF_STRING;
 
-        this.columns = Arrays.asList(columns.toString().split(";"));
+        this.columns = Arrays.asList(columns.toString().split(","));
         positions.add(currentPosition);
         main:
         while (inputStreamReader.skip(PORTION) == PORTION) {
