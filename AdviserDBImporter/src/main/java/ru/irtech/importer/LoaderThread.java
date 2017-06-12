@@ -104,6 +104,8 @@ public class LoaderThread implements Callable<Long> {
                                     System.out.println();
                                 }
                                 System.out.println(path.getFileName().toString());
+                                System.out.println(executedString.toString());
+
                                 e.printStackTrace();
                                 if (!path.getFileName().toString().equalsIgnoreCase("LESSONS")
                                         && !path.getFileName().toString().equalsIgnoreCase("EVENTS")
@@ -113,6 +115,7 @@ public class LoaderThread implements Callable<Long> {
                                         && !path.getFileName().toString().equalsIgnoreCase("ADD_PROGRAMS")) {
                                     System.out.println();
                                 }
+
                                 break;
                             }
                         }
