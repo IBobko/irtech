@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -106,6 +105,7 @@ public class WeatherServiceImpl implements WeatherService {
      *
      * @param calendar Date for which we seek weather.
      * @param region   Region for which we seek weather with country code. For example "RU/Moscow".
+     * @throws Exception .
      * @return JSON formatted data or null if error occurred.
      */
     public String downloadHistoryForDay(final Calendar calendar, final String region) throws Exception {
@@ -153,6 +153,7 @@ public class WeatherServiceImpl implements WeatherService {
      *
      * @param calendar Date.
      * @param region   Region.
+     * @throws Exception .
      * @return WeatherDomain or null.
      */
     private WeatherDomain downloadAndSave(final Calendar calendar, final String region) throws Exception {
@@ -303,7 +304,11 @@ public class WeatherServiceImpl implements WeatherService {
         return null;
     }
 
-
+    /**
+     * d.
+     *
+     * @return calendar.
+     */
     private Calendar getCurrentRunningMinute() {
         try {
             SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
@@ -325,6 +330,11 @@ public class WeatherServiceImpl implements WeatherService {
         }
     }
 
+    /**
+     * ddd.
+     *
+     * @return calendar.
+     */
     private Calendar getCurrentRunningDay() {
         try {
             SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_per_day");
@@ -346,6 +356,9 @@ public class WeatherServiceImpl implements WeatherService {
         }
     }
 
+    /**
+     * ss.
+     */
     private void setCurrentRunningMinute() {
         SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
         Calendar calendar = new GregorianCalendar();
@@ -359,6 +372,9 @@ public class WeatherServiceImpl implements WeatherService {
         getEntityManager().persist(currentMinute);
     }
 
+    /**
+     * sss.
+     */
     private void setCurrentRunningDay() {
         SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_day");
         Calendar calendar = new GregorianCalendar();
@@ -372,6 +388,10 @@ public class WeatherServiceImpl implements WeatherService {
         getEntityManager().persist(currentMinute);
     }
 
+    /**
+     * sss.
+     * @return int.
+     */
     private Integer getRequestsMadePerMinute() {
         SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class, "weather_per_minute");
         if (requestsPerDay == null) {
@@ -389,7 +409,7 @@ public class WeatherServiceImpl implements WeatherService {
         Calendar lastRequestTime = getCurrentRunningMinute();
         if (lastRequestTime != null) {
             if (lastRequestTime.compareTo(currentTime) == 0) {
-                requestsPerDay.setValue(""+(Integer.parseInt(requestsPerDay.getValue()) + 1));
+                requestsPerDay.setValue("" + (Integer.parseInt(requestsPerDay.getValue()) + 1));
                 getEntityManager().persist(requestsPerDay);
             } else {
                 requestsPerDay.setValue("0");
@@ -399,6 +419,11 @@ public class WeatherServiceImpl implements WeatherService {
         return Integer.parseInt(requestsPerDay.getValue());
     }
 
+    /**
+     * sss.
+     *
+     * @return int.
+     */
     private Integer getRequestsMadePerDay() {
         SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class, "weather_per_day");
         if (requestsPerDay == null) {
@@ -416,7 +441,7 @@ public class WeatherServiceImpl implements WeatherService {
         Calendar lastRequestTime = getCurrentRunningMinute();
         if (lastRequestTime != null) {
             if (lastRequestTime.compareTo(currentTime) == 0) {
-                requestsPerDay.setValue(""+(Integer.parseInt(requestsPerDay.getValue()) + 1));
+                requestsPerDay.setValue("" + (Integer.parseInt(requestsPerDay.getValue()) + 1));
                 getEntityManager().persist(requestsPerDay);
             } else {
                 requestsPerDay.setValue("0");
