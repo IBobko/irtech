@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.*;
@@ -109,7 +108,7 @@ public class AdviserImporter {
      */
     private List<Future<Long>> futures = new CopyOnWriteArrayList<>();
 
-    public static Properties getProperties() {
+    static Properties getProperties() {
         return properties;
     }
 
@@ -117,8 +116,8 @@ public class AdviserImporter {
      * The starting method.
      *
      * @param args The first parameter is the directory path with the database dump.
-     * @throws IOException .
-     * @throws SQLException .
+     * @throws IOException          .
+     * @throws SQLException         .
      * @throws InterruptedException .
      */
     public static void main(final String[] args) throws IOException, SQLException, InterruptedException {
@@ -173,8 +172,8 @@ public class AdviserImporter {
      * The starting job.
      *
      * @param pathToDump Folder with CVS files.
-     * @throws SQLException .
-     * @throws IOException .
+     * @throws SQLException         .
+     * @throws IOException          .
      * @throws InterruptedException .
      */
     private void startLoading(final String pathToDump) throws SQLException, IOException, InterruptedException {
@@ -191,9 +190,8 @@ public class AdviserImporter {
                 long totalFileSize = 0;
                 for (final Path path : stream) {
                     //if (!lackOfTables.contains(path.getFileName().toString().toUpperCase())) {
-                    if (!path.getFileName().toString().toUpperCase().equals("QUERIES") &&
-                        !path.getFileName().toString().toUpperCase().equals("OBJPROPS")
-                            ) {
+                    if (!path.getFileName().toString().toUpperCase().equals("QUERIES")
+                            && !path.getFileName().toString().toUpperCase().equals("OBJPROPS")) {
                         paths.add(path);
                         long fileSize = Files.size(path);
                         totalFileSize += fileSize;
@@ -280,20 +278,32 @@ public class AdviserImporter {
         }
     }
 
-
+    /**
+     * Checks that the table exists.
+     *
+     * @param tableName Table Name.
+     * @return true if table exists.
+     * @throws SQLException .
+     */
     private boolean checkThatTableExists(final String tableName) throws SQLException {
         final Connection connection = getDriverManagerDataSource().getConnection();
         final PreparedStatement statement = connection.prepareStatement(" select * from information_schema.tables where table_schema = 'public' and table_name = ?");
-        statement.setString(1,tableName);
+        statement.setString(1, tableName);
         ResultSet rs = statement.executeQuery();
         return rs.next();
     }
 
-    private void createTable(String fileName) throws IOException {
+    /**
+     * Creates new table with columns from file.
+     *
+     * @param fileName CSV file.
+     * @throws IOException .
+     */
+    private void createTable(final String fileName) throws IOException {
         DividerIntoParts dividerIntoParts = new DividerIntoParts(Paths.get(fileName));
         ArrayList<String> t = new ArrayList<>();
         t.addAll(dividerIntoParts.getColumns());
         t.remove(0);
-        String sql = "CREATE TABLE " + dividerIntoParts.getTableName() + " (" + StringUtils.join(t," VARCHAR(255),") + " VARCHAR(255));";
+        String sql = "CREATE TABLE " + dividerIntoParts.getTableName() + " (" + StringUtils.join(t, " VARCHAR(255),") + " VARCHAR(255));";
     }
 }

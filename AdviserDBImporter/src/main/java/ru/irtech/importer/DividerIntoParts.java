@@ -65,10 +65,10 @@ public class DividerIntoParts {
 
         for (int i = 0; i < this.columns.size(); i++) {
             if (this.columns.get(i).equalsIgnoreCase("desc")) {
-                this.columns.set(i,"\"DESC\"");
+                this.columns.set(i, "\"DESC\"");
             }
             if (this.columns.get(i).equalsIgnoreCase("order")) {
-                this.columns.set(i,"\"ORDER\"");
+                this.columns.set(i, "\"ORDER\"");
             }
         }
 
