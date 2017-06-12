@@ -65,7 +65,7 @@ public class LoaderThread implements Callable<Long> {
 
                 final Reader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
 
-                final List<String> columnsArray = partOfFile.getColumns().subList(1, partOfFile.getColumns().size());
+                final List<String> columnsArray = partOfFile.getColumns().subList(0, partOfFile.getColumns().size());
                 final String sql = "INSERT INTO " + tableName + " (" + StringUtils.join(columnsArray, ",") + ")";
                 List<Integer> notNullColumns = new ArrayList<>();
                 try (final BufferedReader br = new BufferedReader(inputStreamReader)) {
@@ -189,7 +189,7 @@ public class LoaderThread implements Callable<Long> {
         }
         final String[] arguments = line.split(AdviserImporter.getProperties().getProperty("csv.delimiter"), -1);
         result.addAll(Arrays.asList(arguments));
-        result.remove(0);
+        //result.remove(0);
         for (int i = 0; i < result.size(); i++) {
             boolean notNull = false;
             if (notNullColumns.contains(i)) {
