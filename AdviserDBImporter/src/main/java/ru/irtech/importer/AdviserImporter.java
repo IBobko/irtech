@@ -1,12 +1,11 @@
 package ru.irtech.importer;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -110,7 +109,7 @@ public class AdviserImporter {
      */
     private List<Future<Long>> futures = new CopyOnWriteArrayList<>();
 
-    private static Properties getProperties() {
+    public static Properties getProperties() {
         return properties;
     }
 
@@ -184,11 +183,6 @@ public class AdviserImporter {
         long times = System.currentTimeMillis();
         long totalSize = 0;
 
-        final List<String> lackOfTables = Arrays.asList(this.lackOfTables);
-        for (int i = 0; i < lackOfTables.size(); i++) {
-            lackOfTables.set(i, lackOfTables.get(i).toUpperCase());
-        }
-
         if (Files.isDirectory(rootPath)) {
             try (final DirectoryStream<Path> stream = Files.newDirectoryStream(rootPath)) {
                 final List<Path> paths = new ArrayList<>();
@@ -196,7 +190,10 @@ public class AdviserImporter {
                 final ExecutorService executorServiceForDb = Executors.newFixedThreadPool(MAX_THREADS);
                 long totalFileSize = 0;
                 for (final Path path : stream) {
-                    if (!lackOfTables.contains(path.getFileName().toString().toUpperCase())) {
+                    //if (!lackOfTables.contains(path.getFileName().toString().toUpperCase())) {
+                    if (!path.getFileName().toString().toUpperCase().equals("QUERIES") &&
+                        !path.getFileName().toString().toUpperCase().equals("OBJPROPS")
+                            ) {
                         paths.add(path);
                         long fileSize = Files.size(path);
                         totalFileSize += fileSize;
@@ -281,5 +278,22 @@ public class AdviserImporter {
             statement.close();
             connection.close();
         }
+    }
+
+
+    private boolean checkThatTableExists(final String tableName) throws SQLException {
+        final Connection connection = getDriverManagerDataSource().getConnection();
+        final PreparedStatement statement = connection.prepareStatement(" select * from information_schema.tables where table_schema = 'public' and table_name = ?");
+        statement.setString(1,tableName);
+        ResultSet rs = statement.executeQuery();
+        return rs.next();
+    }
+
+    private void createTable(String fileName) throws IOException {
+        DividerIntoParts dividerIntoParts = new DividerIntoParts(Paths.get(fileName));
+        ArrayList<String> t = new ArrayList<>();
+        t.addAll(dividerIntoParts.getColumns());
+        t.remove(0);
+        String sql = "CREATE TABLE " + dividerIntoParts.getTableName() + " (" + StringUtils.join(t," VARCHAR(255),") + " VARCHAR(255));";
     }
 }

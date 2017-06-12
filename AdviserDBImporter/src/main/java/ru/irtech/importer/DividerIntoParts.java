@@ -49,8 +49,6 @@ public class DividerIntoParts {
     DividerIntoParts(final Path path) throws IOException {
         this.path = path;
         final InputStream inputStreamReader = new FileInputStream(getPath().toString());
-        final List<Long> positions = new ArrayList<>();
-
         long currentPosition = 0;
 
         final StringBuilder columns = new StringBuilder();
@@ -63,7 +61,18 @@ public class DividerIntoParts {
         inputStreamReader.read();
         currentPosition += NUMBER_BYTES_OF_END_OF_STRING;
 
-        this.columns = Arrays.asList(columns.toString().split(","));
+        this.columns = Arrays.asList(columns.toString().split(AdviserImporter.getProperties().getProperty("csv.delimiter")));
+
+        for (int i = 0; i < this.columns.size(); i++) {
+            if (this.columns.get(i).equalsIgnoreCase("desc")) {
+                this.columns.set(i,"\"DESC\"");
+            }
+            if (this.columns.get(i).equalsIgnoreCase("order")) {
+                this.columns.set(i,"\"ORDER\"");
+            }
+        }
+
+        final List<Long> positions = new ArrayList<>();
         positions.add(currentPosition);
         main:
         while (inputStreamReader.skip(PORTION) == PORTION) {
@@ -124,5 +133,13 @@ public class DividerIntoParts {
             partOfFile.setTo(getParts().get(i + 1));
         }
         return partOfFile;
+    }
+
+    /**
+     * Returns the table name or filename.
+     * @return the table name or filename.
+     */
+    public String getTableName() {
+        return  getPath().getFileName().toString();
     }
 }

@@ -95,15 +95,23 @@ public class LoaderThread implements Callable<Long> {
                                         }
                                     }
                                 } else if (e.getSQLState().equals("42601")) {
-                                    break;
+
                                 } else if (e.getSQLState().equals("42804")) {
-                                    break;
+
                                 } else if (e.getSQLState().equals("22P02")) {
-                                    break;
+
                                 } else {
-                                    e.printStackTrace();
-                                    break;
+
                                 }
+                                System.out.println(path.getFileName().toString());
+                                e.printStackTrace();
+                                if (!path.getFileName().toString().equalsIgnoreCase("LESSONS")&&
+                                        !path.getFileName().toString().equalsIgnoreCase("EVENTS") && !path.getFileName().toString().equalsIgnoreCase("UNITS") &&
+                                        !path.getFileName().toString().equalsIgnoreCase("SCHOOLDOCS") &&
+                                        !path.getFileName().toString().equalsIgnoreCase("USERSPARAMETERS") && !path.getFileName().toString().equalsIgnoreCase("ADD_PROGRAMS")) {
+                                    System.out.println();
+                                }
+                                break;
                             }
                         }
                     }
@@ -174,7 +182,7 @@ public class LoaderThread implements Callable<Long> {
         if (line == null) {
             return result;
         }
-        final String[] arguments = line.split(",", -1);
+        final String[] arguments = line.split(AdviserImporter.getProperties().getProperty("csv.delimiter"), -1);
         result.addAll(Arrays.asList(arguments));
         result.remove(0);
         for (int i = 0; i < result.size(); i++) {
