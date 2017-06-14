@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -89,7 +90,7 @@ public class StudentsMeanGradeAttendanceImporter extends BaseImporter implements
 
         try {
             Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(SQL_FILE_NAME);
+            ResultSet rs = st.executeQuery(readSql(SQL_FILE_NAME, Charset.defaultCharset()));
             while (rs.next()) {
                 result.add(new StudentMeanGradeAttendance(rs.getInt(1), rs.getDouble(2), rs.getInt(3)));
             }

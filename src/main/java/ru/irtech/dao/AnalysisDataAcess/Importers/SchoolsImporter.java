@@ -102,7 +102,7 @@ public class SchoolsImporter extends BaseImporter implements IArrayImporter<Scho
                 ResultSet rs = st.executeQuery(query);
                 while (rs.next()) {
                     students.add(rs.getInt(1));
-                    rs.getInt(4)
+                    rs.getInt(4);
                 }
                 rs.close();
                 st.close();

@@ -10,6 +10,7 @@ import ru.irtech.dao.AnalysisDataAcess.Importers.IArrayImporter;
 import ru.irtech.dao.AnalysisDataAcess.Importers.SchoolsImporter;
 import ru.irtech.dao.AnalysisDataAcess.Importers.StudentsFamilyStatusImporter;
 import ru.irtech.dao.AnalysisDataAcess.Importers.StudentsGradesImporter;
+import ru.irtech.dao.AnalysisDataAcess.Model.Grade;
 import ru.irtech.dao.AnalysisDataAcess.Model.School;
 import ru.irtech.dao.AnalysisDataAcess.Model.StudentFamilyStatus;
 import ru.irtech.dao.AnalysisDataAcess.Model.StudentMeanGrade;
@@ -33,17 +34,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/familyStatus")
 public class FamilyStatusController {
-
-    /**
-     * Lowest border for "best" grade.
-     */
-    private static final int BEST_BORDER_GRADE = 800;
-
-    /**
-     * Lowest border for "good" grade.
-     */
-    private static final int GOOD_BORDER_GRADE = 500;
-
 
     /**
      * Main get method that returns table for all data that represents in database.
@@ -235,9 +225,9 @@ public class FamilyStatusController {
         int total = grades.size();
 
         for (StudentMeanGrade grade : grades) {
-            if (grade.getMeanGrade() >= BEST_BORDER_GRADE) {
+            if (grade.getMeanGrade() >= Grade.BEST_BORDER_GRADE) {
                 best++;
-            } else if (grade.getMeanGrade() >= GOOD_BORDER_GRADE) {
+            } else if (grade.getMeanGrade() >= Grade.GOOD_BORDER_GRADE) {
                 good++;
             } else {
                 average++;
