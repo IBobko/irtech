@@ -18,7 +18,7 @@ import java.util.List;
  * Class that returns csv file reference with data that contains four columns: studentId (int), meanTermGrade(double),
  * meanYearlyGrade (double), isFullFamily (both parents - True, other way - false)
  */
-public class StudentsTermsYearlyMarks extends BaseImporter {
+public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImporter {
     /**
      * Main processing method.
      *
@@ -27,7 +27,6 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
      */
     @Override
     public String importData(final File file, final String databaseName) {
-        String result = "test";
         try {
 
             Connection connection = getConnection(databaseName);
@@ -63,7 +62,7 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
             System.out.println(e.getMessage());
         }
 
-        return result;
+        return file.getPath();
 
     }
 
@@ -102,11 +101,11 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
      */
     private AbstractMap<Integer, List<Integer>> queryRelationships(final Connection connection) {
         AbstractMap<Integer, List<Integer>> result = new HashMap<>();
-        Statement st;
+        Statement st = null;
+        ResultSet rs = null;
         try {
             st = connection.createStatement();
 
-            ResultSet rs;
 
             rs = st.executeQuery("SELECT userid,relationshiptypeid FROM FAMILYINFO \n"
                     + "WHERE RELATIONSHIPTYPEID = 7 OR RELATIONSHIPTYPEID =8");
@@ -117,11 +116,21 @@ public class StudentsTermsYearlyMarks extends BaseImporter {
                     result.put(studentId, new ArrayList<>());
                 }
                 result.get(studentId).add(relation);
-                rs.close();
-                st.close();
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return result;

@@ -1,6 +1,7 @@
 package ru.irtech.analysis.OutliersAndExtremes;
 
-import javafx.util.Pair;
+
+import ru.irtech.analysis.Pair;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
