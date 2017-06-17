@@ -232,7 +232,7 @@ public class AdviserImporter {
                     });
                 }
                 executorService.shutdown();
-                executorService.awaitTermination(Long.MAX_VALUE,TimeUnit.MILLISECONDS);
+                executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
                 while (futures.size() != 0) {
                     final List<Future<Long>> futuresTemp = new ArrayList<>();
                     futuresTemp.addAll(futures);
