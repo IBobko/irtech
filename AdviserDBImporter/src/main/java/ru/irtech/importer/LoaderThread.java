@@ -116,7 +116,7 @@ public class LoaderThread implements Callable<Long> {
 //                                        && !path.getFileName().toString().equalsIgnoreCase("ADD_PROGRAMS")) {
 //                                    ;//System.out.println();
 //                                }
-
+                                e.printStackTrace();
                                 break;
                             }
                         }
