@@ -294,7 +294,12 @@ var InnopolisAdviser = {
         showAdvice: function () {
             this.adviceShowing = true;
             // change image
-            this.setAdvisorImage("advice/" + this.adviceType);
+            if (this.adviceType != null) {
+                this.setAdvisorImage("advice/" + this.adviceType);
+            }
+            else {
+                this.setAdvisorImage(this.selectedAdvisor + "/advisor");
+            }
             this.showDiv("advisorAdvice");
         }
         ,
