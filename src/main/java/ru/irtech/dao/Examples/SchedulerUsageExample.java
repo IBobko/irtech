@@ -26,6 +26,7 @@ public class SchedulerUsageExample {
 
     /**
      * Main example method.
+     * @return list of objects.
      */
     public List<Object> getAnalysisData() {
         IScheduler scheduler = null; // here should be new ConcreteScheduler;
