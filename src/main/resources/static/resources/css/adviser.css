@@ -50,11 +50,12 @@
 
 #advisorAdvice {
     width: 275px;
+    min-height: 50px;
     overflow: auto;
     position: absolute;
     right: 90px;
     bottom: 50px;
-    border-radius: 20px 10px 0;
+    border-radius: 10px 10px 0;
     background-color: #1B9AF7;
 }
 
