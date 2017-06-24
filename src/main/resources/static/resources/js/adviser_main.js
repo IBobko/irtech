@@ -31,7 +31,6 @@ var InnopolisAdviser = {
             var mobile = "";
             if (this.checkIfMobile()) {
                 mobile = "mobile";
-                //todo change fonts
             }
 
             //initial advisor selected
@@ -87,6 +86,7 @@ var InnopolisAdviser = {
             this.separateClicks(this);
             this.onTapHold(this);
             this.advisorSkinsLoad(this);
+            this.clickOutside("advisorChange", this);
         }
         ,
 
@@ -110,6 +110,25 @@ var InnopolisAdviser = {
             document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
         ,
+
+//Method that detects click outside the element
+// for advisor selection it hides advisor selection field
+//  elementId   - element outside which click is analyzed
+        clickOutside: function (elementId, self) {
+            $(document).click(function (e) {
+                // check that your clicked
+                // element has no id=info
+                // and is not child of info
+                if (e.target.id != elementId && !$('#info').find(e.target).length) {
+                    if (e.target.id != "advisorImage") {
+                        if (self.changeOpen)
+                            $("#" + elementId).hide();
+                    }
+                }
+            });
+        }
+        ,
+
 
 //generic get cookie method
 //  cname   - cookie key
@@ -200,7 +219,6 @@ var InnopolisAdviser = {
         ,
 
         onTapHold: function (self) {
-            console.log(1);
             $("#advisorContent").bind("taphold", tapholdHandler);
             function tapholdHandler(event) {
                 console.log(3);
@@ -220,7 +238,10 @@ var InnopolisAdviser = {
 //  image   - img tag id
 //  src     - image src key
         setImage: function (image, src) {
-            $("#" + image).attr("src", this.jsHostLocation + "/resources/images/advisor_material/" + src + ".png");
+            if (image != this.selectedAdvisor) {
+                $("#skinSelector").append("<img id='" + image + "' class='skinContainer' />");
+                $("#" + image).attr("src", this.jsHostLocation + "/resources/images/advisor_material/" + src + ".png");
+            }
         }
         ,
 
@@ -351,5 +372,6 @@ var InnopolisAdviser = {
             this.selectedAdvisor = skin;
             this.setAdvisorImage(skin + "/advisor");
         }
+
     }
     ;
