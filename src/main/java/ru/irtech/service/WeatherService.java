@@ -13,7 +13,8 @@ public interface WeatherService {
      *
      * @param calendar Date of weather.
      * @param region   Region of weather.
-     * @return WeatherDomain or null.
+     * @throws Exception Exception with message which error occurred.
+     * @return WeatherDomain.
      */
-    WeatherDomain getWeatherByDateAndRegion(final Calendar calendar, final String region);
+    WeatherDomain getWeatherByDateAndRegion(final Calendar calendar, final String region) throws Exception;
 }

@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,7 +25,10 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
@@ -103,9 +105,10 @@ public class WeatherServiceImpl implements WeatherService {
      *
      * @param calendar Date for which we seek weather.
      * @param region   Region for which we seek weather with country code. For example "RU/Moscow".
+     * @throws Exception .
      * @return JSON formatted data or null if error occurred.
      */
-    public String downloadHistoryForDay(final Calendar calendar, final String region) {
+    public String downloadHistoryForDay(final Calendar calendar, final String region) throws Exception {
         if (calendar == null) {
             return null;
         }
@@ -113,90 +116,24 @@ public class WeatherServiceImpl implements WeatherService {
             return null;
         }
 
-        SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
-        if (currentMinute == null) {
-            Calendar calendar1 = new GregorianCalendar();
-            currentMinute = new SettingsDomain();
-            currentMinute.setKey("weather_current_minute");
-            currentMinute.setValue(dateFormatForSettings.format(calendar1.getTime()));
-            getEntityManager().persist(currentMinute);
+        if (getRequestsMadePerDay() > MAX_REQUESTS_PER_DAY) {
+            throw new Exception("Извините, сегодня лимит исчерпан.");
         }
 
-        SettingsDomain requestsPerMinute = getEntityManager().find(SettingsDomain.class, "weather_per_minute");
-        if (requestsPerMinute == null) {
-            requestsPerMinute = new SettingsDomain();
-            requestsPerMinute.setKey("weather_per_minute");
-            requestsPerMinute.setValue("0");
-            getEntityManager().persist(requestsPerMinute);
+        if (getRequestsMadePerMinute() > MAX_REQUESTS_PER_MINUTE) {
+            setCurrentRunningMinute();
+            Thread.sleep(MILLISECONDS_FOR_SLEEPING);
+            return downloadHistoryForDay(calendar, region);
         }
-
-        SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class, "weather_per_day");
-        if (requestsPerDay == null) {
-            requestsPerDay = new SettingsDomain();
-            requestsPerDay.setKey("weather_per_day");
-            requestsPerDay.setValue("0");
-            getEntityManager().persist(requestsPerDay);
-        }
-
-        Calendar calendar1 = new GregorianCalendar();
-        calendar1.set(Calendar.SECOND, 0);
-        calendar1.set(Calendar.MILLISECOND, 0);
-
-        try {
-            Date date = dateFormatForSettings.parse(currentMinute.getValue());
-            Calendar calendar2 = new GregorianCalendar();
-            calendar2.setTime(date);
-            calendar2.set(Calendar.SECOND, 0);
-            calendar2.set(Calendar.MILLISECOND, 0);
-            if (calendar1.compareTo(calendar2) == 0) {
-                requestsPerMinute.setValue(Integer.toString(Integer.parseInt(requestsPerMinute.getValue()) + 1));
-                getEntityManager().persist(requestsPerMinute);
-            } else {
-                requestsPerMinute.setValue("1");
-                getEntityManager().persist(requestsPerMinute);
-
-                if (calendar1.get(Calendar.DAY_OF_MONTH) != calendar1.get(Calendar.DAY_OF_MONTH)) {
-                    requestsPerDay.setValue("0");
-                    getEntityManager().persist(requestsPerDay);
-                }
-
-            }
-
-            requestsPerDay.setValue(Integer.toString(Integer.parseInt(requestsPerDay.getValue()) + 1));
-            getEntityManager().persist(requestsPerDay);
-
-            if (Integer.parseInt(requestsPerDay.getValue()) > MAX_REQUESTS_PER_DAY) {
-                System.out.println("Извините сегодня лимит исчерпан");
-                return null;
-            }
-
-            if (Integer.parseInt(requestsPerMinute.getValue()) > MAX_REQUESTS_PER_MINUTE) {
-                Thread.sleep(MILLISECONDS_FOR_SLEEPING);
-                return downloadHistoryForDay(calendar, region);
-            }
-
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
 
         String historyString = "/history_" + getSimpleDateFormat().format(calendar.getTime());
         historyString += "/q/" + region + ".json";
-
-        try {
-            final CloseableHttpClient httpclient = HttpClientBuilder.create().build();
-            final HttpPost httppost = new HttpPost(wundergroundApiAddress + wundergroundKey + historyString);
-            final CloseableHttpResponse response = httpclient.execute(httppost);
-            final StringWriter writer = new StringWriter();
-            IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
-            return writer.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        final CloseableHttpClient httpclient = HttpClientBuilder.create().build();
+        final HttpPost httppost = new HttpPost(wundergroundApiAddress + wundergroundKey + historyString);
+        final CloseableHttpResponse response = httpclient.execute(httppost);
+        final StringWriter writer = new StringWriter();
+        IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
+        return writer.toString();
     }
 
     /**
@@ -216,9 +153,10 @@ public class WeatherServiceImpl implements WeatherService {
      *
      * @param calendar Date.
      * @param region   Region.
+     * @throws Exception .
      * @return WeatherDomain or null.
      */
-    private WeatherDomain downloadAndSave(final Calendar calendar, final String region) {
+    private WeatherDomain downloadAndSave(final Calendar calendar, final String region) throws Exception {
         String response = downloadHistoryForDay(calendar, region);
         if (response == null) {
             return null;
@@ -337,7 +275,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public WeatherDomain getWeatherByDateAndRegion(final Calendar calendar, final String region) {
+    public WeatherDomain getWeatherByDateAndRegion(final Calendar calendar, final String region) throws Exception {
         WeatherDomain weatherDomain = getWeatherFromDatabase(calendar, region);
         if (weatherDomain == null) {
             weatherDomain = downloadAndSave(calendar, region);
@@ -365,5 +303,153 @@ public class WeatherServiceImpl implements WeatherService {
         }
         return null;
     }
+
+    /**
+     * d.
+     *
+     * @return calendar.
+     */
+    private Calendar getCurrentRunningMinute() {
+        try {
+            SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
+            Calendar calendar = new GregorianCalendar();
+            if (currentMinute == null) {
+                currentMinute = new SettingsDomain();
+                currentMinute.setKey("weather_current_minute");
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                currentMinute.setValue(dateFormatForSettings.format(calendar.getTime()));
+                getEntityManager().persist(currentMinute);
+            }
+            calendar.setTime(dateFormatForSettings.parse(currentMinute.getValue()));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar;
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * ddd.
+     *
+     * @return calendar.
+     */
+    private Calendar getCurrentRunningDay() {
+        try {
+            SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_per_day");
+            Calendar calendar = new GregorianCalendar();
+            if (currentMinute == null) {
+                currentMinute = new SettingsDomain();
+                currentMinute.setKey("weather_per_day");
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                currentMinute.setValue(dateFormatForSettings.format(calendar.getTime()));
+                getEntityManager().persist(currentMinute);
+            }
+            calendar.setTime(dateFormatForSettings.parse(currentMinute.getValue()));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar;
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * ss.
+     */
+    private void setCurrentRunningMinute() {
+        SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
+        Calendar calendar = new GregorianCalendar();
+        if (currentMinute == null) {
+            currentMinute = new SettingsDomain();
+            currentMinute.setKey("weather_current_minute");
+        }
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        currentMinute.setValue(dateFormatForSettings.format(calendar.getTime()));
+        getEntityManager().persist(currentMinute);
+    }
+
+    /**
+     * sss.
+     */
+    private void setCurrentRunningDay() {
+        SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_day");
+        Calendar calendar = new GregorianCalendar();
+        if (currentMinute == null) {
+            currentMinute = new SettingsDomain();
+            currentMinute.setKey("weather_current_day");
+        }
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        currentMinute.setValue(dateFormatForSettings.format(calendar.getTime()));
+        getEntityManager().persist(currentMinute);
+    }
+
+    /**
+     * sss.
+     * @return int.
+     */
+    private Integer getRequestsMadePerMinute() {
+        SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class, "weather_per_minute");
+        if (requestsPerDay == null) {
+            requestsPerDay = new SettingsDomain();
+            requestsPerDay.setKey("weather_per_minute");
+            requestsPerDay.setValue("0");
+            getEntityManager().persist(requestsPerDay);
+        }
+        Calendar currentTime = new GregorianCalendar();
+        currentTime.set(Calendar.HOUR, 0);
+        currentTime.set(Calendar.MINUTE, 0);
+        currentTime.set(Calendar.SECOND, 0);
+        currentTime.set(Calendar.MILLISECOND, 0);
+
+        Calendar lastRequestTime = getCurrentRunningMinute();
+        if (lastRequestTime != null) {
+            if (lastRequestTime.compareTo(currentTime) == 0) {
+                requestsPerDay.setValue("" + (Integer.parseInt(requestsPerDay.getValue()) + 1));
+                getEntityManager().persist(requestsPerDay);
+            } else {
+                requestsPerDay.setValue("0");
+                getEntityManager().persist(requestsPerDay);
+            }
+        }
+        return Integer.parseInt(requestsPerDay.getValue());
+    }
+
+    /**
+     * sss.
+     *
+     * @return int.
+     */
+    private Integer getRequestsMadePerDay() {
+        SettingsDomain requestsPerDay = getEntityManager().find(SettingsDomain.class, "weather_per_day");
+        if (requestsPerDay == null) {
+            requestsPerDay = new SettingsDomain();
+            requestsPerDay.setKey("weather_per_day");
+            requestsPerDay.setValue("0");
+            getEntityManager().persist(requestsPerDay);
+        }
+        Calendar currentTime = new GregorianCalendar();
+        currentTime.set(Calendar.HOUR, 0);
+        currentTime.set(Calendar.MINUTE, 0);
+        currentTime.set(Calendar.SECOND, 0);
+        currentTime.set(Calendar.MILLISECOND, 0);
+
+        Calendar lastRequestTime = getCurrentRunningMinute();
+        if (lastRequestTime != null) {
+            if (lastRequestTime.compareTo(currentTime) == 0) {
+                requestsPerDay.setValue("" + (Integer.parseInt(requestsPerDay.getValue()) + 1));
+                getEntityManager().persist(requestsPerDay);
+            } else {
+                requestsPerDay.setValue("0");
+                getEntityManager().persist(requestsPerDay);
+            }
+        }
+        return Integer.parseInt(requestsPerDay.getValue());
+    }
+
 
 }
