@@ -193,6 +193,7 @@ var InnopolisAdviser = {
             }
             else {
                 self.changeOpen = false;
+                $("#skinSelector").empty();
             }
         }
         ,
@@ -243,10 +244,8 @@ var InnopolisAdviser = {
 //  image   - img tag id
 //  src     - image src key
         setImage: function (image, src) {
-            if (image != this.selectedAdvisor) {
-                $("#skinSelector").append("<img id='" + image + "' class='skinContainer' />");
-                $("#" + image).attr("src", this.jsHostLocation + "/resources/images/advisor_material/" + src + ".png");
-            }
+            $("#skinSelector").append("<img id='" + image + "' class='skinContainer' />");
+            $("#" + image).attr("src", this.jsHostLocation + "/resources/images/advisor_material/" + src + ".png");
         }
         ,
 
@@ -370,7 +369,8 @@ var InnopolisAdviser = {
 //  skin    - skin key
         selectSkin: function (skin) {
             this.hideDiv("advisorChange");
-            this.setImage(skin, skin + "/advisor");
+            $("#skinSelector").empty();
+            //this.setImage(skin, skin + "/advisor");
             $("#" + skin).id = "#" + this.selectedAdvisor;
             this.setCookie("selectedAdvisor", skin, 365);
             this.selectedAdvisor = skin;
