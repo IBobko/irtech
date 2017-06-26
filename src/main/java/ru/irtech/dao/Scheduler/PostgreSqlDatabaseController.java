@@ -90,8 +90,8 @@ public class PostgreSqlDatabaseController {
      * @throws ClassNotFoundException in case if postgresql jdbc driver is not found.
      */
     public void createTable(final String name, final PostgreSqlColumnType[] columnTypes, final String[] columnNames) throws SQLException, ClassNotFoundException {
-        if (columnNames.length != columnTypes.length) {
-            throw new IllegalArgumentException("Column names and types array should be equal range");
+        if (name.isEmpty() || columnNames == null || columnTypes == null || columnNames.length == 0 || columnTypes.length == 0 || columnNames.length != columnTypes.length) {
+            throw new IllegalArgumentException("Column names and types array should be equal range and both should not be empty or null. Also table name should not be empty");
         }
 
         StringBuilder sb = new StringBuilder();
@@ -104,8 +104,9 @@ public class PostgreSqlDatabaseController {
             } else {
                 sb.append(" not null");
             }
-
-            sb.append(",");
+            if(i != columnNames.length -1){
+                sb.append(",");
+            }
         }
         sb.append(")");
 
@@ -134,7 +135,7 @@ public class PostgreSqlDatabaseController {
         Connection connection = getConnection();
 
         Statement st = connection.createStatement();
-        st.executeQuery(script);
+        st.execute(script);
 
         st.close();
     }
