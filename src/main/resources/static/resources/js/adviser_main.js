@@ -121,12 +121,11 @@ var InnopolisAdviser = {
                 // and is not child of info
                 console.log(e.target.id);
                 if (e.target.id != elementId && !$('#info').find(e.target).length) {
-                    //if (!self.dblClick) {
                     if (self.changeOpen) {
                         $("#" + elementId).hide();
                         self.changeOpen = false;
+                        $("#skinSelector").empty();
                     }
-                    //}
                 }
             });
         }
@@ -226,8 +225,9 @@ var InnopolisAdviser = {
         ,
 
         onTapHold: function (self) {
-            $("#advisorContent").bind("taphold", tapholdHandler);
+            $("#advisorImage").bind("taphold", tapholdHandler);
             function tapholdHandler(event) {
+                self.advisorSkinsLoad(self);
                 self.showAdvisorChoice(self);
             }
         }
@@ -370,7 +370,6 @@ var InnopolisAdviser = {
         selectSkin: function (skin) {
             this.hideDiv("advisorChange");
             $("#skinSelector").empty();
-            //this.setImage(skin, skin + "/advisor");
             $("#" + skin).id = "#" + this.selectedAdvisor;
             this.setCookie("selectedAdvisor", skin, 365);
             this.selectedAdvisor = skin;
