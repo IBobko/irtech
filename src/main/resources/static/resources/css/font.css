@@ -23,3 +23,17 @@
     right: 90px;
     bottom: 50px;
 }
+
+.skinContainer {
+    width:55px;
+    height:55px;
+    margin-bottom:20px;
+}
+
+.advisor-column {
+    width: 60px;
+    overflow: auto;
+    position: relative;
+    float: right;
+    bottom: 60px;
+}
