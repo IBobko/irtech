@@ -14,8 +14,9 @@ if (typeof jQuery == 'undefined') {
 modules.push("jquerymobile");
 modules.push("stomp");
 // Do not chnage SockJS, because local SockJS has simple changes for working with requireJS.
-modules.push("sockjs");
-modules.push("adviser_main");
+modules.push("external/sockjs");
+modules.push("adviser/adviser_cookies");
+modules.push("adviser/adviser_main");;
 requirejs(modules, function () {
     InnopolisAdviser.jsHostLocation = jsHostLocation;
     InnopolisAdviser.init();
