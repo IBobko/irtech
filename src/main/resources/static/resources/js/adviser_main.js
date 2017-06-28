@@ -85,6 +85,7 @@ var InnopolisAdviser = {
             this.hideAdvice();
             this.hideAdvisor();
             this.separateClicks(this);
+            this.advisorAdviseClick(this);
             this.onTapHold(this);
             this.clickOutside("advisorChange", this);
         }
@@ -224,6 +225,12 @@ var InnopolisAdviser = {
             });
         }
         ,
+
+        advisorAdviseClick: function (self) {
+            $("#advisorAdvice").click(function (e) {
+                self.advisorClick(self);
+            });
+        },
 
         onTapHold: function (self) {
             $("#advisorContent").bind("taphold", tapholdHandler);
