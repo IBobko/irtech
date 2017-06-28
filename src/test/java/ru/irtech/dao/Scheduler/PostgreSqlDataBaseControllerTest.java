@@ -38,7 +38,7 @@ public abstract class PostgreSqlDataBaseControllerTest {
     /**
      * Test set of columnTypes.
      */
-    protected final PostgreSqlColumnType[] testColumnTypes = new PostgreSqlColumnType[]{PostgreSqlColumnType.integer, PostgreSqlColumnType.doublePrecision, PostgreSqlColumnType.string100};
+    protected final PostgreSqlColumnType[] testColumnTypes = new PostgreSqlColumnType[]{PostgreSqlColumnType.integer, PostgreSqlColumnType.doublePrecision, PostgreSqlColumnType.string};
 
     /**
      * Test set of columnNames.

@@ -80,7 +80,6 @@ public class PostgreSqlDatabaseController {
 
     /**
      * Creates a table in the database with given name, schema and column names.
-     * Primary key is always the first column.
      * All values are not null.
      *
      * @param name        Table name.
@@ -99,12 +98,8 @@ public class PostgreSqlDatabaseController {
         sb.append("CREATE TABLE " + name + " (");
         for (int i = 0; i < columnNames.length; i++) {
             sb.append(columnNames[i] + " " + parseColumnType(columnTypes[i]));
-            if (i == 0) {
-                sb.append(" primary key");
-            } else {
-                sb.append(" not null");
-            }
-            if(i != columnNames.length -1){
+            sb.append(" not null");
+            if (i != columnNames.length - 1) {
                 sb.append(",");
             }
         }
@@ -163,25 +158,35 @@ public class PostgreSqlDatabaseController {
             for (int i = 0; i < columnNames.length; i++) {
                 switch (columnTypes[i]) {
                     case integer:
-                        values[i] = rs.getInt(i);
+                        values[i] = rs.getInt(i + 1);
                     case doublePrecision:
-                        values[i] = rs.getDouble(i);
-                    case string10:
-                    case string25:
-                    case string100:
-                        values[i] = rs.getString(i);
+                        values[i] = rs.getDouble(i + 1);
+                    case string:
+                        values[i] = rs.getString(i + 1);
                 }
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.append("INSERT INTO " + databaseName + "(");
+            sb.append("INSERT INTO " + databaseName + " (");
             for (int i = 0; i < columnNames.length; i++) {
-                sb.append(columnNames[i] + ",");
+                sb.append("\"" + columnNames[i] + "\"");
+                if (i != values.length - 1) {
+                    sb.append(",");
+                }
             }
             sb.append(") VALUES (");
 
             for (int i = 0; i < values.length; i++) {
-                sb.append(values[i].toString() + ",");
+                if (columnTypes[i] == PostgreSqlColumnType.string) {
+                    sb.append("\'");
+                }
+                sb.append(values[i].toString());
+                if (columnTypes[i] == PostgreSqlColumnType.string) {
+                    sb.append("\'");
+                }
+                if (i != values.length - 1) {
+                    sb.append(",");
+                }
             }
             sb.append(")");
 
@@ -204,12 +209,8 @@ public class PostgreSqlDatabaseController {
                 return "real";
             case integer:
                 return "integer";
-            case string10:
-                return "varchar(10)";
-            case string25:
-                return "varchar(25)";
-            case string100:
-                return "varchar(100)";
+            case string:
+                return "text";
             default:
                 throw new IllegalArgumentException("Cannot convert:" + value + "to valid postgresql type.");
         }

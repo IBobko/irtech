@@ -8,7 +8,5 @@ package ru.irtech.dao.Scheduler;
 public enum PostgreSqlColumnType {
     integer,
     doublePrecision,
-    string10,
-    string25,
-    string100
+    string,
 }

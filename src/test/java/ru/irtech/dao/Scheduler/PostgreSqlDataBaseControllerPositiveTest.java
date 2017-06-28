@@ -15,7 +15,7 @@ public class PostgreSqlDataBaseControllerPositiveTest extends PostgreSqlDataBase
     private final static String TABLE_NAME = "SomeTableToCreateAndDrop";
 
     /**
-     * False host testing during constructor value injection.
+     * Positive create delete table testing.
      */
     @Test
     public void createDropTableTest() {
@@ -42,6 +42,24 @@ public class PostgreSqlDataBaseControllerPositiveTest extends PostgreSqlDataBase
             } catch (Exception e) {
                 //if there were no table, skip this one.
             }
+        }
+        Assert.assertTrue(true);
+    }
+
+    /**
+     * Positive querying table testing.
+     */
+    @Test
+    public void runQueryWithResults() {
+        PostgreSqlDatabaseController dbController = new PostgreSqlDatabaseController(HOST_ADDRESS, HOST_PORT, DATABASE_NAME, LOGIN, PASSWORD);
+
+        try {
+            // we suppose that there not empty table test_table
+            dbController.executeScriptAndDeliverResultsTo("Select * from test_table", "test_table",
+                    new PostgreSqlColumnType[]{PostgreSqlColumnType.integer, PostgreSqlColumnType.doublePrecision, PostgreSqlColumnType.string},
+                    new String[]{"testId", "testDouble", "testString"});
+        } catch (Exception e) {
+            Assert.fail();
         }
         Assert.assertTrue(true);
     }
