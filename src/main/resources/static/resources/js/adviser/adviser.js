@@ -22,8 +22,8 @@
             var headTag = document.getElementsByTagName("head")[0];
             var jqTag = document.createElement('script');
             jqTag.type = 'text/javascript';
-            jqTag.src = parent.jsHostLocation + '/resources/js/require.js';
-            jqTag.setAttribute("data-main", parent.jsHostLocation + "/resources/js/config.js");
+            jqTag.src = parent.jsHostLocation + '/resources/js/external/require.js';
+            jqTag.setAttribute("data-main", parent.jsHostLocation + "/resources/js/config/config.js");
             headTag.appendChild(jqTag);
             break;
         }

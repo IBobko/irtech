@@ -126,6 +126,7 @@ var InnopolisAdviser = {
                     if (self.changeOpen) {
                         $("#" + elementId).hide();
                         self.changeOpen = false;
+                        $("#skinSelector").empty();
                     }
                     //}
                 }
@@ -210,6 +211,7 @@ var InnopolisAdviser = {
                         self.advisorClick(self);
                         $("#advisorChange").hide();
                         self.changeOpen = false;
+                        $("#skinSelector").empty();
                         clearTimeout(self.timer);
                         self.clicks = 0;             //after action performed, reset counter
                     }, self.DELAY);
@@ -233,8 +235,9 @@ var InnopolisAdviser = {
         },
 
         onTapHold: function (self) {
-            $("#advisorContent").bind("taphold", tapholdHandler);
+            $("#advisorImage").bind("taphold", tapholdHandler);
             function tapholdHandler(event) {
+                self.advisorSkinsLoad(self);
                 self.showAdvisorChoice(self);
             }
         }
