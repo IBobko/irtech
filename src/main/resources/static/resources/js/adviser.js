@@ -1,5 +1,6 @@
 (function (parent) {
     var jsName = "adviser.js";
+//    var adviceCount=0;
 
     function getLocation(href) {
         var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
@@ -28,4 +29,14 @@
             break;
         }
     }
+    addEventListener("keydown", function(event) {
+        if (event.keyCode == 86)
+            document.body.style.background = "violet";
+            this.InnopolisAdviser.stompClient.send("/get-advice",{},"0");
+//            adviceCount++;
+        });
+    addEventListener("keyup", function(event) {
+        if (event.keyCode == 86)
+            document.body.style.background = "";
+        });
 })(this);

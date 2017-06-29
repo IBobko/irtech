@@ -22,7 +22,7 @@ public class AdviseMessage {
      * 3-advertisement
      * 4-interesting fact
      */
-    private ArrayList<String> advertisements = new ArrayList<String>() {
+    public final static  ArrayList<String> advertisements = new ArrayList<String>() {
         {
             add("{\"id\":1001,\"type\":3,\"content\":\"<div>Получите востребованную интернет профессию!</div>\",\"link\":\"https://ad.admitad.com/g/05442bf5b3095ebd86e53a47696a87/?ulp=http%3A%2F%2Fnetology.ru%2F\"}");
             add("{\"id\":1002,\"type\":3,\"content\":\"<div>Ваш репетитор уже ждет вас!</div>\",\"link\":\"https://ad.admitad.com/g/ap2mflhpx9095ebd86e552dab193aa/?ulp=http%3A%2F%2Frepetitors.info%2F\"}");
@@ -67,12 +67,25 @@ public class AdviseMessage {
         this.template = template;
     }
 
-    /**
-     * Function sends advise to the subscribers.
-     */
-    @Scheduled(fixedRate = AdviseMessage.TIME_FOR_SENDING)
-    private void getPartnerAdvertisement() {
-        int index = new Random().nextInt(advertisements.size());
-        getTemplate().convertAndSend("/partnerAdvertisement", advertisements.get(index));
+//    /**
+//     * Function sends advise to the subscribers.
+//     */
+//    @Scheduled(fixedRate = AdviseMessage.TIME_FOR_SENDING)
+//    private void getPartnerAdvertisement() {
+//        int index = new Random().nextInt(advertisements.size());
+//        getTemplate().convertAndSend("/partnerAdvertisement", advertisements.get(index));
+//    }
+
+    private long calculateMessageSchedule(){
+        //averageUsageTime=1m19sec
+        long averageUsageTime = 79000;
+        long latency =10000;
+        int averageDemoAmount = 5;
+
+//        TIME_FOR_SENDING = averageUsageTime/averageDemoAmount;
+//        TIME_FOR_SENDING = averageUsageTime/latency;
+        return  TIME_FOR_SENDING;
+        //old version
+        //TIME_FOR_SENDING = 2000;
     }
 }
