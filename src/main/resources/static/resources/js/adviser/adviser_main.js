@@ -46,7 +46,7 @@ var InnopolisAdviser = {
             // add css and html advisor template to current view
             $('head').append('<link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
                 + "/resources/css/adviser" + '.css"/><link rel="stylesheet" type="text/css" href=" ' + this.jsHostLocation
-                + "/resources/css/font" + mobile + '.css"/>');
+                + "/resources/css/advisor" + mobile + '.css"/>');
             $.ajax({
                 url: this.jsHostLocation + "/templates/adviser" + ".html",
                 async: false
