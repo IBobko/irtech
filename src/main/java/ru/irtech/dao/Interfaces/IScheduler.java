@@ -5,6 +5,7 @@ import ru.irtech.dao.Utility.SchedulerNoDataYetException;
 import ru.irtech.dao.Utility.SchedulerTableNotFoundException;
 import ru.irtech.dao.Utility.SchedulerTableRequestSchema;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -25,12 +26,13 @@ public interface IScheduler {
      * <p>
      * This method is returning a set of requested earlier entities.
      *
-     * @param key -   data access key, a string that represents data access to one or the other set of data.
+     * @param key    -   data access key, a string that represents data access to one or the other set of data.
+     * @param schema -   data schema, an entity which represents sql query and the expecting result structure.
      * @return List of data entities according to the schema.
      * @throws SchedulerTableNotFoundException in case if the requested key is not presented in the database.
      * @throws SchedulerNoDataYetException     in case  data is not received yet.
      */
-    List<Object> getDataEntities(final String key) throws SchedulerTableNotFoundException, SchedulerNoDataYetException;
+    List<Object> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerTableNotFoundException, SchedulerNoDataYetException, ClassNotFoundException, SQLException;
 
     /**
      * Data request method.
@@ -39,7 +41,7 @@ public interface IScheduler {
      * @param schema -   data schema, an entity which represents sql query and the expecting result structure.
      * @throws SchedulerAlreadyRequestedException in case when key is presented but result is not done yet.
      */
-    void queueRequest(final String key, final SchedulerTableRequestSchema schema) throws SchedulerAlreadyRequestedException;
+    void queueRequest(final String key, final SchedulerTableRequestSchema schema) throws SchedulerAlreadyRequestedException, ClassNotFoundException, SQLException;
 
 
 }

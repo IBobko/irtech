@@ -34,6 +34,7 @@ abstract class BaseImporter {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
+                    //TODO TO CONFIGURATION
                     "jdbc:postgresql://188.130.155.86:5432/" + databaseName, "postgres", "yOklqXf4");
         } catch (SQLException e) {
             e.printStackTrace();

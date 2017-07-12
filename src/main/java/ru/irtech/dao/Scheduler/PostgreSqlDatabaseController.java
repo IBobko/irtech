@@ -2,6 +2,7 @@ package ru.irtech.dao.Scheduler;
 
 import java.sql.*;
 import java.util.Formatter;
+import java.util.List;
 
 /**
  * Created by Iggytoto on 24.06.2017.
@@ -9,6 +10,21 @@ import java.util.Formatter;
  * Class that represents entity that can operate database structure. Create, delete and query tables.
  */
 public class PostgreSqlDatabaseController {
+
+    /**
+     * Query string.
+     */
+    private final static String CHECK_TABLE_QUERY = "SELECT * FROM @TABLENAME LIMIT 1";
+
+    /**
+     * Tablename token to search and replace it.
+     */
+    private final static String TABLENAME_TOKEN = "@TABLENAME";
+
+    /**
+     * count query string.
+     */
+    private final static String CHECL_TABLE_ROWS = "SELECT COUNT(*) FROM @TABLENAME LIMIT 1";
 
     /**
      * Database server host.
@@ -138,14 +154,14 @@ public class PostgreSqlDatabaseController {
     /**
      * Runs the script and puts the result in given table by given columns and given names.
      *
-     * @param script       Script to execute.
-     * @param databaseName Database to insert the results.
-     * @param columnTypes  Resulting database column types.
-     * @param columnNames  Resulting database column names.
+     * @param script      Script to execute.
+     * @param tableName   Table to insert the results.
+     * @param columnTypes Resulting database column types.
+     * @param columnNames Resulting database column names.
      * @throws SQLException           In case if something happens inside database.
      * @throws ClassNotFoundException in case of postgresql jdbc driver not found.
      */
-    public void executeScriptAndDeliverResultsTo(final String script, final String databaseName, final PostgreSqlColumnType[] columnTypes, final String[] columnNames) throws SQLException, ClassNotFoundException {
+    public void executeScriptAndDeliverResultsTo(final String script, final String tableName, final PostgreSqlColumnType[] columnTypes, final String[] columnNames) throws SQLException, ClassNotFoundException {
         if (columnNames.length != columnTypes.length) {
             throw new IllegalArgumentException("Column names and types array should be equal range");
         }
@@ -167,7 +183,7 @@ public class PostgreSqlDatabaseController {
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.append("INSERT INTO " + databaseName + " (");
+            sb.append("INSERT INTO " + tableName + " (");
             for (int i = 0; i < columnNames.length; i++) {
                 sb.append("\"" + columnNames[i] + "\"");
                 if (i != values.length - 1) {
@@ -216,4 +232,46 @@ public class PostgreSqlDatabaseController {
         }
     }
 
+    /**
+     * Checks if table exists in database.
+     *
+     * @param tableName tablename to check.
+     * @return boolean answer.
+     * @throws ClassNotFoundException in case there is no pgsql driver.
+     */
+    public boolean isTableExists(final String tableName) throws ClassNotFoundException {
+        try {
+            executeScript(CHECK_TABLE_QUERY.replace(TABLENAME_TOKEN, tableName));
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Checks if table has data.
+     *
+     * @param tableName tablename to check.
+     * @return True or false. xD
+     * @throws SQLException           in case something bad happens.
+     * @throws ClassNotFoundException in case there is no pgsql driver.
+     */
+    public boolean tableHasData(final String tableName) throws SQLException, ClassNotFoundException {
+        Connection connection = getConnection();
+
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(CHECL_TABLE_ROWS.replace(TABLENAME_TOKEN, tableName));
+
+        rs.next();
+        int count = rs.getInt(1);
+
+        rs.close();
+        st.close();
+
+        if (count == 0) {
+            return false;
+        }
+        return true;
+    }
 }
