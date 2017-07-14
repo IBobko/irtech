@@ -64,6 +64,7 @@ public class WeatherServiceImpl implements WeatherService {
      * This format is used for getting history of weather.
      */
     private static final String HISTORY_DATE_FORMAT = "yyyyMMdd";
+    private final String WEATHER_CURRENT_MINUTE_KEY = "weather_current_minute";
     /**
      * Is used for forming the proper string for getting the date data.
      */
@@ -105,10 +106,10 @@ public class WeatherServiceImpl implements WeatherService {
      *
      * @param calendar Date for which we seek weather.
      * @param region   Region for which we seek weather with country code. For example "RU/Moscow".
-     * @throws Exception .
      * @return JSON formatted data or null if error occurred.
+     * @throws Exception .
      */
-    public String downloadHistoryForDay(final Calendar calendar, final String region) throws Exception {
+    private String downloadHistoryForDay(final Calendar calendar, final String region) throws Exception {
         if (calendar == null) {
             return null;
         }
@@ -116,15 +117,15 @@ public class WeatherServiceImpl implements WeatherService {
             return null;
         }
 
-        if (getRequestsMadePerDay() > MAX_REQUESTS_PER_DAY) {
-            throw new Exception("Извините, сегодня лимит исчерпан.");
-        }
-
-        if (getRequestsMadePerMinute() > MAX_REQUESTS_PER_MINUTE) {
-            setCurrentRunningMinute();
-            Thread.sleep(MILLISECONDS_FOR_SLEEPING);
-            return downloadHistoryForDay(calendar, region);
-        }
+//        if (getRequestsMadePerDay() > MAX_REQUESTS_PER_DAY) {
+//            throw new Exception("Извините, сегодня лимит исчерпан.");
+//        }
+//
+//        if (getRequestsMadePerMinute() > MAX_REQUESTS_PER_MINUTE) {
+//            setCurrentRunningMinute();
+//            Thread.sleep(MILLISECONDS_FOR_SLEEPING);
+//            return downloadHistoryForDay(calendar, region);
+//        }
 
         String historyString = "/history_" + getSimpleDateFormat().format(calendar.getTime());
         historyString += "/q/" + region + ".json";
@@ -133,6 +134,7 @@ public class WeatherServiceImpl implements WeatherService {
         final CloseableHttpResponse response = httpclient.execute(httppost);
         final StringWriter writer = new StringWriter();
         IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
+        setTimeOfLastRequest();
         return writer.toString();
     }
 
@@ -153,8 +155,8 @@ public class WeatherServiceImpl implements WeatherService {
      *
      * @param calendar Date.
      * @param region   Region.
-     * @throws Exception .
      * @return WeatherDomain or null.
+     * @throws Exception .
      */
     private WeatherDomain downloadAndSave(final Calendar calendar, final String region) throws Exception {
         String response = downloadHistoryForDay(calendar, region);
@@ -163,7 +165,6 @@ public class WeatherServiceImpl implements WeatherService {
         }
         return saveHistoryResponse(response, region);
     }
-
 
     /**
      * Saves history of weather to database.
@@ -305,28 +306,77 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     /**
-     * d.
+     * Returns time of last request.
      *
      * @return calendar.
      */
-    private Calendar getCurrentRunningMinute() {
+    private Calendar getTimeOfLastRequest() {
         try {
-            SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, "weather_current_minute");
-            Calendar calendar = new GregorianCalendar();
+            SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, WEATHER_CURRENT_MINUTE_KEY);
             if (currentMinute == null) {
-                currentMinute = new SettingsDomain();
-                currentMinute.setKey("weather_current_minute");
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                currentMinute.setValue(dateFormatForSettings.format(calendar.getTime()));
-                getEntityManager().persist(currentMinute);
+                return null;
             }
+            final Calendar calendar = new GregorianCalendar();
             calendar.setTime(dateFormatForSettings.parse(currentMinute.getValue()));
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
             return calendar;
         } catch (ParseException e) {
             return null;
+        }
+    }
+
+    /**
+     * Sets time of last request.
+     */
+    private void setTimeOfLastRequest() {
+        SettingsDomain currentMinute = getEntityManager().find(SettingsDomain.class, WEATHER_CURRENT_MINUTE_KEY);
+        if (currentMinute == null) {
+            currentMinute = new SettingsDomain();
+            currentMinute.setKey(WEATHER_CURRENT_MINUTE_KEY);
+        }
+        final Calendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        currentMinute.setValue(dateFormatForSettings.format(calendar.getTime()));
+        getEntityManager().persist(currentMinute);
+
+        updateMinute(calendar);
+        updateDay(calendar);
+
+    }
+
+    private void updateDay(final Calendar calendar) {
+        Calendar last = getTimeOfLastRequest();
+        calendar.set(Calendar.HOUR,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        last.set(Calendar.HOUR,0);
+        last.set(Calendar.MINUTE,0);
+        last.set(Calendar.MILLISECOND, 0);
+
+        if (last.compareTo(calendar) == 0) {
+            // Обновляем счетчик
+        } else {
+            // Сбрасываем счетчик
+        }
+    }
+
+    private void updateMinute(final Calendar calendar) {
+        Calendar last = getTimeOfLastRequest();
+        calendar.set(Calendar.HOUR,0);
+        calendar.set(Calendar.MINUTE,0);
+
+
+        last.set(Calendar.HOUR,0);
+        last.set(Calendar.MINUTE,0);
+
+
+        if (last.compareTo(calendar) == 0) {
+            // Обновляем счетчик
+        } else {
+            // Сбрасываем счетчик
         }
     }
 
@@ -390,6 +440,7 @@ public class WeatherServiceImpl implements WeatherService {
 
     /**
      * sss.
+     *
      * @return int.
      */
     private Integer getRequestsMadePerMinute() {
@@ -399,22 +450,6 @@ public class WeatherServiceImpl implements WeatherService {
             requestsPerDay.setKey("weather_per_minute");
             requestsPerDay.setValue("0");
             getEntityManager().persist(requestsPerDay);
-        }
-        Calendar currentTime = new GregorianCalendar();
-        currentTime.set(Calendar.HOUR, 0);
-        currentTime.set(Calendar.MINUTE, 0);
-        currentTime.set(Calendar.SECOND, 0);
-        currentTime.set(Calendar.MILLISECOND, 0);
-
-        Calendar lastRequestTime = getCurrentRunningMinute();
-        if (lastRequestTime != null) {
-            if (lastRequestTime.compareTo(currentTime) == 0) {
-                requestsPerDay.setValue("" + (Integer.parseInt(requestsPerDay.getValue()) + 1));
-                getEntityManager().persist(requestsPerDay);
-            } else {
-                requestsPerDay.setValue("0");
-                getEntityManager().persist(requestsPerDay);
-            }
         }
         return Integer.parseInt(requestsPerDay.getValue());
     }
@@ -432,24 +467,6 @@ public class WeatherServiceImpl implements WeatherService {
             requestsPerDay.setValue("0");
             getEntityManager().persist(requestsPerDay);
         }
-        Calendar currentTime = new GregorianCalendar();
-        currentTime.set(Calendar.HOUR, 0);
-        currentTime.set(Calendar.MINUTE, 0);
-        currentTime.set(Calendar.SECOND, 0);
-        currentTime.set(Calendar.MILLISECOND, 0);
-
-        Calendar lastRequestTime = getCurrentRunningMinute();
-        if (lastRequestTime != null) {
-            if (lastRequestTime.compareTo(currentTime) == 0) {
-                requestsPerDay.setValue("" + (Integer.parseInt(requestsPerDay.getValue()) + 1));
-                getEntityManager().persist(requestsPerDay);
-            } else {
-                requestsPerDay.setValue("0");
-                getEntityManager().persist(requestsPerDay);
-            }
-        }
         return Integer.parseInt(requestsPerDay.getValue());
     }
-
-
 }
