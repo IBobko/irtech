@@ -3,6 +3,7 @@ package ru.irtech.dao.Examples;
 import ru.irtech.dao.Interfaces.IScheduler;
 import ru.irtech.dao.Utility.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +29,13 @@ public class SchedulerUsageExample {
      * Main example method.
      * @return list of objects.
      */
-    public List<Object> getAnalysisData() {
+    public List<Object> getAnalysisData() throws SQLException, ClassNotFoundException {
         IScheduler scheduler = null; // here should be new ConcreteScheduler;
         List<Object> results = new ArrayList() {
         };
 
         try {
-            scheduler.getDataEntities(DATA_KEY);
+            scheduler.getDataEntities(DATA_KEY, SCHEMA);
         } catch (SchedulerTableNotFoundException e) {
             try {
                 scheduler.queueRequest(DATA_KEY, SCHEMA);
