@@ -1,6 +1,9 @@
 package ru.irtech.dao.Scheduler;
 
+import ru.irtech.dao.Utility.SchedulerType;
+
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class PostgreSqlDatabaseController {
      * @throws SQLException           If something is gone wrong during the connection.
      */
     private Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.postgresql.Driver");
+
         Connection connection = null;
         connection = DriverManager.getConnection(getConnectionString(), this.login, this.password);
         return connection;
@@ -145,6 +148,20 @@ public class PostgreSqlDatabaseController {
     private void executeScript(final String script) throws SQLException, ClassNotFoundException {
         Connection connection = getConnection();
 
+        Statement st = connection.createStatement();
+        st.execute(script);
+
+        st.close();
+    }
+
+    /**
+     * Executes script on given connection.
+     *
+     * @param script     script.
+     * @param connection connection.
+     * @throws SQLException if something bad happens.
+     */
+    private void executeScript(final String script, final Connection connection) throws SQLException {
         Statement st = connection.createStatement();
         st.execute(script);
 
@@ -273,5 +290,45 @@ public class PostgreSqlDatabaseController {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Method that executes script and returns rows as results
+     *
+     * @param script          sql script
+     * @param resultStructure result structure
+     * @return list of rows
+     * @throws SQLException           in case something bad happens.
+     * @throws ClassNotFoundException in case there is no pgsql driver.
+     */
+    public List<Object[]> executeScriptAndDeliverResults(final String script, final PostgreSqlColumnType[] resultStructure) throws SQLException, ClassNotFoundException {
+        Connection connection = getConnection();
+
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(script);
+
+        List<Object[]> rowsList = new ArrayList<>();
+
+        while (rs.next()) {
+            Object[] row = new Object[resultStructure.length];
+
+            for (int i = 0; i < resultStructure.length; i++) {
+                switch (resultStructure[i]) {
+                    case integer:
+                        row[i] = rs.getInt(i + 1);
+                        break;
+                    case doublePrecision:
+                        row[i] = rs.getDouble(i + 1);
+                        break;
+                    case string:
+                        row[i] = rs.getString(i + 1);
+                        break;
+                }
+            }
+
+            rowsList.add(row);
+
+        }
+        return rowsList;
     }
 }

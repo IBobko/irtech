@@ -1,7 +1,6 @@
 package ru.irtech.dao.Scheduler;
 
 import ru.irtech.dao.Utility.SchedulerTableRequestSchema;
-import ru.irtech.dao.Utility.SchedulerType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.SQLException;
@@ -9,7 +8,7 @@ import java.sql.SQLException;
 /**
  * Created by Iggytoto on 12.07.2017.
  */
-public class ScheduledTask extends Thread {
+public class ScheduledTask implements Runnable {
 
     /**
      * Table name to fill.
@@ -73,7 +72,7 @@ public class ScheduledTask extends Thread {
                 }
             }
 
-            controller.createTable(key, cTypes, cNames);
+            controller.createTable(schema.getKey(), cTypes, cNames);
 
             controller.executeScriptAndDeliverResultsTo(schema.getSqlQuery(), schema.getKey(), cTypes, cNames);
 

@@ -13,27 +13,27 @@ public abstract class PostgreSqlDataBaseControllerTest {
     /**
      * Test host.
      */
-    protected final static String HOST_ADDRESS = "188.130.155.86";
+    public final static String HOST_ADDRESS = "188.130.155.86";
 
     /**
      * Test port.
      */
-    protected final static String HOST_PORT = "5432";
+    public final static String HOST_PORT = "5432";
 
     /**
      * Test db name.
      */
-    protected final static String DATABASE_NAME = "Test_database";
+    public final static String DATABASE_NAME = "Test_database";
 
     /**
      * Test login.
      */
-    protected final static String LOGIN = "postgres";
+    public final static String LOGIN = "postgres";
 
     /**
      * Test pass.
      */
-    protected final static String PASSWORD = "yOklqXf4";
+    public final static String PASSWORD = "yOklqXf4";
 
     /**
      * Test set of columnTypes.

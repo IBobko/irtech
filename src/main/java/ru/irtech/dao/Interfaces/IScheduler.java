@@ -32,7 +32,7 @@ public interface IScheduler {
      * @throws SchedulerTableNotFoundException in case if the requested key is not presented in the database.
      * @throws SchedulerNoDataYetException     in case  data is not received yet.
      */
-    List<Object> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerTableNotFoundException, SchedulerNoDataYetException, ClassNotFoundException, SQLException;
+    List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerTableNotFoundException, SchedulerNoDataYetException, ClassNotFoundException, SQLException;
 
     /**
      * Data request method.

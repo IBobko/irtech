@@ -2,6 +2,9 @@ package ru.irtech.dao.Scheduler;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ru.CryptoPro.Install.n;
+
+import java.util.List;
 
 /**
  * Created by Iggytoto on 26.06.2017.
@@ -63,4 +66,19 @@ public class PostgreSqlDataBaseControllerPositiveTest extends PostgreSqlDataBase
         }
         Assert.assertTrue(true);
     }
+
+    @Test
+    public void runQueryWithResults2() {
+        PostgreSqlDatabaseController dbController = new PostgreSqlDatabaseController(HOST_ADDRESS, HOST_PORT, DATABASE_NAME, LOGIN, PASSWORD);
+
+        try {
+            // we suppose that there not empty table test_table
+            List<Object[]> result = dbController.executeScriptAndDeliverResults("Select testint,teststr from test_data_table",
+                    new PostgreSqlColumnType[]{PostgreSqlColumnType.integer, PostgreSqlColumnType.string});
+            Assert.assertTrue(result.size() == 4);
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
 }
