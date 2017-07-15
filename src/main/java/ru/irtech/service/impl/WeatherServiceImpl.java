@@ -64,7 +64,10 @@ public class WeatherServiceImpl implements WeatherService {
      * This format is used for getting history of weather.
      */
     private static final String HISTORY_DATE_FORMAT = "yyyyMMdd";
-    private final String WEATHER_CURRENT_MINUTE_KEY = "weather_current_minute";
+    /**
+     * .
+     */
+    private static final String WEATHER_CURRENT_MINUTE_KEY = "weather_current_minute";
     /**
      * Is used for forming the proper string for getting the date data.
      */
@@ -346,38 +349,46 @@ public class WeatherServiceImpl implements WeatherService {
 
     }
 
+    /**
+     * .
+     * @param calendar .
+     */
     private void updateDay(final Calendar calendar) {
         Calendar last = getTimeOfLastRequest();
-        calendar.set(Calendar.HOUR,0);
-        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        last.set(Calendar.HOUR,0);
-        last.set(Calendar.MINUTE,0);
+        last.set(Calendar.HOUR, 0);
+        last.set(Calendar.MINUTE, 0);
         last.set(Calendar.MILLISECOND, 0);
 
-        if (last.compareTo(calendar) == 0) {
-            // Обновляем счетчик
-        } else {
-            // Сбрасываем счетчик
-        }
+//        if (last.compareTo(calendar) == 0) {
+//            // Обновляем счетчик
+//        } else {
+//            // Сбрасываем счетчик
+//        }
     }
 
+    /**
+     * .
+     * @param calendar .
+     */
     private void updateMinute(final Calendar calendar) {
         Calendar last = getTimeOfLastRequest();
-        calendar.set(Calendar.HOUR,0);
-        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
 
 
-        last.set(Calendar.HOUR,0);
-        last.set(Calendar.MINUTE,0);
+        last.set(Calendar.HOUR, 0);
+        last.set(Calendar.MINUTE, 0);
 
 
-        if (last.compareTo(calendar) == 0) {
-            // Обновляем счетчик
-        } else {
-            // Сбрасываем счетчик
-        }
+//        if (last.compareTo(calendar) == 0) {
+//            // Обновляем счетчик
+//        } else {
+//            // Сбрасываем счетчик
+//        }
     }
 
     /**
