@@ -1,7 +1,6 @@
 package ru.irtech.controller;
 
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +19,7 @@ import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -103,6 +103,29 @@ import java.util.*;
 @RequestMapping("/weather")
 public class WeatherController {
     /**
+     * Allowed requests per minute.
+     */
+    private static final Integer REQUESTS_PER_MINUTE = 10;
+
+    /**
+     * One day.
+     */
+    private static final Integer MILLISECONDS_IN_ONE_DAY = 1000 * 60 * 60 * 24;
+
+    /**
+     * 1 second.
+     */
+    private static final Integer SLEEP_TIME = 1000;
+    /**
+     * Allowed requests per day.
+     */
+    private static final Integer REQUESTS_PER_DAY = 600;
+    /**
+     * Object for working with db.
+     */
+    @PersistenceContext
+    private EntityManager entityManager;
+    /**
      * Service for working with weather.
      */
     private WeatherService weatherService;
@@ -116,25 +139,32 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
-    @PersistenceContext
-    EntityManager entityManager;
     /**
      * Index method.
      *
+     * @param model stores attributes of page.
      * @return response.
      */
-    @RequestMapping(value="", method = RequestMethod.GET)
-    public String index(Model model)
-    {
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String index(final Model model) {
         if (!model.containsAttribute("filterForm")) {
             model.addAttribute("filterForm", new WeatherForm());
         }
         return "weather/index";
     }
 
-    @RequestMapping(value = "",method = RequestMethod.POST)
+    /**
+     * Performs post request about weather.
+     *
+     * @param response      response.
+     * @param filterForm    form.
+     * @param bindingResult validator.
+     * @param model         stores attributes of page.
+     * @throws IOException in some cases:)
+     */
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public void index_post(final HttpServletResponse response, final HttpServletRequest request, @Validated final WeatherForm filterForm, final BindingResult bindingResult, final Model model) throws IOException {
+    public void indexPost(final HttpServletResponse response, @Validated final WeatherForm filterForm, final BindingResult bindingResult, final Model model) throws IOException {
         if (!bindingResult.hasErrors()) {
             final Calendar fromCalendar = new GregorianCalendar();
             fromCalendar.setTimeInMillis(0);
@@ -157,16 +187,16 @@ public class WeatherController {
                 response.getWriter().println(fromCalendar.toString() + "<br/>");
                 WeatherDomain wetherDomain;
                 try {
-                    if (counter1 >= 10) {
-                        Thread.sleep(1000);
+                    if (counter1 >= REQUESTS_PER_MINUTE) {
+                        Thread.sleep(SLEEP_TIME);
                         counter1 = 0;
                     }
-                    if (counter2 == 599) {
+                    if (counter2 >= REQUESTS_PER_DAY) {
                         return;
                     }
                     wetherDomain = getWeatherService().getWeatherByDateAndRegion(fromCalendar, filterForm.getRegion());
                     weatherDomainSet.add(wetherDomain);
-                    fromCalendar.setTimeInMillis(fromCalendar.getTimeInMillis() + (1000 * 60 * 60 * 24));
+                    fromCalendar.setTimeInMillis(fromCalendar.getTimeInMillis() + (MILLISECONDS_IN_ONE_DAY));
                     counter1++;
                     counter2++;
                 } catch (Exception e) {
@@ -178,52 +208,63 @@ public class WeatherController {
         }
     }
 
-    @RequestMapping("/stat")
-    @ResponseBody
-    public List stat() {
-        Query query = entityManager.createNativeQuery("\n" +
-                "    SELECT wds.*,iar.* FROM weather w\n" +
-                "    JOIN weather_daily_summary wds ON w.id = wds.id\n" +
-                "    JOIN irtech_avg_results iar ON CAST(iar.donedate as DATE) = CAST (w.date AS DATE)\n" +
-                "    WHERE city = 'RU/Temryuk'");
 
-        return query.getResultList();
-
-    }
+    /**
+     * Page with weather chart.
+     *
+     * @param model Stores attributes.
+     * @param request request.
+     * @return Template name.
+     */
     @RequestMapping("/chart")
-    public String weather_chart() {
+    public String chart(final Model model, final HttpServletRequest request) {
+        final Query query = entityManager.createNativeQuery("\n"
+                + "    SELECT schoolid FROM irtech_avg_results w\n"
+                + "    GROUP BY schoolid");
+
+        final List<Integer> results = query.getResultList();
+        List<String> sc = new ArrayList<>();
+        for (final Integer o: results) {
+            sc.add(o.toString());
+        }
+        model.addAttribute("schools", sc);
+
+        String p1 = request.getParameter("school");
+        model.addAttribute("school", p1);
+
         return "weather/chart";
     }
-    @RequestMapping("/data.tsv")
+
+    /**
+     * The method generates data for chart.
+     * @param request .
+     * @return The data for chart.
+     */
+    @SuppressWarnings("unchecked")
     @ResponseBody
-    public String a() {
-        return "letter\tfrequency\n" +
-                "A\t.08167\n" +
-                "B\t.01492\n" +
-                "C\t.02780\n" +
-                "D\t.04253\n" +
-                "E\t.12702\n" +
-                "F\t.02288\n" +
-                "G\t.02022\n" +
-                "H\t.06094\n" +
-                "I\t.06973\n" +
-                "J\t.00153\n" +
-                "K\t.00747\n" +
-                "L\t.04025\n" +
-                "M\t.02517\n" +
-                "N\t.06749\n" +
-                "O\t.07507\n" +
-                "P\t.01929\n" +
-                "Q\t.00098\n" +
-                "R\t.05987\n" +
-                "S\t.06333\n" +
-                "T\t.09056\n" +
-                "U\t.02758\n" +
-                "V\t.01037\n" +
-                "W\t.02465\n" +
-                "X\t.00150\n" +
-                "Y\t.01971\n" +
-                "Z\t.00074";
+    @RequestMapping("/data.tsv")
+    public String data(final HttpServletRequest request) {
+        String p1 = request.getParameter("school");
+
+        String school = "";
+        if (p1 != null || !p1.equals("null")) {
+            school = " AND iar.schoolid = " + p1;
+        }
+
+
+        final Query query = entityManager.createNativeQuery("\n"
+                + "    SELECT AVG(iar.avg_result),meantempm FROM weather w\n"
+                + "    JOIN weather_daily_summary wds ON w.id = wds.id\n"
+                + "    JOIN irtech_avg_results iar ON CAST(iar.donedate AS DATE) = CAST (w.date AS DATE)\n"
+                + "    WHERE city = 'RU/Temryuk' " + school + " GROUP BY meantempm ORDER BY meantempm");
+
+        final List<Object[]> results = query.getResultList();
+        StringBuilder r = new StringBuilder("letter\tfrequency\n");
+        for (Object[] u : results) {
+            final BigDecimal grade = (BigDecimal) u[0];
+            r.append(u[1].toString()).append("\t").append(grade.setScale(0, BigDecimal.ROUND_HALF_UP)).append("\n");
+        }
+        return r.toString();
     }
 
 
