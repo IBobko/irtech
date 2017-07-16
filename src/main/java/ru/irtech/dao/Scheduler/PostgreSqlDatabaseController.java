@@ -1,7 +1,5 @@
 package ru.irtech.dao.Scheduler;
 
-import ru.irtech.dao.Utility.SchedulerType;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -17,17 +15,17 @@ public class PostgreSqlDatabaseController {
     /**
      * Query string.
      */
-    private final static String CHECK_TABLE_QUERY = "SELECT * FROM @TABLENAME LIMIT 1";
+    private static final String CHECK_TABLE_QUERY = "SELECT * FROM @TABLENAME LIMIT 1";
 
     /**
      * Tablename token to search and replace it.
      */
-    private final static String TABLENAME_TOKEN = "@TABLENAME";
+    private static final String TABLENAME_TOKEN = "@TABLENAME";
 
     /**
      * count query string.
      */
-    private final static String CHECL_TABLE_ROWS = "SELECT COUNT(*) FROM @TABLENAME LIMIT 1";
+    private static final String CHECL_TABLE_ROWS = "SELECT COUNT(*) FROM @TABLENAME LIMIT 1";
 
     /**
      * Database server host.
@@ -177,8 +175,9 @@ public class PostgreSqlDatabaseController {
      * @param columnNames Resulting database column names.
      * @throws SQLException           In case if something happens inside database.
      * @throws ClassNotFoundException in case of postgresql jdbc driver not found.
+     * @throws Exception              in some other ways.
      */
-    public void executeScriptAndDeliverResultsTo(final String script, final String tableName, final PostgreSqlColumnType[] columnTypes, final String[] columnNames) throws SQLException, ClassNotFoundException {
+    public void executeScriptAndDeliverResultsTo(final String script, final String tableName, final PostgreSqlColumnType[] columnTypes, final String[] columnNames) throws Exception {
         if (columnNames.length != columnTypes.length) {
             throw new IllegalArgumentException("Column names and types array should be equal range");
         }
@@ -196,6 +195,8 @@ public class PostgreSqlDatabaseController {
                         values[i] = rs.getDouble(i + 1);
                     case string:
                         values[i] = rs.getString(i + 1);
+                    default:
+                        throw new Exception("Not implemented yet.");
                 }
             }
 
@@ -293,15 +294,16 @@ public class PostgreSqlDatabaseController {
     }
 
     /**
-     * Method that executes script and returns rows as results
+     * Method that executes script and returns rows as results.
      *
      * @param script          sql script
      * @param resultStructure result structure
      * @return list of rows
      * @throws SQLException           in case something bad happens.
      * @throws ClassNotFoundException in case there is no pgsql driver.
+     * @throws Exception              in some other ways.
      */
-    public List<Object[]> executeScriptAndDeliverResults(final String script, final PostgreSqlColumnType[] resultStructure) throws SQLException, ClassNotFoundException {
+    public List<Object[]> executeScriptAndDeliverResults(final String script, final PostgreSqlColumnType[] resultStructure) throws Exception {
         Connection connection = getConnection();
 
         Statement st = connection.createStatement();
@@ -323,6 +325,8 @@ public class PostgreSqlDatabaseController {
                     case string:
                         row[i] = rs.getString(i + 1);
                         break;
+                    default:
+                        throw new Exception("Not Implemented yet.");
                 }
             }
 

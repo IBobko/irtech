@@ -31,8 +31,10 @@ public interface IScheduler {
      * @return List of data entities according to the schema.
      * @throws SchedulerTableNotFoundException in case if the requested key is not presented in the database.
      * @throws SchedulerNoDataYetException     in case  data is not received yet.
+     * @throws ClassNotFoundException          driver not found.
+     * @throws Exception                       something bad happened.
      */
-    List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerTableNotFoundException, SchedulerNoDataYetException, ClassNotFoundException, SQLException;
+    List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerNoDataYetException, SchedulerTableNotFoundException, Exception;
 
     /**
      * Data request method.
@@ -40,6 +42,9 @@ public interface IScheduler {
      * @param key    -   data access key.
      * @param schema -   data schema, an entity which represents sql query and the expecting result structure.
      * @throws SchedulerAlreadyRequestedException in case when key is presented but result is not done yet.
+     * @throws ClassNotFoundException             driver not found.
+     * @throws SQLException                       something bad happened.
+     * @throws Exception                          something bad happened.
      */
     void queueRequest(final String key, final SchedulerTableRequestSchema schema) throws SchedulerAlreadyRequestedException, ClassNotFoundException, SQLException;
 

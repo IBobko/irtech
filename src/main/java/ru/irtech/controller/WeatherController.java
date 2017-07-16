@@ -1,7 +1,6 @@
 package ru.irtech.controller;
 
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -111,28 +110,37 @@ public class WeatherController {
         return weatherService;
     }
 
+    /**
+     * Weather service.
+     *
+     * @param weatherService Injected realization.
+     */
     @Autowired
     public void setWeatherService(final WeatherService weatherService) {
         this.weatherService = weatherService;
     }
 
+
+    /**
+     * Entity manager.
+     */
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
+
     /**
      * Index method.
      *
      * @return response.
      */
-    @RequestMapping(value="", method = RequestMethod.GET)
-    public String index(Model model)
-    {
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String index(Model model) {
         if (!model.containsAttribute("filterForm")) {
             model.addAttribute("filterForm", new WeatherForm());
         }
         return "weather/index";
     }
 
-    @RequestMapping(value = "",method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public void index_post(final HttpServletResponse response, final HttpServletRequest request, @Validated final WeatherForm filterForm, final BindingResult bindingResult, final Model model) throws IOException {
         if (!bindingResult.hasErrors()) {
@@ -190,10 +198,12 @@ public class WeatherController {
         return query.getResultList();
 
     }
+
     @RequestMapping("/chart")
     public String weather_chart() {
         return "weather/chart";
     }
+
     @RequestMapping("/data.tsv")
     @ResponseBody
     public String a() {
