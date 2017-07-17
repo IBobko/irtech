@@ -17,11 +17,6 @@ import javax.persistence.PersistenceContext;
 public class AdviceRestController {
 
     /**
-     * Path to database dump.
-     */
-    private static final String PATH_TO_DUMP = "/home/igor/irtech/asdsa";
-
-    /**
      * This is used for database manipulations.
      */
     @PersistenceContext
