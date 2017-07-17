@@ -1,7 +1,6 @@
 package ru.irtech.dao.Scheduler;
 
 import ru.irtech.dao.Utility.SchedulerTableRequestSchema;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.SQLException;
 
@@ -28,18 +27,18 @@ public class ScheduledTask implements Runnable {
     /**
      * C-tor.
      *
-     * @param key
-     * @param schema
-     * @param controller
+     * @param key        table key.
+     * @param schema     table schema.
+     * @param controller db controller.
      */
-    public ScheduledTask(final String key, final SchedulerTableRequestSchema schema, PostgreSqlDatabaseController controller) {
+    public ScheduledTask(final String key, final SchedulerTableRequestSchema schema, final PostgreSqlDatabaseController controller) {
         this.key = key;
         this.schema = schema;
         this.controller = controller;
     }
 
     /**
-     * Main runnner.
+     * Main runner.
      */
     @Override
     public void run() {
@@ -67,14 +66,19 @@ public class ScheduledTask implements Runnable {
                         cNames[i] = PostgreSqlColumnType.string.toString();
                         break;
                     case DATE:
-                        new NotImplementedException().printStackTrace();
+                    default:
+                        new Exception("Not implemented yet.").printStackTrace();
                         return;
                 }
             }
 
             controller.createTable(schema.getKey(), cTypes, cNames);
 
-            controller.executeScriptAndDeliverResultsTo(schema.getSqlQuery(), schema.getKey(), cTypes, cNames);
+            try {
+                controller.executeScriptAndDeliverResultsTo(schema.getSqlQuery(), schema.getKey(), cTypes, cNames);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

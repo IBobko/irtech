@@ -23,7 +23,7 @@ public class SchedulerTest {
     private final static String TEST_QUERY = "SELECT testint,teststr FROM test_data_table";
 
     @Test
-    public void SchedulerPositiveTest() throws InterruptedException {
+    public void SchedulerPositiveTest() throws Exception {
 
         PostgreSqlDatabaseController controller = getTestController();
 

@@ -134,6 +134,11 @@ public class WeatherController {
         return weatherService;
     }
 
+    /**
+     * Weather service.
+     *
+     * @param weatherService Injected realization.
+     */
     @Autowired
     public void setWeatherService(final WeatherService weatherService) {
         this.weatherService = weatherService;

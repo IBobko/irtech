@@ -1,9 +1,7 @@
 package ru.irtech.dao.Scheduler;
 
-import ru.irtech.dao.AnalysisDataAcess.DataBaseList;
 import ru.irtech.dao.Interfaces.IScheduler;
 import ru.irtech.dao.Utility.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -13,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Iggytoto on 24.06.2017.
  */
-public class PostgreSqlScheduler implements IScheduler {
+public final class PostgreSqlScheduler implements IScheduler {
 
     /**
      * scheduler instances.
@@ -24,25 +22,25 @@ public class PostgreSqlScheduler implements IScheduler {
      * TODO transfer to config
      * Db host.
      */
-    private final static String HOST_ADDRESS = "188.130.155.86";
+    private static final String HOST_ADDRESS = "188.130.155.86";
 
     /**
      * TODO transfer to config
      * Db port.
      */
-    private final static String HOST_PORT = "5432";
+    private static final String HOST_PORT = "5432";
 
     /**
      * TODO transfer to config
      * Db login.
      */
-    private final static String LOGIN = "postgres";
+    private static final String LOGIN = "postgres";
 
     /**
      * TODO transfer to config
      * Db pass.
      */
-    private final static String PASSWORD = "yOklqXf4";
+    private static final String PASSWORD = "yOklqXf4";
 
     /**
      * Sql db controller.
@@ -50,25 +48,28 @@ public class PostgreSqlScheduler implements IScheduler {
     private final PostgreSqlDatabaseController dbController;
 
     /**
-     * Synchronization object
+     * Synchronization object.
      */
-    private static final Object locker = new Object();
+    private static final Object LOCKER = new Object();
 
     /**
-     * Private constructor - Singleton requirement
+     * Private constructor - Singleton requirement.
+     *
+     * @param controller - db controller.
      */
-    private PostgreSqlScheduler(PostgreSqlDatabaseController controller) {
+    private PostgreSqlScheduler(final PostgreSqlDatabaseController controller) {
         dbController = controller;
     }
 
     /**
      * Singleton implementation.
      *
+     * @param controller db controller.
      * @return PostgreSqlScheduler instance.
      */
-    public static PostgreSqlScheduler getInstance(PostgreSqlDatabaseController controller) {
+    public static PostgreSqlScheduler getInstance(final PostgreSqlDatabaseController controller) {
 
-        synchronized (locker) {
+        synchronized (LOCKER) {
             //double check that
             if (map.getOrDefault(controller, null) == null) {
                 map.put(controller, new PostgreSqlScheduler(controller));
@@ -79,7 +80,7 @@ public class PostgreSqlScheduler implements IScheduler {
     }
 
     @Override
-    public List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerTableNotFoundException, SchedulerNoDataYetException, ClassNotFoundException, SQLException {
+    public List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws Exception {
         if (dbController.isTableExists(key)) {
             if (dbController.tableHasData(key)) {
                 return dbController.executeScriptAndDeliverResults(schema.getSqlQuery(), convertStructure(schema.getResultStructure()));
@@ -103,9 +104,11 @@ public class PostgreSqlScheduler implements IScheduler {
     /**
      * Creating the table columns structure.
      *
-     * @return
+     * @param types schedulertypes.
+     * @return columntypes.
+     * @throws Exception in some ways.
      */
-    private PostgreSqlColumnType[] convertStructure(final SchedulerType[] types) {
+    private PostgreSqlColumnType[] convertStructure(final SchedulerType[] types) throws Exception {
         PostgreSqlColumnType[] result = new PostgreSqlColumnType[types.length];
 
         for (int i = 0; i < types.length; i++) {
@@ -120,7 +123,8 @@ public class PostgreSqlScheduler implements IScheduler {
                     result[i] = PostgreSqlColumnType.string;
                     break;
                 case DATE:
-                    throw new NotImplementedException();
+                default:
+                    throw new Exception("Not implemented yet");
             }
         }
         return result;
@@ -129,10 +133,11 @@ public class PostgreSqlScheduler implements IScheduler {
     /**
      * Converts structure to naming.
      *
-     * @param types types
+     * @param types types.
      * @return string array.
+     * @throws Exception in some ways.
      */
-    private String[] convertStructureToNames(final SchedulerType[] types) {
+    private String[] convertStructureToNames(final SchedulerType[] types) throws Exception {
         String[] result = new String[types.length];
 
         for (int i = 0; i < types.length; i++) {
@@ -147,7 +152,9 @@ public class PostgreSqlScheduler implements IScheduler {
                     result[i] = "str";
                     break;
                 case DATE:
-                    throw new NotImplementedException();
+                default:
+                    throw new Exception("Not implemented yet");
+
             }
         }
         return result;
