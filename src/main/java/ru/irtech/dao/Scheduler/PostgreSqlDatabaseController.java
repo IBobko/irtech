@@ -191,10 +191,13 @@ public class PostgreSqlDatabaseController {
                 switch (columnTypes[i]) {
                     case integer:
                         values[i] = rs.getInt(i + 1);
+                        break;
                     case doublePrecision:
                         values[i] = rs.getDouble(i + 1);
+                        break;
                     case string:
                         values[i] = rs.getString(i + 1);
+                        break;
                     default:
                         throw new Exception("Not implemented yet.");
                 }
