@@ -43,7 +43,7 @@ public class CorrelationDataController {
 
         try {
             ICsvImporter importer = new StudentsTermsYearlyMarks();
-//            importer.importData(file, DataBaseList.getDataBases().get(0));
+            importer.importData(file, DataBaseList.getDataBases().get(0));
 
             if (file.getTotalSpace() == 0) {
                 return new ControllerResponse("No data"); // FOR TEST COMMENT THIS LINE
