@@ -51,7 +51,7 @@ public class PostgreSqlDataBaseControllerPositiveTest extends PostgreSqlDataBase
 
     /**
      * Positive querying table testing.
-     
+
     public void runQueryWithResults() {
         PostgreSqlDatabaseController dbController = new PostgreSqlDatabaseController(HOST_ADDRESS, HOST_PORT, DATABASE_NAME, LOGIN, PASSWORD);
 
