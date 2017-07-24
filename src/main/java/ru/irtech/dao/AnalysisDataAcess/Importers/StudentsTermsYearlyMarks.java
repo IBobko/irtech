@@ -28,7 +28,6 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
     @Override
     public String importData(final File file, final String databaseName) {
         try {
-
             Connection connection = getConnection(databaseName);
 
             AbstractMap<Integer, List<Double>> studentPeriodGradeMap;

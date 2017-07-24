@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <style>
@@ -30,37 +30,59 @@
     <!-- page css-->
     <link rel="stylesheet" href="/resources/css/chart/chart.css"/>
 </head>
-<body>
+<body style="padding:50px">
 
-<form action="/weather/chart" method="GET">
-    Выберите школу
-    <select name="school">
-        <option th:each="i : ${schools}">
-            <p th:text="${ i }"></p>
-        </option>
-    </select>
+<form action="/weather/chart" method="POST " modelAttribute="filterForm">
 
-    <div class="form-group">
-        <label for="dtp_to">C </label>
-        <div style="width:200px" class='input-group date' id='datetimepicker_from'>
-            <input type='text' name="dtp_from" class="form-control" id="dtp_from"/>
-            <span class="input-group-addon">
+    <style>
+        #filter {
+            display: flex;
+        }
+        #filter div {
+            margin: 10px 10px 10px 0;
+        }
+    </style>
+
+    <div id="filter">
+        <div>
+            <label for="city">Выберите город </label>
+            <select class="form-control" name="city" id="city">
+                <option th:each="i : ${cities}">
+                    <p th:value="${ i.key }" th:text="${ i.value }"></p>
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="school">Выберите школу </label>
+            <select class="form-control" name="school" id="school">
+                <option th:value="0">не выбран</option>
+                <option th:each="i : ${schools}">
+                    <p th:text="${ i }"></p>
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dtpTo">C </label>
+            <div style="margin:0px; width:200px" class='input-group date' id='datetimepicker_from'>
+                <input type='text' name="dtpFrom" value="01/01/2015" class="form-control"/>
+                <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="dtpTo">По </label>
+            <div style="margin:0px; width:200px" class='input-group date' id='datetimepicker_to'>
+                <input name="dtpTo" type='text' value="01/01/2016" class="form-control"/>
+                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+            </div>
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="dtp_to">По </label>
-        <div style="width:200px" class='input-group date' id='datetimepicker_to'>
-            <input name="dtp_to" type='text' class="form-control" id="dtp_to"/>
-            <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-        </div>
-    </div>
-
-    <input type="submit" value="Показать"/>
+    <input type="submit" value="Показать" class="btn btn-default"/>
 </form>
 
 <svg width="960" height="500"></svg>
@@ -78,7 +100,10 @@
     var g = svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.tsv("/weather/data.tsv?school=[[${school}]]&dtp_from=[[${dtp_from}]]&dtp_to=[[${dtp_to}]]" + "[[${school}]]", function (d) {
+    var url = "/weather/data.tsv?school=" + [[${school}]] + "&dtpFrom=" + [[${dtpFrom}]] + "&dtpTo=" + [[${dtpTo}]];
+
+
+    d3.tsv(url, function (d) {
         d.frequency = +d.frequency;
         return d;
     }, function (error, data) {
