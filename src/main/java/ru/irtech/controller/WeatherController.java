@@ -237,7 +237,7 @@ public class WeatherController {
         }
 
         HashMap<Integer, String> cities = new HashMap<>();
-        cities.put(1626,"Темрюк");
+        cities.put(1626, "Темрюк");
 
         model.addAttribute("cities", cities);
         model.addAttribute("schools", sc);

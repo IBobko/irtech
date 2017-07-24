@@ -28,15 +28,11 @@ public class ChartForWeatherForm {
      */
     private Integer city = 1626;
 
-    public ChartForWeatherForm() {
-
-    }
-
     public Integer getCity() {
         return city;
     }
 
-    public void setCity(Integer city) {
+    public void setCity(final Integer city) {
         this.city = city;
     }
 
