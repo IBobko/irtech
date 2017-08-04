@@ -267,7 +267,7 @@ public class WeatherController {
             school = " AND iar.schoolid = " + form.getSchool();
         }
         String city = "";
-        if (form.getCity() != null && !form.getSchool().equals(0)) {
+        if (form.getCity() != null && !form.getCity().equals(0)) {
             school = " AND iar.cityid = " + form.getCity();
         }
 

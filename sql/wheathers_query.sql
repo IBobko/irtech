@@ -36,3 +36,4 @@ insert into irtech_avg_results
   where S.cityid = 1626
   GROUP BY (R.donedate)::date, S.SCHOOLID
   ORDER BY (R.donedate)::date ASC;
+

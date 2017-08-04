@@ -48,7 +48,7 @@
             <label for="city">Выберите город </label>
             <select class="form-control" name="city" id="city">
                 <option th:each="i : ${cities}">
-                    <p th:value="${ i.key }" th:text="${ i.value }"></p>
+                    <p th:value="${ i.key }" th:text="${ i.key }"></p>
                 </option>
             </select>
         </div>
