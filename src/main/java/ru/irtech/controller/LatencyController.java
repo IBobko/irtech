@@ -58,10 +58,13 @@ public class LatencyController {
                 "\n" +
                 "GROUP BY name,sb.SCHOOLID,s.schoolnumber ORDER BY AVG(latency) DESC");
         final List<Object[]> results = query.getResultList();
-        final List<String> sc = new ArrayList<>();
+
+        StringBuilder stringBuilder = new StringBuilder();
         for (final Object[] o: results) {
-            sc.add(o.toString());
+            if (o[0]!=null)
+            stringBuilder.append(o[1].toString() + ",0,0,0,0" + o[0].toString() + "," + o[0].toString() + "\n");
+
         }
-        return results;
+        return stringBuilder.toString();
     }
 }
