@@ -62,7 +62,7 @@ public class LatencyController {
         StringBuilder stringBuilder = new StringBuilder();
         for (final Object[] o: results) {
             if (o[0]!=null)
-            stringBuilder.append(o[1].toString() + ",0,0,0,0" + o[0].toString() + "," + o[0].toString() + "\n");
+            stringBuilder.append(o[1].toString() + ",0,0,0,0," + (int)Double.parseDouble(o[0].toString()) + "," + (int)Double.parseDouble(o[0].toString()) + "\n");
 
         }
         return stringBuilder.toString();
