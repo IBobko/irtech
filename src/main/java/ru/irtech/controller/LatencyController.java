@@ -38,7 +38,7 @@ public class LatencyController {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @RequestMapping("/raw_data.csv")
+    @RequestMapping(value = "/raw_data.csv", produces = "text/plain")
     @ResponseBody
     public String row_data() {
 //        String ss = "Question,1,2,3,4,5,N\n" +
@@ -63,12 +63,11 @@ public class LatencyController {
                 "\n" +
                 "GROUP BY name,sb.SCHOOLID,s.schoolnumber ORDER BY AVG(latency) DESC");
         final List<Object[]> results = query.getResultList();
-
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Question,1,2,3,4,5,N\n");
         for (final Object[] o: results) {
             if (o[0]!=null)
-            stringBuilder.append(o[1].toString() + ",0,0,0,0," + (int)Double.parseDouble(o[0].toString()) + "," + (int)Double.parseDouble(o[0].toString()) + "\n");
-
+            stringBuilder.append(o[1].toString()).append(",0,0,0,0").append((int) Double.parseDouble(o[0].toString()) + "," + (int) Double.parseDouble(o[0].toString())).append("\n");
         }
         return stringBuilder.toString();
     }
