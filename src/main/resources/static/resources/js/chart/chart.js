@@ -25,6 +25,7 @@ function switch_chart(type) {
         $('#corr').removeClass('active');
         $('#learn').removeClass('active');
         $('#attendanceResults').removeClass('active');
+        $('#latencyResults').removeClass('active');
         $('#header').empty();
         $('#header').append("Проф ориентация");
         bubble_chart("Тестовый график");
@@ -33,6 +34,7 @@ function switch_chart(type) {
         $('#corr').addClass('active');
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
+        $('#latencyResults').removeClass('active');
         $('#attendanceResults').removeClass('active');
         $('#header').empty();
         $('#header').append("");
@@ -42,6 +44,7 @@ function switch_chart(type) {
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
         $('#learn').addClass('active');
+        $('#latencyResults').removeClass('active');
         $('#attendanceResults').removeClass('active');
         $('#header').empty();
         $('#header').append("Обучение");
@@ -51,10 +54,14 @@ function switch_chart(type) {
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
+        $('#latencyResults').removeClass('active');
         $('#attendanceResults').addClass('active');
         $('#header').empty();
         $('#header').append("");
         single_bar_chart('Количество пропусков', attendanceCorrelation, 'Зависимость оценок от количества пропусков');
+    }
+    else if (type == '#latencyResults') {
+        window.open("/latency","_self");
     }
 }
 
