@@ -1,5 +1,10 @@
 var fullFamilyTerms = 0;
 var fullFamilyYearly = 0;
+//attendance
+var attendanceCorrelation = 0
+var attBest = 0;
+var attGood = 0;
+var attAver = 0;
 
 // вызывется при открытии страницы для отрисовки начального состояния графиков
 window.onload = function() {
@@ -25,7 +30,7 @@ window.onload = function() {
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
         $('#header').empty();
-        $('#header').append("Корреляции");
+        $('#header').append("");
         bar_chart('Средняя оценка за год',fullFamilyYearly, 'Средняя оценка за четверть',fullFamilyTerms, 'Зависимость оценок от полноты семьи');
     }
     else if (type=='#learn'){
@@ -35,6 +40,14 @@ window.onload = function() {
         $('#header').empty();
         $('#header').append("Обучение");
         histogram("Распределения оценок");
+    }
+    else if (type=='#attendanceResults'){
+        $('#corr').removeClass('active');
+        $('#prof').removeClass('active');
+        $('#learn').addClass('active');
+        $('#header').empty();
+        $('#header').append("");
+        bar_chart('Количество пропусков',attendanceCorrelation, '',-attendanceCorrelation, 'Зависимость оценок от количества пропусков');
     }
 }
 
@@ -321,6 +334,7 @@ $(function () {
 
 $(document).ready(function() {
     requestFTGData();
+    requestATGData();
 });
 
 function requestFTGData(){
@@ -334,6 +348,17 @@ function requestFTGData(){
     );
 }
 
+function requestATGData(){
+    $.ajax(
+        {
+            url     : "/correlationData/attendanceToGrades",
+            success : onATGDataReceived,
+            error   : console.log,
+            dataType: "json"
+        }
+    );
+}
+
 function onFTGDataReceived(data){
     if(data.message != "OK"){
         console.log(data.message);
@@ -341,6 +366,19 @@ function onFTGDataReceived(data){
     }
     else{
         drawFTG(data.termsCorrelation,data.yearlyCorrelation);
+    }
+}
+
+function onATGDataReceived(data){
+    if(data.message != "OK"){
+        console.log(data.message);
+        //TODO DO NOT CREATE ATG GRAPH
+    }
+    else{
+        attendanceCorrelation = -1;//data.attendanceGradeCorrelation;
+        attBest = data.meanSkipsByBestGrades;
+        attGood = data.meanSkipsByGoodGrades;
+        attAver = data.meanSkipsByAverageGrades;
     }
 }
 

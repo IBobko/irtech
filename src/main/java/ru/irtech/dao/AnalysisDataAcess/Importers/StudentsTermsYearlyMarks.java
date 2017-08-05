@@ -1,5 +1,8 @@
 package ru.irtech.dao.AnalysisDataAcess.Importers;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +22,11 @@ import java.util.List;
  * meanYearlyGrade (double), isFullFamily (both parents - True, other way - false)
  */
 public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImporter {
+
+    public static StudentsTermsYearlyMarks getImporter() {
+        return new StudentsTermsYearlyMarks();
+    }
+
     /**
      * Main processing method.
      *
@@ -28,7 +36,6 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
     @Override
     public String importData(final File file, final String databaseName) {
         try {
-
             Connection connection = getConnection(databaseName);
 
             AbstractMap<Integer, List<Double>> studentPeriodGradeMap;

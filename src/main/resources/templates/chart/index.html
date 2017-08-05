@@ -31,7 +31,10 @@
                        class="list-group-item">Проф ориентация</a>
                     <a id="corr"
                        onclick="switch_chart('#corr')"
-                       class="list-group-item">Корреляции</a>
+                       class="list-group-item">Зависимость оценки от полноты семьи</a>
+                    <a id="attendanceResults"
+                       onclick="switch_chart('#attendanceResults')"
+                       class="list-group-item">Зависимость оценки от пропусков занятий</a>
                 </div>
             </div>
         </div>
@@ -67,9 +70,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="dtp_to">По </label>
+                <label for="dtpTo">По </label>
                 <div class='input-group date' id='datetimepicker_to'>
-                    <input type='text' class="form-control" id="dtp_to"/>
+                    <input type='text' class="form-control" id="dtpTo"/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>

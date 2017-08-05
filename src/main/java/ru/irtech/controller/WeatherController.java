@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.irtech.domain.WeatherDomain;
+import ru.irtech.form.ChartForWeatherForm;
 import ru.irtech.form.WeatherForm;
 import ru.irtech.service.WeatherService;
 
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -213,55 +216,66 @@ public class WeatherController {
         }
     }
 
-
     /**
      * Page with weather chart.
      *
      * @param model Stores attributes.
      * @param request request.
+     * @param form Form with data.
      * @return Template name.
      */
     @RequestMapping("/chart")
-    public String chart(final Model model, final HttpServletRequest request) {
+    public String chart(final Model model, final HttpServletRequest request, final ChartForWeatherForm form) {
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         final Query query = entityManager.createNativeQuery("\n"
                 + "    SELECT schoolid FROM irtech_avg_results w\n"
                 + "    GROUP BY schoolid");
-
         final List<Integer> results = query.getResultList();
-        List<String> sc = new ArrayList<>();
+        final List<String> sc = new ArrayList<>();
         for (final Integer o: results) {
             sc.add(o.toString());
         }
+
+        HashMap<Integer, String> cities = new HashMap<>();
+        cities.put(1626, "Темрюк");
+
+        model.addAttribute("cities", cities);
         model.addAttribute("schools", sc);
-
-        String p1 = request.getParameter("school");
-        model.addAttribute("school", p1);
-
+        model.addAttribute("school", form.getSchool());
+        model.addAttribute("dtpFrom", sdf.format(form.getDtpFrom().getTime()));
+        model.addAttribute("dtpTo", sdf.format(form.getDtpTo().getTime()));
         return "weather/chart";
     }
 
     /**
      * The method generates data for chart.
      * @param request .
+     * @param form Form with data.
      * @return The data for chart.
+     * @throws ParseException .
      */
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/data.tsv")
-    public String data(final HttpServletRequest request) {
-        String p1 = request.getParameter("school");
+    public String data(final HttpServletRequest request, final ChartForWeatherForm form) throws ParseException {
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        final String dateFromStr = sdf.format(form.getDtpFrom().getTime());
+        final String dateToStr = sdf.format(form.getDtpTo().getTime());
 
         String school = "";
-        if (p1 != null || !p1.equals("null")) {
-            school = " AND iar.schoolid = " + p1;
+        if (form.getSchool() != null && !form.getSchool().equals(0)) {
+            school = " AND iar.schoolid = " + form.getSchool();
         }
-
+        String city = "";
+        if (form.getCity() != null && !form.getSchool().equals(0)) {
+            school = " AND iar.cityid = " + form.getCity();
+        }
 
         final Query query = entityManager.createNativeQuery("\n"
                 + "    SELECT AVG(iar.avg_result),meantempm FROM weather w\n"
                 + "    JOIN weather_daily_summary wds ON w.id = wds.id\n"
                 + "    JOIN irtech_avg_results iar ON CAST(iar.donedate AS DATE) = CAST (w.date AS DATE)\n"
-                + "    WHERE city = 'RU/Temryuk' " + school + " GROUP BY meantempm ORDER BY meantempm");
+                + "    WHERE CAST(iar.donedate AS DATE) BETWEEN '" + dateFromStr + "' AND '" + dateToStr + "' AND city = 'RU/Temryuk' " + school + city + " GROUP BY meantempm ORDER BY meantempm");
 
         final List<Object[]> results = query.getResultList();
         StringBuilder r = new StringBuilder("letter\tfrequency\n");
