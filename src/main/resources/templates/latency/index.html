@@ -16,12 +16,122 @@
             shape-rendering: crispEdges;
         }
     </style>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+
+    <!-- DateTime picker -->
+    <link rel="stylesheet" href="resources/css/external/datetimepicker/bootstrap-datetimepicker.min.css"/>
+    <!-- page css-->
+    <link rel="stylesheet" href="resources/css/chart/chart.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
     <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="resources/js/external/moment/moment.min.js"></script>
+    <script type="text/javascript" src="resources/js/external/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="resources/js/chart/chart.js"></script>
 <body>
 
-<div id="figure" style="margin-bottom: 50px;"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-3 mt">
+            <div class="thumbnail">
+                <div class="list-group">
+                    <a id="learn"
+                       onclick="switch_chart('#learn');"
+                       class="list-group-item">
+                        Обучение
+                    </a>
+                    <a id="prof"
+                       onclick="switch_chart('#prof')"
+                       class="list-group-item">Проф ориентация</a>
+                    <a id="corr"
+                       onclick="switch_chart('#corr')"
+                       class="list-group-item">Зависимость оценки от полноты семьи</a>
+                    <a id="attendanceResults"
+                       onclick="switch_chart('#attendanceResults')"
+                       class="list-group-item">Зависимость оценки от пропусков занятий</a>
+                    <a id="latencyResults"
+                       onclick="window.open('/latency','_self');"
+                       class="list-group-item active">Задержка выставления оценок</a>
+                    <a id="weatherResults"
+                       onclick="window.open('/weather/chart','_self');"
+                       class="list-group-item">Корреляция оценок и температуры</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <h1 id="header"></h1>
+            <div id="dashboard" style="position:absolute; top:10px; left:-50px">
+            </div>
+            <!--div id="results_div">
+                <h1>Результаты</h1>
+                <table border="1">
+                    <tr>
+                        <td></td>
+                        <td>Average</td>
+                        <td>Good</td>
+                        <td>Best</td>
+                    </tr>
+                    <tr>
+                        <td>Mean skips for student for period</td>
+                        <td id="avg_skips_value"></td>
+                        <td id="good_skips_value"></td>
+                        <td id="best_skips_value"></td>
+                    </tr>
+                    <tr>
+                        <td>Skips percentages for period</td>
+                        <td id="avg_skips_perc"></td>
+                        <td id="good_skips_perc"></td>
+                        <td id="best_skips_perc"></td>
+                    </tr>
+                </table>
+            </div-->
+        </div>
 
-
+        <!--div class="col-sm-3 col-md-3 mt">
+            <div class="form-group">
+                <label for="period">Период времени </label>
+                <select class="form-control" id="period">
+                    <option>Последняя Неделя</option>
+                    <option>Последний Месяц</option>
+                    <option>Последняя Четверть</option>
+                    <option>Последнее Полугодие</option>
+                    <option>Последний Год</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dtp_from">C </label>
+                <div class='input-group date' id='datetimepicker_from'>
+                    <input type='text' class="form-control" id="dtp_from"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dtpTo">По </label>
+                <div class='input-group date' id='datetimepicker_to'>
+                    <input type='text' class="form-control" id="dtpTo"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary">Экспорт в Excel</button>
+            </div>
+        </div-->
+    </div>
+</div>
 
 <script>
 
@@ -46,14 +156,14 @@
         .scale(y)
         .orient("left")
 
-    var svg = d3.select("#figure").append("svg")
+    var svg = d3.select("#dashboard").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .attr("id", "d3-plot")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    color.domain(["Strongly agree"]);
+    color.domain(["School 3377"]);
 
     d3.csv("/latency/raw_data.csv", function(error, data) {
 

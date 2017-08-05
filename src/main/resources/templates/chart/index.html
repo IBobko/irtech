@@ -35,6 +35,12 @@
                     <a id="attendanceResults"
                        onclick="switch_chart('#attendanceResults')"
                        class="list-group-item">Зависимость оценки от пропусков занятий</a>
+                    <a id="latencyResults"
+                       onclick="window.open('/latency','_self');"
+                       class="list-group-item">Задержка выставления оценок</a>
+                    <a id="weatherResults"
+                       onclick="window.open('/weather/chart','_self');"
+                       class="list-group-item">Корреляция оценок и температуры</a>
                 </div>
             </div>
         </div>
@@ -69,7 +75,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 col-md-3 mt">
+        <!--div class="col-sm-3 col-md-3 mt">
             <div class="form-group">
                 <label for="period">Период времени </label>
                 <select class="form-control" id="period">
@@ -101,7 +107,7 @@
             <div class="form-group">
                 <button type="button" class="btn btn-primary">Экспорт в Excel</button>
             </div>
-        </div>
+        </div-->
     </div>
 </div>
 
