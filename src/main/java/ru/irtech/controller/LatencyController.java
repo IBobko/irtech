@@ -55,13 +55,16 @@ public class LatencyController {
 
 //        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         final Query query = entityManager.createNativeQuery("\n"
-                + "select AVG(latency),name,s.schoolnumber from irtech_ass_latency ass\n" +
+                + "select AVG(latency),name, s.schoolnumber from irtech_ass_latency ass\n" +
                 "  inner join SUBJECTGROUPS sg on sg.ID=ass.SGID\n" +
                 "  inner join SUBJECTS sb on sb.SUBJECTID=sg.SUBJECTID\n" +
                 "  inner join GLOBALSUBJECTS gs on gs.GLOBALSUBJID=sb.GLOBALSUBJID\n" +
                 "  inner join SCHOOLS s on s.SCHOOLID=sb.SCHOOLID\n" +
                 "\n" +
-                "GROUP BY name,sb.SCHOOLID,s.schoolnumber ORDER BY AVG(latency) DESC");
+                "WHERE s.schoolnumber = '3377' GROUP BY name,sb.SCHOOLID,s.schoolnumber ORDER BY AVG(latency) DESC");
+
+        //WHERE s.schoolnumber = '3347'
+
         final List<Object[]> results = query.getResultList();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Question,1,2,3,4,5,N\n");
