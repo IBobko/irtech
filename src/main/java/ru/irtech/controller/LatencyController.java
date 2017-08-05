@@ -26,6 +26,11 @@ public class LatencyController {
         return "latency/index";
 
     }
+    @RequestMapping("bygrades")
+    public String indexgrades() {
+        return "latencybygrades/index";
+
+    }
 
     /**
      * Object for working with db.
