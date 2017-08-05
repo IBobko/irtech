@@ -30,7 +30,7 @@ window.onload = function() {
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
         $('#header').empty();
-        $('#header').append("Корреляции");
+        $('#header').append("");
         bar_chart('Средняя оценка за год',fullFamilyYearly, 'Средняя оценка за четверть',fullFamilyTerms, 'Зависимость оценок от полноты семьи');
     }
     else if (type=='#learn'){
@@ -40,6 +40,14 @@ window.onload = function() {
         $('#header').empty();
         $('#header').append("Обучение");
         histogram("Распределения оценок");
+    }
+    else if (type=='#attendanceResults'){
+        $('#corr').removeClass('active');
+        $('#prof').removeClass('active');
+        $('#learn').addClass('active');
+        $('#header').empty();
+        $('#header').append("");
+        bar_chart('Количество пропусков',attendanceCorrelation, '',-attendanceCorrelation, 'Зависимость оценок от количества пропусков');
     }
 }
 
@@ -367,7 +375,7 @@ function onATGDataReceived(data){
         //TODO DO NOT CREATE ATG GRAPH
     }
     else{
-        attendanceCorrelation = data.attendanceGradeCorrelation;
+        attendanceCorrelation = -1;//data.attendanceGradeCorrelation;
         attBest = data.meanSkipsByBestGrades;
         attGood = data.meanSkipsByGoodGrades;
         attAver = data.meanSkipsByAverageGrades;
