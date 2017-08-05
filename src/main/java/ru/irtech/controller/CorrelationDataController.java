@@ -13,6 +13,7 @@ import ru.irtech.dao.AnalysisDataAcess.DataBaseList;
 import ru.irtech.dao.AnalysisDataAcess.Importers.FakeTestData.StudentsTermsYearlyFakeGenerator;
 import ru.irtech.dao.AnalysisDataAcess.Importers.ICsvImporter;
 import ru.irtech.dao.AnalysisDataAcess.Importers.StudentsTermsYearlyMarks;
+import ru.irtech.dto.AttendanceToGradesResponse;
 import ru.irtech.dto.ControllerResponse;
 import ru.irtech.dto.FamilyStatus.FamilyStatusToGradesCorrelationResponse;
 
@@ -67,6 +68,18 @@ public class CorrelationDataController {
             if (file.exists()) {
                 file.delete();
             }
+        }
+    }
+
+    @RequestMapping(value = "/attendanceToGrades", method = RequestMethod.GET)
+    @ResponseBody
+    public ControllerResponse getAttendanceToGradesCorrelation(){
+        try {
+            AttendanceToGradesResponse response = new AttendanceToGradesResponse();
+
+            return response;
+        } catch (Exception e) {
+            return new ControllerResponse(e.getMessage());
         }
     }
 }
