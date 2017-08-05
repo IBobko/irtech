@@ -19,4 +19,35 @@ public class HomePageController {
         return "index";
 
     }
+
+    /**
+     * Grades page.
+     *
+     * @return sgo screen page with grades.
+     */
+    @RequestMapping("grades")
+    public String sgoGrades() {
+        return "sgo_pages/sgo_grades";
+    }
+
+    /**
+     * Schedule page.
+     *
+     * @return sgo screen page with schedule.
+     */
+    @RequestMapping("schedule")
+    public String sgoSchedule() {
+        return "sgo_pages/sgo_schedule";
+    }
+
+    /**
+     * Plan page.
+     *
+     * @return sgo screen page with schedule.
+     */
+    @RequestMapping("plan")
+    public String sgoPlan() {
+        return "sgo_pages/sgo_plan";
+    }
+
 }
