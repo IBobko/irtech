@@ -10,9 +10,10 @@ import ru.irtech.analysis.Correlation.FakeCorrelationProcessor;
 import ru.irtech.analysis.Correlation.ICorrelationProcessor;
 import ru.irtech.analysis.Correlation.PearsonsCorrelationProcessor;
 import ru.irtech.dao.AnalysisDataAcess.DataBaseList;
+import ru.irtech.dao.AnalysisDataAcess.Importers.*;
 import ru.irtech.dao.AnalysisDataAcess.Importers.FakeTestData.StudentsTermsYearlyFakeGenerator;
-import ru.irtech.dao.AnalysisDataAcess.Importers.ICsvImporter;
-import ru.irtech.dao.AnalysisDataAcess.Importers.StudentsTermsYearlyMarks;
+import ru.irtech.dao.AnalysisDataAcess.Model.StudentAttendanceGrade;
+import ru.irtech.dao.AnalysisDataAcess.Model.StudentFamilyStatus;
 import ru.irtech.dto.AttendanceToGradesResponse;
 import ru.irtech.dto.ControllerResponse;
 import ru.irtech.dto.FamilyStatus.FamilyStatusToGradesCorrelationResponse;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.List;
 
 /**
  * Created by Iggytoto on 29.04.2017.
@@ -73,10 +75,42 @@ public class CorrelationDataController {
 
     @RequestMapping(value = "/attendanceToGrades", method = RequestMethod.GET)
     @ResponseBody
-    public ControllerResponse getAttendanceToGradesCorrelation(){
+    public ControllerResponse getAttendanceToGradesCorrelation() {
         try {
             AttendanceToGradesResponse response = new AttendanceToGradesResponse();
+            IArrayImporter<StudentAttendanceGrade> importer = new StudentsAttendanceGradesImporter();
+            List<StudentAttendanceGrade> rows = importer.importAllData(DataBaseList.getDataBases().get(0));
 
+            int avgsCount = 0;
+            int goodsCount = 0;
+            int bestsCount = 0;
+
+            for (StudentAttendanceGrade sag : rows) {
+                if (sag.getMeanGrade() < 500) {
+                    avgsCount++;
+                    continue;
+                }
+                if (sag.getMeanGrade() < 800) {
+                    goodsCount++;
+                    continue;
+                }
+                bestsCount++;
+            }
+
+            response.setMeanSkipsByBestGrades(rows.size() / bestsCount);
+            response.setMeanSkipsByAverageGrades(rows.size() / avgsCount);
+            response.setMeanSkipsByGoodGrades(rows.size() / goodsCount);
+
+            response.setPercentSkipsByAverageGrades(avgsCount / (double) rows.size());
+            response.setPercentSkipsByBestGrades(bestsCount / (double) rows.size());
+            response.setPercentSkipsByGoodGrades(goodsCount / (double) rows.size());
+
+
+            //TODO COUNT REAL CORRELATION FROM ARRAY
+            //ICorrelationProcessor icp = new PearsonsCorrelationProcessor();
+            ICorrelationProcessor icp = new FakeCorrelationProcessor();
+            Dictionary<Integer, Double> dict = icp.parseCorrelation(null, null, null);
+            response.setAttendanceGradeCorrelation(dict.get(dict.keys().nextElement()));
             return response;
         } catch (Exception e) {
             return new ControllerResponse(e.getMessage());

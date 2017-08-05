@@ -5,6 +5,9 @@ var attendanceCorrelation = 0
 var attBest = 0;
 var attGood = 0;
 var attAver = 0;
+var percBest = 0;
+var percGood = 0;
+var percAver = 0;
 
 // вызывется при открытии страницы для отрисовки начального состояния графиков
 window.onload = function () {
@@ -21,6 +24,7 @@ function switch_chart(type) {
         $('#prof').addClass('active');
         $('#corr').removeClass('active');
         $('#learn').removeClass('active');
+        $('#attendanceResults').removeClass('active');
         $('#header').empty();
         $('#header').append("Проф ориентация");
         bubble_chart("Тестовый график");
@@ -29,6 +33,7 @@ function switch_chart(type) {
         $('#corr').addClass('active');
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
+        $('#attendanceResults').removeClass('active');
         $('#header').empty();
         $('#header').append("");
         bar_chart('Средняя оценка за год', fullFamilyYearly, 'Средняя оценка за четверть', fullFamilyTerms, 'Зависимость оценок от полноты семьи');
@@ -37,6 +42,7 @@ function switch_chart(type) {
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
         $('#learn').addClass('active');
+        $('#attendanceResults').removeClass('active');
         $('#header').empty();
         $('#header').append("Обучение");
         histogram("Распределения оценок");
@@ -44,7 +50,8 @@ function switch_chart(type) {
     else if (type == '#attendanceResults') {
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
-        $('#learn').addClass('active');
+        $('#learn').removeClass('active');
+        $('#attendanceResults').addClass('active');
         $('#header').empty();
         $('#header').append("");
         single_bar_chart('Количество пропусков', attendanceCorrelation, 'Зависимость оценок от количества пропусков');
@@ -328,6 +335,10 @@ function single_bar_chart(attribute_first, correlation_first, graph_name) {
     goods.text(String(attGood));
     bests.text(String(attBest));
 
+    $("#best_skips_perc").text(String(percBest));
+    $("#avg_skips_perc").text(String(percGood));
+    $("#good_skips_perc").text(String(percAver));
+
     // cleanin svg field
     $("#svg").empty();
 
@@ -457,10 +468,14 @@ function onATGDataReceived(data) {
         //TODO DO NOT CREATE ATG GRAPH
     }
     else {
-        attendanceCorrelation = 0.7;//data.attendanceGradeCorrelation;
-        attBest = 1;//data.meanSkipsByBestGrades;
-        attGood = 2;//data.meanSkipsByGoodGrades;
-        attAver = 3;//data.meanSkipsByAverageGrades;
+        attendanceCorrelation = data.attendanceGradeCorrelation;
+        attBest = data.meanSkipsByBestGrades;
+        attGood = data.meanSkipsByGoodGrades;
+        attAver = data.meanSkipsByAverageGrades;
+
+        percBest = data.percentSkipsByBestGrades;
+        percGood = data.percentSkipsByGoodGrades;
+        percAver = data.percentSkipsByAverageGrades;
     }
 }
 

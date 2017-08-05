@@ -11,6 +11,10 @@ public class AttendanceToGradesResponse extends ControllerResponse {
     private double meanSkipsByGoodGrades;
     private double meanSkipsByAverageGrades;
 
+    private double percentSkipsByBestGrades;
+    private double percentSkipsByGoodGrades;
+    private double percentSkipsByAverageGrades;
+
 
     /**
      * Main c-tor.
@@ -49,5 +53,29 @@ public class AttendanceToGradesResponse extends ControllerResponse {
 
     public void setMeanSkipsByAverageGrades(double meanSkipsByAverageGrades) {
         this.meanSkipsByAverageGrades = meanSkipsByAverageGrades;
+    }
+
+    public double getPercentSkipsByBestGrades() {
+        return percentSkipsByBestGrades;
+    }
+
+    public void setPercentSkipsByBestGrades(double percentSkipsByBestGrades) {
+        this.percentSkipsByBestGrades = percentSkipsByBestGrades;
+    }
+
+    public double getPercentSkipsByGoodGrades() {
+        return percentSkipsByGoodGrades;
+    }
+
+    public void setPercentSkipsByGoodGrades(double percentSkipsByGoodGrades) {
+        this.percentSkipsByGoodGrades = percentSkipsByGoodGrades;
+    }
+
+    public double getPercentSkipsByAverageGrades() {
+        return percentSkipsByAverageGrades;
+    }
+
+    public void setPercentSkipsByAverageGrades(double percentSkipsByAverageGrades) {
+        this.percentSkipsByAverageGrades = percentSkipsByAverageGrades;
     }
 }
