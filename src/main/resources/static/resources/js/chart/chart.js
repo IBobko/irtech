@@ -7,17 +7,17 @@ var attGood = 0;
 var attAver = 0;
 
 // вызывется при открытии страницы для отрисовки начального состояния графиков
-window.onload = function() {
+window.onload = function () {
 };
 
 /**
  * this function switches between graphs
  * @type the type of graph to be loaded
  */
-    function switch_chart(type){
+function switch_chart(type) {
     // prevent page reload
     event.preventDefault();
-    if (type=='#prof') {
+    if (type == '#prof') {
         $('#prof').addClass('active');
         $('#corr').removeClass('active');
         $('#learn').removeClass('active');
@@ -25,15 +25,15 @@ window.onload = function() {
         $('#header').append("Проф ориентация");
         bubble_chart("Тестовый график");
     }
-    else if(type=='#corr') {
+    else if (type == '#corr') {
         $('#corr').addClass('active');
         $('#prof').removeClass('active');
         $('#learn').removeClass('active');
         $('#header').empty();
         $('#header').append("");
-        bar_chart('Средняя оценка за год',fullFamilyYearly, 'Средняя оценка за четверть',fullFamilyTerms, 'Зависимость оценок от полноты семьи');
+        bar_chart('Средняя оценка за год', fullFamilyYearly, 'Средняя оценка за четверть', fullFamilyTerms, 'Зависимость оценок от полноты семьи');
     }
-    else if (type=='#learn'){
+    else if (type == '#learn') {
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
         $('#learn').addClass('active');
@@ -41,13 +41,13 @@ window.onload = function() {
         $('#header').append("Обучение");
         histogram("Распределения оценок");
     }
-    else if (type=='#attendanceResults'){
+    else if (type == '#attendanceResults') {
         $('#corr').removeClass('active');
         $('#prof').removeClass('active');
         $('#learn').addClass('active');
         $('#header').empty();
         $('#header').append("");
-        bar_chart('Количество пропусков',attendanceCorrelation, '',-attendanceCorrelation, 'Зависимость оценок от количества пропусков');
+        single_bar_chart('Количество пропусков', attendanceCorrelation, 'Зависимость оценок от количества пропусков');
     }
 }
 
@@ -58,7 +58,7 @@ window.onload = function() {
  * @return no return value, generated graph is places in svg
  */
 function bubble_chart(graph_name) {
-
+    $("#results_div").hide();
     $("#svg").empty();
 
     var svg = d3.select("svg"),
@@ -152,6 +152,7 @@ function bubble_chart(graph_name) {
  * @return no return value, generated graph is places in svg
  */
 function histogram(graph_name) {
+    $("#results_div").hide();
     $("#svg").empty();
     var data = d3.range(100).map(d3.randomBates(5));
 
@@ -160,7 +161,7 @@ function histogram(graph_name) {
     var svg = d3.select("svg"),
         margin = {top: 30, right: 10, bottom: 10, left: 10},
         width = +document.getElementById('dashboard').offsetWidth,
-        height = +document.getElementById('dashboard').offsetWidth-100;
+        height = +document.getElementById('dashboard').offsetWidth - 100;
 
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -231,61 +232,141 @@ function histogram(graph_name) {
  * @return no return value, generated graph is plot into svg
  */
 function bar_chart(attribute_first, correlation_first, attribute_second, correlation_second, graph_name) {
+    $("#results_div").hide();
     // cleanin svg field
     $("#svg").empty();
 
     // setting svg boundaries
     var svg = d3.select("svg"),
         margin = {top: 10, right: 10, bottom: 10, left: 10},
-        width = +document.getElementById('dashboard').offsetWidth-100,
-        height = +document.getElementById('dashboard').offsetWidth-100;
+        width = +document.getElementById('dashboard').offsetWidth - 100,
+        height = +document.getElementById('dashboard').offsetWidth - 100;
 
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // creating scale for x axis - scale with oridnal values
     var x = d3.scaleOrdinal()
         .domain(["", attribute_first, attribute_second])
-        .range([0, width/3,(width/3)*2, width]);
+        .range([0, width / 3, (width / 3) * 2, width]);
 
     // creating scale for y axis - scake with linear values from 0 to 1
     var y = d3.scaleLinear()
         .domain([-1, 1])
         .range([height, 0]);
 
-    var startPosition  =   0;
-    var endPosition    =   0;
+    var startPosition = 0;
+    var endPosition = 0;
 
-    if(correlation_first > 0){
-        startPosition = height/2 - correlation_first - (height/2)*correlation_first;
+    if (correlation_first > 0) {
+        startPosition = height / 2 - correlation_first - (height / 2) * correlation_first;
     }
-    else{
-        startPosition = height/2 - correlation_first;
+    else {
+        startPosition = height / 2 - correlation_first;
     }
-    endPosition = (height/2)*Math.abs(correlation_first);
+    endPosition = (height / 2) * Math.abs(correlation_first);
 
     // creating rectangle for first attribute
     g.append("rect")
         .attr("x", 30)
         .attr("y", startPosition)
         .attr("fill", "blue")
-        .attr("width", width/3)
+        .attr("width", width / 3)
         .attr("height", endPosition);
-        
-    if(correlation_second > 0){
-        startPosition = height/2 - correlation_second - (height/2)*correlation_second;
+
+    if (correlation_second > 0) {
+        startPosition = height / 2 - correlation_second - (height / 2) * correlation_second;
     }
-    else{
-        startPosition = height/2 - correlation_second;
+    else {
+        startPosition = height / 2 - correlation_second;
     }
-    endPosition = (height/2)*Math.abs(correlation_second);
+    endPosition = (height / 2) * Math.abs(correlation_second);
 
     // creating rectangle for second attribute
     g.append("rect")
-        .attr("x", width - width/3-30)
+        .attr("x", width - width / 3 - 30)
         .attr("y", startPosition)
         .attr("fill", "red")
-        .attr("width", width/3)
+        .attr("width", width / 3)
         .attr("height", endPosition);
+
+    // adding x axis to svg graph
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    // adding y axis to svg graph
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .attr("transform", "translate(" + width + ",0)")
+        .call(d3.axisRight(y));
+
+    // adding text on the top of the chart
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 15)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(graph_name);
+}
+
+
+/**
+ * Plots bar graph for two attributes
+ * @attribute_first name of the first attribute for comparison
+ * @correlation_first correlation index for the first attribute
+ * @graph_name name which will be represented on the top of the chart
+ * @return no return value, generated graph is plot into svg
+ */
+function single_bar_chart(attribute_first, correlation_first, graph_name) {
+    $("#results_div").show();
+    var avgs = $("#avg_skips_value");
+    var goods = $("#good_skips_value");
+    var bests = $("#best_skips_value");
+
+    avgs.text(String(attAver));
+    goods.text(String(attGood));
+    bests.text(String(attBest));
+
+    // cleanin svg field
+    $("#svg").empty();
+
+    // setting svg boundaries
+    var svg = d3.select("svg"),
+        margin = {top: 10, right: 10, bottom: 10, left: 10},
+        width = +document.getElementById('dashboard').offsetWidth - 100,
+        height = +document.getElementById('dashboard').offsetWidth - 100;
+
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// creating scale for x axis - scale with oridnal values
+    var x = d3.scaleOrdinal()
+        .domain(["", attribute_first])
+        .range([0, width / 3, (width / 3) * 2, width]);
+
+    // creating scale for y axis - scake with linear values from 0 to 1
+    var y = d3.scaleLinear()
+        .domain([-1, 1])
+        .range([height, 0]);
+
+    var startPosition = 0;
+
+    if (correlation_first > 0) {
+        startPosition = height / 2 - correlation_first - (height / 2) * correlation_first;
+    }
+    else {
+        startPosition = height / 2 - correlation_first;
+    }
+    var endPosition = (height / 2) * Math.abs(correlation_first);
+
+    // creating rectangle for first attribute
+    g.append("rect")
+        .attr("x", 50)
+        .attr("y", startPosition)
+        .attr("fill", "blue")
+        .attr("width", width / 2)
+        .attr("height", endPosition);
+
 
     // adding x axis to svg graph
     g.append("g")
@@ -332,57 +413,58 @@ $(function () {
 });
 
 
-$(document).ready(function() {
+$(document).ready(function () {
+    $("#results_div").hide();
     requestFTGData();
     requestATGData();
 });
 
-function requestFTGData(){
+function requestFTGData() {
     $.ajax(
         {
-            url     : "/correlationData/familyToGrades",
-            success : onFTGDataReceived,
-            error   : console.log,
+            url: "/correlationData/familyToGrades",
+            success: onFTGDataReceived,
+            error: console.log,
             dataType: "json"
         }
     );
 }
 
-function requestATGData(){
+function requestATGData() {
     $.ajax(
         {
-            url     : "/correlationData/attendanceToGrades",
-            success : onATGDataReceived,
-            error   : console.log,
+            url: "/correlationData/attendanceToGrades",
+            success: onATGDataReceived,
+            error: console.log,
             dataType: "json"
         }
     );
 }
 
-function onFTGDataReceived(data){
-    if(data.message != "OK"){
+function onFTGDataReceived(data) {
+    if (data.message != "OK") {
         console.log(data.message);
         //TODO DO NOT CREATE FTG GRAPH
     }
-    else{
-        drawFTG(data.termsCorrelation,data.yearlyCorrelation);
+    else {
+        drawFTG(data.termsCorrelation, data.yearlyCorrelation);
     }
 }
 
-function onATGDataReceived(data){
-    if(data.message != "OK"){
+function onATGDataReceived(data) {
+    if (data.message != "OK") {
         console.log(data.message);
         //TODO DO NOT CREATE ATG GRAPH
     }
-    else{
-        attendanceCorrelation = -1;//data.attendanceGradeCorrelation;
-        attBest = data.meanSkipsByBestGrades;
-        attGood = data.meanSkipsByGoodGrades;
-        attAver = data.meanSkipsByAverageGrades;
+    else {
+        attendanceCorrelation = 0.7;//data.attendanceGradeCorrelation;
+        attBest = 1;//data.meanSkipsByBestGrades;
+        attGood = 2;//data.meanSkipsByGoodGrades;
+        attAver = 3;//data.meanSkipsByAverageGrades;
     }
 }
 
-function drawFTG(termsCorrelation,yearlyCorrelation){
+function drawFTG(termsCorrelation, yearlyCorrelation) {
     fullFamilyTerms = termsCorrelation;
     fullFamilyYearly = yearlyCorrelation;
 }
