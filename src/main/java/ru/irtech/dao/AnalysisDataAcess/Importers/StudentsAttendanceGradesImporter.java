@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class StudentsAttendanceGradesImporter extends BaseImporter implements IArrayImporter<StudentAttendanceGrade> {
     @Override
-    public List<StudentAttendanceGrade> importAllData(String databaseName) {
+    public List<StudentAttendanceGrade> importAllData(final String databaseName) {
         Connection connection = getConnection(databaseName);
 
         List<StudentAttendanceGrade> result = new ArrayList<>();
@@ -33,7 +33,7 @@ public class StudentsAttendanceGradesImporter extends BaseImporter implements IA
     }
 
     @Override
-    public List<StudentAttendanceGrade> importData(String databaseName, Date dateFrom, Date dateTo) {
+    public List<StudentAttendanceGrade> importData(final String databaseName, final Date dateFrom, final Date dateTo) {
         return importAllData(databaseName);
     }
 }

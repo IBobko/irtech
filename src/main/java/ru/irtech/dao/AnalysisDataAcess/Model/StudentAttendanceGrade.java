@@ -4,11 +4,27 @@ package ru.irtech.dao.AnalysisDataAcess.Model;
  * Created by Iggytoto on 05.08.2017.
  */
 public class StudentAttendanceGrade {
+    /**
+     * Student id.
+     */
     private int studentid;
+    /**
+     * Skip count.
+     */
     private int skipsCount;
+    /**
+     * Mean grade.
+     */
     private double meanGrade;
 
-    public StudentAttendanceGrade(int studentid, int skipsCount, double meanGrade) {
+    /**
+     * Constructor.
+     *
+     * @param studentid Student id.
+     * @param skipsCount Skip count.
+     * @param meanGrade Mean grade.
+     */
+    public StudentAttendanceGrade(final int studentid, final int skipsCount, final double meanGrade) {
 
         this.studentid = studentid;
         this.skipsCount = skipsCount;
@@ -19,7 +35,7 @@ public class StudentAttendanceGrade {
         return studentid;
     }
 
-    public void setStudentid(int studentid) {
+    public void setStudentid(final int studentid) {
         this.studentid = studentid;
     }
 
@@ -27,7 +43,7 @@ public class StudentAttendanceGrade {
         return skipsCount;
     }
 
-    public void setSkipsCount(int skipsCount) {
+    public void setSkipsCount(final int skipsCount) {
         this.skipsCount = skipsCount;
     }
 
@@ -35,7 +51,7 @@ public class StudentAttendanceGrade {
         return meanGrade;
     }
 
-    public void setMeanGrade(double meanGrade) {
+    public void setMeanGrade(final double meanGrade) {
         this.meanGrade = meanGrade;
     }
 }

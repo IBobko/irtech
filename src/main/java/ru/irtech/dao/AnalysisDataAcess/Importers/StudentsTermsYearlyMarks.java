@@ -1,8 +1,5 @@
 package ru.irtech.dao.AnalysisDataAcess.Importers;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -157,7 +154,7 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
             st = connection.createStatement();
 
             ResultSet rs;
-            rs = st.executeQuery("select studentid,mark from YEARTOTALS where PERIODTYPEID = 2");
+            rs = st.executeQuery("SELECT studentid,mark FROM YEARTOTALS WHERE PERIODTYPEID = 2");
             while (rs.next()) {
                 int studentId = rs.getInt(1);
                 double grade = rs.getDouble(2);
@@ -188,7 +185,7 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
             st = connection.createStatement();
 
             ResultSet rs;
-            rs = st.executeQuery("select studentid, mark from totals");
+            rs = st.executeQuery("SELECT studentid, mark FROM totals");
             while (rs.next()) {
                 int studentId = rs.getInt(1);
                 double grade = rs.getDouble(2);

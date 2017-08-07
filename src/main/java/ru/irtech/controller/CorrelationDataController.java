@@ -1,19 +1,17 @@
 package ru.irtech.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.irtech.analysis.Correlation.FakeCorrelationProcessor;
 import ru.irtech.analysis.Correlation.ICorrelationProcessor;
-import ru.irtech.analysis.Correlation.PearsonsCorrelationProcessor;
 import ru.irtech.dao.AnalysisDataAcess.DataBaseList;
-import ru.irtech.dao.AnalysisDataAcess.Importers.*;
 import ru.irtech.dao.AnalysisDataAcess.Importers.FakeTestData.StudentsTermsYearlyFakeGenerator;
+import ru.irtech.dao.AnalysisDataAcess.Importers.IArrayImporter;
+import ru.irtech.dao.AnalysisDataAcess.Importers.ICsvImporter;
+import ru.irtech.dao.AnalysisDataAcess.Importers.StudentsAttendanceGradesImporter;
 import ru.irtech.dao.AnalysisDataAcess.Model.StudentAttendanceGrade;
-import ru.irtech.dao.AnalysisDataAcess.Model.StudentFamilyStatus;
 import ru.irtech.dto.AttendanceToGradesResponse;
 import ru.irtech.dto.ControllerResponse;
 import ru.irtech.dto.FamilyStatus.FamilyStatusToGradesCorrelationResponse;
@@ -32,13 +30,16 @@ import java.util.List;
 @RequestMapping("/correlationData")
 public class CorrelationDataController {
 
-    //USE THIS FOR REAL DATA
-    //ICsvImporter stygImporter = new StudentsTermsYearlyMarks());
-    ICsvImporter stygImporter = new StudentsTermsYearlyFakeGenerator();
     /**
-     * Familty to grade calculations class index.
+     * Family to grade calculations class index.
      */
     private static final int FAMILY_TO_GRADE_CLASS_INDEX = 3;
+    //USE THIS FOR REAL DATA
+    //ICsvImporter stygImporter = new StudentsTermsYearlyMarks());
+    /**
+     * ICsvImporter implementation.
+     */
+    private ICsvImporter stygImporter = new StudentsTermsYearlyFakeGenerator();
 
     /**
      * Method that returns family status to yearly and termly grades correlation analysis results.
@@ -73,6 +74,11 @@ public class CorrelationDataController {
         }
     }
 
+    /**
+     * attendanceToGrades page.
+     *
+     * @return response.
+     */
     @RequestMapping(value = "/attendanceToGrades", method = RequestMethod.GET)
     @ResponseBody
     public ControllerResponse getAttendanceToGradesCorrelation() {

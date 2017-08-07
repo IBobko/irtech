@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class FakeCorrelationProcessor implements ICorrelationProcessor {
     @Override
-    public Dictionary<Integer, Double> parseCorrelation(String csvFileName, Integer classColumnIndex, Integer[] targetColumnIndex) {
+    public Dictionary<Integer, Double> parseCorrelation(final String csvFileName, final Integer classColumnIndex, final Integer[] targetColumnIndex) {
         Dictionary<Integer, Double> result = new Hashtable<>();
         Random r = new Random();
         result.put(1, r.nextDouble() * 2 - 1);

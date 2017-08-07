@@ -14,6 +14,6 @@ public interface ICorrelationProcessor {
      * @param targetColumnIndex indexes of column that points on the target attribute
      * @return Dictionary that contains pairs index -> correlation value.
      */
-    Dictionary<Integer, Double> parseCorrelation(String csvFileName, Integer classColumnIndex,
-                                                 Integer[] targetColumnIndex);
+    Dictionary<Integer, Double> parseCorrelation(final String csvFileName, final Integer classColumnIndex,
+                                                 final Integer[] targetColumnIndex);
 }

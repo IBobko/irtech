@@ -1,7 +1,6 @@
 package ru.irtech.dao.AnalysisDataAcess.Importers;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -11,8 +10,10 @@ import java.io.IOException;
 public interface ICsvImporter {
     /**
      * Method that imports data from given database into csv file.
+     *
      * @param databaseName database name to connect to.
-     * @param file file to write
+     * @param file         file to write
+     * @throws IOException .'
      * @return csv file name
      */
     String importData(File file, String databaseName) throws IOException;

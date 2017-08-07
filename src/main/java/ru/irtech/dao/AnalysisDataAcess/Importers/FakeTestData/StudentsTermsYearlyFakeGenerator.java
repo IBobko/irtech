@@ -1,7 +1,5 @@
 package ru.irtech.dao.AnalysisDataAcess.Importers.FakeTestData;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import ru.irtech.dao.AnalysisDataAcess.Importers.ICsvImporter;
 
 import java.io.*;
@@ -11,16 +9,25 @@ import java.util.*;
  * Created by Iggytoto on 05.08.2017.
  */
 public class StudentsTermsYearlyFakeGenerator implements ICsvImporter {
-
-    public static StudentsTermsYearlyFakeGenerator getGenerator() {
-        return new StudentsTermsYearlyFakeGenerator();
-    }
-
-    AbstractMap<Integer, List<Double>> studentPeriodGradeMap;
-    AbstractMap<Integer, List<Double>> studentYearlyGradeMap;
-    AbstractMap<Integer, List<Integer>> studentRelationsMap;
-    List<Integer> studentIds;
-
+    /**
+     * .
+     */
+    private AbstractMap<Integer, List<Double>> studentPeriodGradeMap;
+    /**
+     * .
+     */
+    private AbstractMap<Integer, List<Double>> studentYearlyGradeMap;
+    /**
+     * .
+     */
+    private AbstractMap<Integer, List<Integer>> studentRelationsMap;
+    /**
+     * .
+     */
+    private List<Integer> studentIds;
+    /**
+     * .
+     */
     public StudentsTermsYearlyFakeGenerator() {
         Random r = new Random();
         studentPeriodGradeMap = new HashMap<>();
@@ -39,8 +46,12 @@ public class StudentsTermsYearlyFakeGenerator implements ICsvImporter {
         }
     }
 
+    public static StudentsTermsYearlyFakeGenerator getGenerator() {
+        return new StudentsTermsYearlyFakeGenerator();
+    }
+
     @Override
-    public String importData(File file, String databaseName) throws IOException {
+    public String importData(final File file, final String databaseName) throws IOException {
 
         FileOutputStream fos = new FileOutputStream(file);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
@@ -61,17 +72,32 @@ public class StudentsTermsYearlyFakeGenerator implements ICsvImporter {
         return file.getPath();
     }
 
-    private List<Double> generateRandomIntegers(double max, double min, int count) {
-        Random r = new Random();
-
-        List<Double> result = new ArrayList<>();
+    /**
+     * Generates list of random integers.
+     *
+     * @param max value.
+     * @param min value.
+     * @param count value.
+     * @return list.
+     */
+    private List<Double> generateRandomIntegers(final double max, final double min, final int count) {
+        final Random r = new Random();
+        final List<Double> result = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             result.add(r.nextDouble() * (max - min) + min);
         }
         return result;
     }
 
-    private List<Integer> generateRandomDoubles(int max, int min, int count) {
+    /**
+     * Generates list of random doubles.
+     *
+     * @param max value.
+     * @param min value.
+     * @param count value.
+     * @return list.
+     */
+    private List<Integer> generateRandomDoubles(final int max, final int min, final int count) {
         Random r = new Random();
 
         List<Integer> result = new ArrayList<>();
@@ -81,12 +107,17 @@ public class StudentsTermsYearlyFakeGenerator implements ICsvImporter {
         return result;
     }
 
-    private Double countAverage(List<Double> soruce) {
+    /**
+     * Calculation mean value.
+     * @param source .
+     * @return mean value.
+     */
+    private Double countAverage(final List<Double> source) {
         Double sum = 0d;
-        for (Double d : soruce) {
+        for (Double d : source) {
             sum += d;
         }
-        return sum / soruce.size();
+        return sum / source.size();
     }
 
 }

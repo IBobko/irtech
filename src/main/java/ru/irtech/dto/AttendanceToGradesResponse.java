@@ -4,15 +4,33 @@ package ru.irtech.dto;
  * Created by Iggytoto on 05.08.2017.
  */
 public class AttendanceToGradesResponse extends ControllerResponse {
-
+    /**
+     * .
+     */
     private double attendanceGradeCorrelation;
-
+    /**
+     * .
+     */
     private double meanSkipsByBestGrades;
+    /**
+     * .
+     */
     private double meanSkipsByGoodGrades;
+    /**
+     * .
+     */
     private double meanSkipsByAverageGrades;
-
+    /**
+     * .
+     */
     private double percentSkipsByBestGrades;
+    /**
+     * .
+     */
     private double percentSkipsByGoodGrades;
+    /**
+     * .
+     */
     private double percentSkipsByAverageGrades;
 
 
@@ -27,7 +45,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return attendanceGradeCorrelation;
     }
 
-    public void setAttendanceGradeCorrelation(double attendanceGradeCorrelation) {
+    public void setAttendanceGradeCorrelation(final double attendanceGradeCorrelation) {
         this.attendanceGradeCorrelation = attendanceGradeCorrelation;
     }
 
@@ -35,7 +53,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return meanSkipsByBestGrades;
     }
 
-    public void setMeanSkipsByBestGrades(double meanSkipsByBestGrades) {
+    public void setMeanSkipsByBestGrades(final double meanSkipsByBestGrades) {
         this.meanSkipsByBestGrades = meanSkipsByBestGrades;
     }
 
@@ -43,7 +61,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return meanSkipsByGoodGrades;
     }
 
-    public void setMeanSkipsByGoodGrades(double meanSkipsByGoodGrades) {
+    public void setMeanSkipsByGoodGrades(final double meanSkipsByGoodGrades) {
         this.meanSkipsByGoodGrades = meanSkipsByGoodGrades;
     }
 
@@ -51,7 +69,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return meanSkipsByAverageGrades;
     }
 
-    public void setMeanSkipsByAverageGrades(double meanSkipsByAverageGrades) {
+    public void setMeanSkipsByAverageGrades(final double meanSkipsByAverageGrades) {
         this.meanSkipsByAverageGrades = meanSkipsByAverageGrades;
     }
 
@@ -59,7 +77,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return percentSkipsByBestGrades;
     }
 
-    public void setPercentSkipsByBestGrades(double percentSkipsByBestGrades) {
+    public void setPercentSkipsByBestGrades(final double percentSkipsByBestGrades) {
         this.percentSkipsByBestGrades = percentSkipsByBestGrades;
     }
 
@@ -67,7 +85,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return percentSkipsByGoodGrades;
     }
 
-    public void setPercentSkipsByGoodGrades(double percentSkipsByGoodGrades) {
+    public void setPercentSkipsByGoodGrades(final double percentSkipsByGoodGrades) {
         this.percentSkipsByGoodGrades = percentSkipsByGoodGrades;
     }
 
@@ -75,7 +93,7 @@ public class AttendanceToGradesResponse extends ControllerResponse {
         return percentSkipsByAverageGrades;
     }
 
-    public void setPercentSkipsByAverageGrades(double percentSkipsByAverageGrades) {
+    public void setPercentSkipsByAverageGrades(final double percentSkipsByAverageGrades) {
         this.percentSkipsByAverageGrades = percentSkipsByAverageGrades;
     }
 }

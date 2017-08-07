@@ -7,17 +7,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * Controller to show latency.
+ */
 @RequestMapping("/latency")
 @Controller
 public class LatencyController {
     /**
-     * Main page of latency
+     * Object for working with db.
+     */
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    /**
+     * Main page of latency.
      *
      * @return Text which provided users.
      */
@@ -26,6 +31,12 @@ public class LatencyController {
         return "latency/index";
 
     }
+
+    /**
+     * bygrades page.
+     *
+     * @return template name.
+     */
     @RequestMapping("bygrades")
     public String indexgrades() {
         return "latencybygrades/index";
@@ -33,44 +44,31 @@ public class LatencyController {
     }
 
     /**
-     * Object for working with db.
+     *  Row data for latency.
+     *
+     * @return response.
      */
-    @PersistenceContext
-    private EntityManager entityManager;
-
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/raw_data.csv", produces = "text/plain")
     @ResponseBody
-    public String row_data() {
-//        String ss = "Question,1,2,3,4,5,N\n" +
-//                "Question 1,0,0,0,0,2,2\n" +
-//                "Question 2,0,0,0,0,2,2\n" +
-//                "Question 3,0,0,0,0,2,2\n" +
-//                "Question 4,0,0,0,0,2,2\n" +
-//                "Question 5,0,0,0,0,2,2\n" +
-//                "Question 6,0,0,0,0,2,2\n" +
-//                "Question 7,0,0,0,0,2,2\n" +
-//                "Question 8,0,0,0,0,2,2";
-//        return ss;
-
-
-//        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    public String rowData() {
         final Query query = entityManager.createNativeQuery("\n"
-                + "select AVG(latency),name, s.schoolnumber from irtech_ass_latency ass\n" +
-                "  inner join SUBJECTGROUPS sg on sg.ID=ass.SGID\n" +
-                "  inner join SUBJECTS sb on sb.SUBJECTID=sg.SUBJECTID\n" +
-                "  inner join GLOBALSUBJECTS gs on gs.GLOBALSUBJID=sb.GLOBALSUBJID\n" +
-                "  inner join SCHOOLS s on s.SCHOOLID=sb.SCHOOLID\n" +
-                "\n" +
-                "WHERE s.schoolnumber = '3377' GROUP BY name,sb.SCHOOLID,s.schoolnumber ORDER BY AVG(latency) DESC");
-
-        //WHERE s.schoolnumber = '3347'
+                + "SELECT AVG(latency),name, s.schoolnumber FROM irtech_ass_latency ass"
+                + " INNER JOIN SUBJECTGROUPS sg ON sg.ID = ass.SGID"
+                + " INNER JOIN SUBJECTS sb ON sb.SUBJECTID = sg.SUBJECTID"
+                + " INNER JOIN GLOBALSUBJECTS gs ON gs.GLOBALSUBJID = sb.GLOBALSUBJID"
+                + " INNER JOIN SCHOOLS s ON s.SCHOOLID = sb.SCHOOLID"
+                + " WHERE s.schoolnumber = '3377' GROUP BY name,sb.SCHOOLID,s.schoolnumber ORDER BY AVG(latency) DESC");
+        query.setParameter(1, 3377);
 
         final List<Object[]> results = query.getResultList();
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Question,1,2,3,4,5,N\n");
-        for (final Object[] o: results) {
-            if (o[0]!=null)
-            stringBuilder.append(o[1].toString()).append(",0,0,0,0").append((int) Double.parseDouble(o[0].toString()) + "," + (int) Double.parseDouble(o[0].toString())).append("\n");
+        for (final Object[] row : results) {
+            if (row[0] != null) {
+                int number = (int) Double.parseDouble(row[0].toString());
+                stringBuilder.append(row[1].toString()).append(",0,0,0,0").append(number).append(",").append(number).append("\n");
+            }
         }
         return stringBuilder.toString();
     }
