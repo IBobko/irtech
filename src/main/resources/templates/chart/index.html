@@ -31,7 +31,16 @@
                        class="list-group-item">Проф ориентация</a>
                     <a id="corr"
                        onclick="switch_chart('#corr')"
-                       class="list-group-item">Корреляции</a>
+                       class="list-group-item">Зависимость оценки от полноты семьи</a>
+                    <a id="attendanceResults"
+                       onclick="switch_chart('#attendanceResults')"
+                       class="list-group-item">Зависимость оценки от пропусков занятий</a>
+                    <a id="latencyResults"
+                       onclick="window.open('/latency','_self');"
+                       class="list-group-item">Задержка выставления оценок</a>
+                    <a id="weatherResults"
+                       onclick="window.open('/weather/chart','_self');"
+                       class="list-group-item">Корреляция оценок и температуры</a>
                 </div>
             </div>
         </div>
@@ -41,12 +50,32 @@
                 <svg width="900" height="900" id="svg" font-family="sans-serif" font-size="10"
                      text-anchor="middle"></svg>
             </div>
-            <div>
+            <div id="results_div">
                 <h1>Результаты</h1>
+                <table border="1">
+                    <tr>
+                        <td></td>
+                        <td>Average</td>
+                        <td>Good</td>
+                        <td>Best</td>
+                    </tr>
+                    <tr>
+                        <td>Mean skips for student for period</td>
+                        <td id="avg_skips_value"></td>
+                        <td id="good_skips_value"></td>
+                        <td id="best_skips_value"></td>
+                    </tr>
+                    <tr>
+                        <td>Skips percentages for period</td>
+                        <td id="avg_skips_perc"></td>
+                        <td id="good_skips_perc"></td>
+                        <td id="best_skips_perc"></td>
+                    </tr>
+                </table>
             </div>
         </div>
 
-        <div class="col-sm-3 col-md-3 mt">
+        <!--div class="col-sm-3 col-md-3 mt">
             <div class="form-group">
                 <label for="period">Период времени </label>
                 <select class="form-control" id="period">
@@ -67,20 +96,30 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="dtp_to">По </label>
+                <label for="dtpTo">По </label>
                 <div class='input-group date' id='datetimepicker_to'>
-                    <input type='text' class="form-control" id="dtp_to"/>
+                    <input type='text' class="form-control" id="dtpTo"/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary">Экспорт в Excel</button>
+                <form action='/chart/export'>
+                <button type="submit">Экспортировать в Excel</button>
+                </form>
             </div>
-        </div>
+        </div-->
     </div>
 </div>
+
+<table class="table table-striped" id="data_table">
+    <tr>
+        <td>
+            <a img="resources/static/resources/images/advisor_material/minion/advisor.png"></a>
+        </td>
+    </tr>
+</table>
 
 <!-- JavaScript files inserted at the end of the page to improve the loading performance -->
 

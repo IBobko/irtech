@@ -14,7 +14,7 @@ public class HostnameStatDomain {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    @SequenceGenerator(name = "seq", sequenceName = "seq_hostnamestat", allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "hostname_stat_id_seq", allocationSize = 1)
     private Integer id;
     /**
      * Referer which send us request.

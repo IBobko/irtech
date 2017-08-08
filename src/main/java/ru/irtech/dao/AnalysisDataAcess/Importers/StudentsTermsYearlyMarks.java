@@ -19,6 +19,11 @@ import java.util.List;
  * meanYearlyGrade (double), isFullFamily (both parents - True, other way - false)
  */
 public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImporter {
+
+    public static StudentsTermsYearlyMarks getImporter() {
+        return new StudentsTermsYearlyMarks();
+    }
+
     /**
      * Main processing method.
      *
@@ -28,7 +33,6 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
     @Override
     public String importData(final File file, final String databaseName) {
         try {
-
             Connection connection = getConnection(databaseName);
 
             AbstractMap<Integer, List<Double>> studentPeriodGradeMap;
@@ -150,7 +154,7 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
             st = connection.createStatement();
 
             ResultSet rs;
-            rs = st.executeQuery("select studentid,mark from YEARTOTALS where PERIODTYPEID = 2");
+            rs = st.executeQuery("SELECT studentid,mark FROM YEARTOTALS WHERE PERIODTYPEID = 2");
             while (rs.next()) {
                 int studentId = rs.getInt(1);
                 double grade = rs.getDouble(2);
@@ -181,7 +185,7 @@ public class StudentsTermsYearlyMarks extends BaseImporter implements ICsvImport
             st = connection.createStatement();
 
             ResultSet rs;
-            rs = st.executeQuery("select studentid, mark from totals");
+            rs = st.executeQuery("SELECT studentid, mark FROM totals");
             while (rs.next()) {
                 int studentId = rs.getInt(1);
                 double grade = rs.getDouble(2);

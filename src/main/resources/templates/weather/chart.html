@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        .bar {
+            fill: steelblue;
+        }
+
+        .bar:hover {
+            fill: brown;
+        }
+
+        .axis--x path {
+            display: none;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+
+    <!-- DateTime picker -->
+    <link rel="stylesheet" href="/resources/css/external/datetimepicker/bootstrap-datetimepicker.min.css"/>
+    <!-- page css-->
+    <link rel="stylesheet" href="/resources/css/chart/chart.css"/>
+</head>
+<body style="padding:50px">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-3 mt">
+            <div class="thumbnail">
+                <div class="list-group">
+                    <a id="learn"
+                       onclick="switch_chart('#learn');"
+                       class="list-group-item">
+                        Обучение
+                    </a>
+                    <a id="prof"
+                       onclick="switch_chart('#prof')"
+                       class="list-group-item">Проф ориентация</a>
+                    <a id="corr"
+                       onclick="switch_chart('#corr')"
+                       class="list-group-item">Зависимость оценки от полноты семьи</a>
+                    <a id="attendanceResults"
+                       onclick="switch_chart('#attendanceResults')"
+                       class="list-group-item">Зависимость оценки от пропусков занятий</a>
+                    <a id="latencyResults"
+                       onclick="window.open('/latency','_self');"
+                       class="list-group-item">Задержка выставления оценок</a>
+                    <a id="weatherResults"
+                       onclick="window.open('/weather/chart','_self');"
+                       class="list-group-item active">Корреляция оценок и температуры</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <h1 id="header"></h1>
+            <div id="dashboard" style="position:absolute; top:10px; left:10px">
+                <svg width="800" height="500"></svg>
+            </div>
+            <!--div id="results_div">
+                <h1>Результаты</h1>
+                <table border="1">
+                    <tr>
+                        <td></td>
+                        <td>Average</td>
+                        <td>Good</td>
+                        <td>Best</td>
+                    </tr>
+                    <tr>
+                        <td>Mean skips for student for period</td>
+                        <td id="avg_skips_value"></td>
+                        <td id="good_skips_value"></td>
+                        <td id="best_skips_value"></td>
+                    </tr>
+                    <tr>
+                        <td>Skips percentages for period</td>
+                        <td id="avg_skips_perc"></td>
+                        <td id="good_skips_perc"></td>
+                        <td id="best_skips_perc"></td>
+                    </tr>
+                </table>
+            </div-->
+        </div>
+
+        <!--div class="col-sm-3 col-md-3 mt">
+            <div class="form-group">
+                <label for="period">Период времени </label>
+                <select class="form-control" id="period">
+                    <option>Последняя Неделя</option>
+                    <option>Последний Месяц</option>
+                    <option>Последняя Четверть</option>
+                    <option>Последнее Полугодие</option>
+                    <option>Последний Год</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dtp_from">C </label>
+                <div class='input-group date' id='datetimepicker_from'>
+                    <input type='text' class="form-control" id="dtp_from"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dtpTo">По </label>
+                <div class='input-group date' id='datetimepicker_to'>
+                    <input type='text' class="form-control" id="dtpTo"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary">Экспорт в Excel</button>
+            </div>
+        </div-->
+    </div>
+</div>
+
+
+<!--form action="/weather/chart" method="POST " modelAttribute="filterForm">
+
+    <style>
+        #filter {
+            display: flex;
+        }
+        #filter div {
+            margin: 10px 10px 10px 0;
+        }
+    </style>
+
+    <!--div id="filter">
+        <div>
+            <label for="city">Выберите город </label>
+            <select class="form-control" name="city" id="city">
+                <option th:each="i : ${cities}">
+                    <p th:value="${ i.key }" th:text="${ i.key }"></p>
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="school">Выберите школу </label>
+            <select class="form-control" name="school" id="school">
+                <option th:value="0">не выбран</option>
+                <option th:each="i : ${schools}">
+                    <p th:text="${ i }"></p>
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dtpTo">C </label>
+            <div style="margin:0px; width:200px" class='input-group date' id='datetimepicker_from'>
+                <input type='text' name="dtpFrom" value="01/01/2015" class="form-control"/>
+                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="dtpTo">По </label>
+            <div style="margin:0px; width:200px" class='input-group date' id='datetimepicker_to'>
+                <input name="dtpTo" type='text' value="01/01/2016" class="form-control"/>
+                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+            </div>
+        </div>
+    </div-->
+
+    <!--input type="submit" value="Показать" class="btn btn-default"/-->
+</form-->
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script th:inline="javascript">
+
+    var svg = d3.select("svg"),
+        margin = {top: 20, right: 20, bottom: 30, left: 40},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+        y = d3.scaleLinear().rangeRound([height, 0]);
+
+    var g = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var url = "/weather/data.tsv?school=" + [[${school}]] + "&dtpFrom=" + [[${dtpFrom}]] + "&dtpTo=" + [[${dtpTo}]];
+
+
+    d3.tsv(url, function (d) {
+        d.frequency = +d.frequency;
+        return d;
+    }, function (error, data) {
+        if (error) throw error;
+
+        x.domain(data.map(function (d) {
+            return d.letter;
+        }));
+        y.domain([0, d3.max(data, function (d) {
+            return d.frequency;
+        })]);
+
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text("Frequency");
+
+        g.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function (d) {
+                return x(d.letter);
+            })
+            .attr("y", function (d) {
+                return y(d.frequency);
+            })
+            .attr("width", x.bandwidth())
+            .attr("height", function (d) {
+                return height - y(d.frequency);
+            });
+    });
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="/resources/js/external/moment/moment.min.js"></script>
+<script type="text/javascript" src="/resources/js/external/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/resources/js/chart/chart.js"></script>
+</body>
+</html>

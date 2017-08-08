@@ -1,0 +1,39 @@
+#adviceContent {
+    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px;
+}
+
+#advisorContent .image {
+    width: 60px;
+    height: 60px;
+    transition: all 0.75s 0.25s;
+}
+
+#advisorContent {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+
+#advisorAdvice {
+    width: 275px;
+    right: 90px;
+    bottom: 50px;
+}
+
+.skinContainer {
+    width:55px;
+    height:55px;
+    margin-bottom:20px;
+}
+
+.advisor-column {
+    width: 60px;
+    overflow: auto;
+    position: relative;
+    float: right;
+    bottom: 60px;
+}

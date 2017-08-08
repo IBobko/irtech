@@ -6,16 +6,29 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.irtech.domain.RecommendationDomain;
 import ru.irtech.service.RecommendationService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * @author Igor Bobko <limit-speed@yandex.ru>.
  */
 @RestController
 @RequestMapping("/rest-advice")
 public class AdviceRestController {
+
+    /**
+     * This is used for database manipulations.
+     */
+    @PersistenceContext
+    private EntityManager entityManager;
     /**
      * Service of recommendation.
      */
     private RecommendationService recommendationService;
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 
     private RecommendationService getRecommendationService() {
         return recommendationService;

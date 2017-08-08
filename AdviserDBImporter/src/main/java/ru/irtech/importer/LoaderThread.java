@@ -94,28 +94,29 @@ public class LoaderThread implements Callable<Long> {
                                             break;
                                         }
                                     }
-                                } else if (e.getSQLState().equals("42601")) {;
-                                //    System.out.println();
-                                } else if (e.getSQLState().equals("42804")) {;
-                                //    System.out.println();
-                                } else if (e.getSQLState().equals("22P02")) {;
-                                //    System.out.println();
-                                } else {
-                                //    System.out.println();
                                 }
+                                // else if (e.getSQLState().equals("42601")) {
+//                                //    System.out.println();
+//                                } else if (e.getSQLState().equals("42804")) {
+//                                //    System.out.println();
+//                                } else if (e.getSQLState().equals("22P02")) {
+//                                //    System.out.println();
+//                                } else {
+//                                //    System.out.println();
+//                                }
                                 //System.out.println(path.getFileName().toString());
                                 //System.out.println(executedString.toString());
 
                                 //e.printStackTrace();
-                                if (!path.getFileName().toString().equalsIgnoreCase("LESSONS")
-                                        && !path.getFileName().toString().equalsIgnoreCase("EVENTS")
-                                        && !path.getFileName().toString().equalsIgnoreCase("UNITS")
-                                        && !path.getFileName().toString().equalsIgnoreCase("SCHOOLDOCS")
-                                        && !path.getFileName().toString().equalsIgnoreCase("USERSPARAMETERS")
-                                        && !path.getFileName().toString().equalsIgnoreCase("ADD_PROGRAMS")) {
-                                    ;//System.out.println();
-                                }
-
+//                                if (!path.getFileName().toString().equalsIgnoreCase("LESSONS")
+//                                        && !path.getFileName().toString().equalsIgnoreCase("EVENTS")
+//                                        && !path.getFileName().toString().equalsIgnoreCase("UNITS")
+//                                        && !path.getFileName().toString().equalsIgnoreCase("SCHOOLDOCS")
+//                                        && !path.getFileName().toString().equalsIgnoreCase("USERSPARAMETERS")
+//                                        && !path.getFileName().toString().equalsIgnoreCase("ADD_PROGRAMS")) {
+//                                    ;//System.out.println();
+//                                }
+                                e.printStackTrace();
                                 break;
                             }
                         }

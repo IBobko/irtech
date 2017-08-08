@@ -26,20 +26,6 @@
     height: 30px;
 }
 
-#advisorContent {
-    width: 60px;
-    height: 60px;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-}
-
-#advisorContent .image {
-    width: 60px;
-    height: 60px;
-    transition: all 0.75s 0.25s;
-}
-
 .toggle-down {
     transform: rotate(0deg);
 }
@@ -50,11 +36,10 @@
 
 #advisorAdvice {
     width: 275px;
+    min-height: 50px;
     overflow: auto;
     position: absolute;
-    right: 90px;
-    bottom: 50px;
-    border-radius: 20px 10px 0;
+    border-radius: 10px 10px 0;
     background-color: #1B9AF7;
 }
 
@@ -69,6 +54,7 @@
     margin-top: 5px;
     margin-right: 5px;
     margin-left: 10px;
+    min-height: 70px;
     font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     font-size: 14px;
     color: #ffffff;
@@ -91,14 +77,6 @@
     width: 20%; /* Could be more or less, depending on screen size */
 }
 
-.advisor-column {
-    width: 60px;
-    overflow: auto;
-    position: relative;
-    float: right;
-    bottom: 60px;
-}
-
 /* The Close Button */
 .close {
     color: #aaa;
@@ -112,10 +90,4 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
-}
-
-.skinContainer {
-    width:55px;
-    height:55px;
-    margin-bottom:20px;
 }
