@@ -1,8 +1,6 @@
 package ru.irtech.dao.Interfaces;
 
 import ru.irtech.dao.Utility.SchedulerAlreadyRequestedException;
-import ru.irtech.dao.Utility.SchedulerNoDataYetException;
-import ru.irtech.dao.Utility.SchedulerTableNotFoundException;
 import ru.irtech.dao.Utility.SchedulerTableRequestSchema;
 
 import java.sql.SQLException;
@@ -29,12 +27,9 @@ public interface IScheduler {
      * @param key    -   data access key, a string that represents data access to one or the other set of data.
      * @param schema -   data schema, an entity which represents sql query and the expecting result structure.
      * @return List of data entities according to the schema.
-     * @throws SchedulerTableNotFoundException in case if the requested key is not presented in the database.
-     * @throws SchedulerNoDataYetException     in case  data is not received yet.
-     * @throws ClassNotFoundException          driver not found.
-     * @throws Exception                       something bad happened.
+     * @throws Exception something bad happened.
      */
-    List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws SchedulerNoDataYetException, SchedulerTableNotFoundException, Exception;
+    List<Object[]> getDataEntities(final String key, final SchedulerTableRequestSchema schema) throws Exception;
 
     /**
      * Data request method.
@@ -44,7 +39,6 @@ public interface IScheduler {
      * @throws SchedulerAlreadyRequestedException in case when key is presented but result is not done yet.
      * @throws ClassNotFoundException             driver not found.
      * @throws SQLException                       something bad happened.
-     * @throws Exception                          something bad happened.
      */
     void queueRequest(final String key, final SchedulerTableRequestSchema schema) throws SchedulerAlreadyRequestedException, ClassNotFoundException, SQLException;
 
